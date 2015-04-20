@@ -10,7 +10,7 @@ public class SubForum {
     Collection<ForumThread> threads;
     Collection<Member> moderates;   // TODO - way need this in sub-forum?
 
-    public SubForum(){
+    public SubForum(String subForumName){
         this.moderates = new ArrayList<Member>();
         this.threads = new ArrayList<ForumThread>();
     }
@@ -21,5 +21,8 @@ public class SubForum {
 
     public Collection<Member> getModerates(){
         return moderates;
+    }
+
+    public void addModerate(Member moderate) {
     }
 }
