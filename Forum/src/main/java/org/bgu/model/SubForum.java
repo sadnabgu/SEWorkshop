@@ -8,12 +8,18 @@ import java.util.Collection;
  */
 public class SubForum {
     Collection<ForumThread> threads;
+    Collection<Member> moderates;
 
     public SubForum(){
+        this.moderates = new ArrayList<>();
         this.threads = new ArrayList<>();
     }
 
     public Collection<ForumThread> getThreads(){
         return this.threads;
+    }
+
+    public Collection<Member> getModerates(){
+        return moderates;
     }
 }
