@@ -1,4 +1,4 @@
-package org.bgu.model;
+package org.bgu.domain.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +14,7 @@ public class Message {
 
     public Message (String title, User creator){
         this.title = title;
-        this.comments = new ArrayList<>();
+        this.comments = new ArrayList<Message>();
         this.creator = creator;
     }
 

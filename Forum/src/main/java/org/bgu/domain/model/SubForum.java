@@ -1,4 +1,4 @@
-package org.bgu.model;
+package org.bgu.domain.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,11 +8,11 @@ import java.util.Collection;
  */
 public class SubForum {
     Collection<ForumThread> threads;
-    Collection<Member> moderates;
+    Collection<Member> moderates;   // TODO - way need this in sub-forum?
 
     public SubForum(){
-        this.moderates = new ArrayList<>();
-        this.threads = new ArrayList<>();
+        this.moderates = new ArrayList<Member>();
+        this.threads = new ArrayList<ForumThread>();
     }
 
     public Collection<ForumThread> getThreads(){

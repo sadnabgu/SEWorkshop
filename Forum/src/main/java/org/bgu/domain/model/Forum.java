@@ -1,4 +1,4 @@
-package org.bgu.model;
+package org.bgu.domain.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +10,7 @@ public class Forum {
     Collection<SubForum> subForums;
 
     public Forum(){
-        this.subForums = new ArrayList<>();
+        this.subForums = new ArrayList<SubForum>();
     }
 
     public Collection<SubForum> getSubForums(){

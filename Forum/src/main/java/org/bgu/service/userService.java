@@ -1,4 +1,4 @@
-package service;
+package org.bgu.service;
 
 /**
  * interface for the user management functionality

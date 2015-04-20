@@ -1,4 +1,4 @@
-package service;
+package org.bgu.service;
 
 /**
  * interface to all the forum services (non-users)

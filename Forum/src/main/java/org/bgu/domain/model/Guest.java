@@ -1,4 +1,4 @@
-package org.bgu.model;
+package org.bgu.domain.model;
 
 public class Guest extends User{
 
