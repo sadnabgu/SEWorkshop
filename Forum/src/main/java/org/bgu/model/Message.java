@@ -10,10 +10,12 @@ public class Message {
     String title;
     String body;
     Collection<Message> comments;
+    User creator;
 
-    public Message (String title){
+    public Message (String title, User creator){
         this.title = title;
         this.comments = new ArrayList<>();
+        this.creator = creator;
     }
 
     public String getTitle() {
