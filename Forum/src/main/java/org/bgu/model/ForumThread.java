@@ -1,7 +1,5 @@
 package org.bgu.model;
 
-import sun.plugin2.message.Message;
-
 /**
  * Created by gur on 20/04/2015.
  */
