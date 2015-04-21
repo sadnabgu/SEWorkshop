@@ -25,26 +25,31 @@ public class AdminService {
    /**
     * first init routine  - initial administrator details
     */
-   boolean initializeSystem(String adminName,
+   public boolean initializeSystem(String adminName,
                             String adminPass){
        //TODO - validate legal data
 
        // make sure the system wasn't initiated before
-       if (!initialized){
+       if (initialized){
+           System.err.println("system already initialized");
            return false;
        }
 
        //initial the system
-       adminMember = UserFacade.createSuperAdmin(adminName, adminPass);
        initialized = true;
+       adminMember = UserFacade.createSuperAdmin(adminName, adminPass);
        return true;
    }
     /**
      * login to the whole damn system as the super admin
      */
-    boolean loginSystem(String adminName,
+    public boolean loginSystem(String adminName,
                         String adminPass){
         // check authentication
+        if(!initialized){
+            System.err.println("system un-initialized");
+            return false;
+        }
         adminMember = UserFacade.loginSuperAdmin(adminName, adminPass);
         if(adminMember == null)
             return false;
@@ -52,9 +57,11 @@ public class AdminService {
         return true;
     }
 
-    boolean createForum(int forumId, String ForumName){
-        if (adminMember == null)
+    public boolean createForum(int forumId, String ForumName){
+        if (adminMember == null){
+            System.err.println("need to be loggedin");
             return false;       // only logged in admin can create new forum
+        }
 
         Forum forum = ForumFacade.createForum(forumId, ForumName);
         if (forum == null)
