@@ -27,8 +27,10 @@ public class Member extends User{
 
     @Override
     public boolean login(String pass) {
+        /*
         if(logedIn)
             return false; // TODO - hidden assumption, no paralel connections to the same user
+            */
         if(this.pass.equals(pass)){
             logedIn = true;
             return true;
