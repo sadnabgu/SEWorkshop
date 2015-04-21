@@ -1,6 +1,7 @@
 package org.bgu.service;
 
 import org.bgu.domain.facades.UserFacade;
+import org.bgu.domain.model.Guest;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.User;
 
@@ -12,7 +13,10 @@ import org.bgu.domain.model.User;
 public class UserService {
     private User user;
 
-
+    /**
+     * construct user service per client (connection)
+     * initial state the client identify as Guest
+     */
     public UserService(){
         user = UserFacade.createGuest();
     }
@@ -29,11 +33,14 @@ public class UserService {
     void logOut(){
         // TODO - wadafak am I doing here ? :|
         UserFacade.memberLogOut(user);
+        user = UserFacade.createGuest();
+
+
     }
 
     /* create new member while user ask for signUp */
-    boolean addMember(String userName,
-                    String pass){
+    public static boolean addMember(String userName,
+                                    String pass){
         Member result;
         //TODO -  validate parameters
 
@@ -43,5 +50,30 @@ public class UserService {
             return false;
 
         return true;
+    }
+
+    /**
+     * client oriented registration
+     * TODO - add rest of the member properties and validate it
+     * @param userName - unique user name (id)
+     * @param pass - the new user password
+     * @return true if success
+     */
+    public boolean registerMember(String userName,
+                                  String pass){
+        // only guest can register new member
+        if(user.getClass() != Guest.class){  //TODO - find better way to check if its Guest
+            return false;
+        }
+        // TODO - validate permisions??
+        if(!addMember(userName, pass)){
+            return false;
+        }
+
+        return logIn(userName, pass);
+    }
+
+    public User getUser() {
+        return user;
     }
 }

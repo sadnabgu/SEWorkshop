@@ -67,6 +67,14 @@ public class UserFacade {
     }
 
     public static Member addMember(String userName, String pass) {
+        // check that the userName not exist
+        for (Iterator<User> iterator = users.iterator(); iterator.hasNext(); ) {
+            User next =  iterator.next();
+            if(next.getUserName().equals(userName)){
+                return null;
+            }
+        }
+
         Member member = new Member(userName, pass); //TODO - should be a member or specific admin class??
         if (member == null)
             return null;
