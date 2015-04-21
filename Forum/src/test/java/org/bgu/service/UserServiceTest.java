@@ -63,7 +63,38 @@ public class UserServiceTest {
         logoutSystem();
         Assert.assertFalse(userService.registerMember(MEMBER1, MEMBER1_PASS));
         Assert.assertFalse(userService.registerMember(MEMBER1, "newPass"));
-        //TODO - check that users really was created
+        //TODO - check that users wasn't created
     }
+
+    @Test
+    public void loginMember_login_userIsLoggedIn(){
+        Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS));
+        //TODO - verify member is loggedin
+        logoutSystem();
+        Assert.assertTrue(userService.logIn(MEMBER2, MEMBER2_PASS));
+        //TODO - verify member is loggedin
+
+    }
+
+    @Test
+    public void loginMember_wrongLogin_fail(){
+        // wrong member identifiers
+        Assert.assertFalse(userService.logIn("notMember", "somePass"));
+        Assert.assertFalse(userService.logIn("notMember", MEMBER1_PASS));
+        Assert.assertFalse(userService.logIn("Guest", "somePass"));
+        Assert.assertFalse(userService.logIn(MEMBER1, "notPassOfMember1"));
+        //verify that no member is logged in
+        Assert.assertFalse(userService.isLoggedin());
+
+        // user is already loggedin
+        Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS));
+        Assert.assertFalse(userService.logIn(MEMBER1, MEMBER1_PASS));
+        Assert.assertFalse(userService.logIn(MEMBER2, MEMBER2_PASS));
+        // verify member1 still loggedin
+        Assert.assertTrue(userService.isLoggedin());
+        Assert.assertTrue(userService.getUser().getUserName().equals(MEMBER1));
+    }
+
+
 
 }

@@ -21,16 +21,21 @@ public class UserService {
         user = UserFacade.createGuest();
     }
 
-    boolean logIn(String userName, String pass){
+    public  boolean logIn(String userName, String pass){
+        // only Guest can loggin
+        if(isLoggedin()){
+            return false;
+        }
         // TODO - identify user
         user = UserFacade.getMember(userName, pass);
         if (user == null){
+            user = UserFacade.createGuest();
             return false;
         }
         return true;
     }
 
-    void logOut(){
+    public void logOut(){
         // TODO - wadafak am I doing here ? :|
         UserFacade.memberLogOut(user);
         user = UserFacade.createGuest();
@@ -46,8 +51,9 @@ public class UserService {
 
         // if OK create and add the user
         result = UserFacade.addMember(userName, pass);
-        if(result == null)
+        if(result == null){
             return false;
+        }
 
         return true;
     }
@@ -55,6 +61,7 @@ public class UserService {
     /**
      * client oriented registration
      * TODO - add rest of the member properties and validate it
+     * TODO - verify by mail (left for release 2??)
      * @param userName - unique user name (id)
      * @param pass - the new user password
      * @return true if success
@@ -62,7 +69,7 @@ public class UserService {
     public boolean registerMember(String userName,
                                   String pass){
         // only guest can register new member
-        if(user.getClass() != Guest.class){  //TODO - find better way to check if its Guest
+        if(isLoggedin()){
             return false;
         }
         // TODO - validate permisions??
@@ -75,5 +82,10 @@ public class UserService {
 
     public User getUser() {
         return user;
+    }
+
+    public boolean isLoggedin() {
+        //TODO - find better way to check if its Guest
+        return (user.getClass() != Guest.class);
     }
 }
