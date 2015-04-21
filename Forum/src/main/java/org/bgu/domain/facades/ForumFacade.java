@@ -13,9 +13,17 @@ public class ForumFacade {
     private static Collection<Forum> forums = new ArrayList<>();
 
     public static Forum createForum(int forumId, String forumName) {
+        // check that the forum didn't exist already
+        for (Iterator<Forum> iterator = forums.iterator(); iterator.hasNext(); ) {
+            Forum next =  iterator.next();
+            if (next.getId() == forumId){
+                System.err.println("forum with id=" + forumId + " already exist");
+                return null;
+            }
+        }
+
         Forum forum = new Forum(forumId, forumName);
-        if (forum == null)
-            return null;
+
         forums.add(forum);
         return forum;
     }
