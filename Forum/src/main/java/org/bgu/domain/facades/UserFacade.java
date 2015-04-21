@@ -73,4 +73,13 @@ public class UserFacade {
         users.add(member);
         return member;
     }
+
+    /**
+     * clear all the user database
+     * used only for the testing
+     */
+    public static void resetUsers() {
+        users.clear();
+        superAdmins.clear();
+    }
 }

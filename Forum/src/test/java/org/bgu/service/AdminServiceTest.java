@@ -1,4 +1,4 @@
-package org.bgu;
+package org.bgu.service;
 
 import junit.framework.Assert;
 import org.bgu.service.AdminService;
@@ -13,11 +13,12 @@ public class AdminServiceTest {
     public static final String ADMIN1_NAME = "admin1";
     public static final String ADMIN1_PASS = "pass1";
 
-    public static AdminService adminService = new AdminService();
+    public static AdminService adminService;
 
     @BeforeClass
     public static void initialSystem(){
         adminService = new AdminService();
+        adminService.resetSystem();
         //adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS);
         Assert.assertTrue(adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
     }
@@ -35,8 +36,18 @@ public class AdminServiceTest {
 
     @Test
     public void initializeSystem_innitialSequence_pass(){
-        adminService = new AdminService();   // reset system (logout)
+        adminService.resetSystem();
+        Assert.assertTrue(adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
+        logoutSystem();
         Assert.assertTrue(adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
+    }
+
+    @Test
+    public void initializeSystem_innitialSequence_fail(){
+        adminService.resetSystem();
+
+        Assert.assertFalse(adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
+        Assert.assertTrue(adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
     }
 
     @Test

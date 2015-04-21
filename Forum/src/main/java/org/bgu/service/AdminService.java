@@ -69,4 +69,15 @@ public class AdminService {
 
         return true;
     }
+
+    /**
+     * un-initialize the system
+     * used only for the testing
+     */
+    public void resetSystem() {
+        initialized = false;
+        adminMember = null;
+        UserFacade.resetUsers();
+        ForumFacade.resetForums();
+    }
 }

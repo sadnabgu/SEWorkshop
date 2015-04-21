@@ -36,4 +36,12 @@ public class ForumFacade {
         }
         return null;
     }
+
+    /**
+     * clear all the forums database
+     * used only for the testing
+     */
+    public static void resetForums() {
+        forums.clear();
+    }
 }
