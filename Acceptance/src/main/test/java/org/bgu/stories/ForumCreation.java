@@ -1,7 +1,10 @@
 package org.bgu.stories;
 
+import org.bgu.domain.facades.ForumFacade;
+import org.bgu.domain.model.Forum;
 import org.junit.Ignore;
 import org.junit.Test;
+import java.lang.System;
 
 /**
  * Created by gur on 21/04/2015.
@@ -19,13 +22,35 @@ public class ForumCreation {
     *
      */
     public void createForumWithCorrectData_SystemInitialized_NewForumInWaitingState(){
-        // TODO: Setup system to initial state
+        System.out.print("testing 'createForumWithCorrectData_SystemInitialized_NewForumInWaitingState' \n");
+        // TODO: Setup system to initial state :
+        ForumFacade forumFacade = new ForumFacade();
 
         // TODO: Simulate Super-Admin clicks Create-Forum button
+        int forumID = 1234;
+        String forumName = "Tapuz";
 
         // TODO: Insert valid data
+        Forum forumCreated = forumFacade.createForum(forumID, forumName);
 
         // TODO: verify : Query system so it has a new forum in waiting state
+        Forum forumReturned = forumFacade.getForum(forumID);
+
+        if (forumCreated!=null &&
+                forumReturned!=null &&
+                forumCreated == forumReturned &&
+                forumName.equals(forumReturned.getName()) &&
+                forumReturned.getId() == forumID
+            ){
+
+            System.out.print("Passed! :) \n");
+        }
+        else {
+            System.out.print("Failed! :( \n");
+        }
+
+        // TODO: Clear forum data
+        forumFacade.resetForums();
     }
 
     @Test
