@@ -8,6 +8,7 @@ import java.lang.System;
 
 /**
  * Created by gur on 21/04/2015.
+ *
  */
 public class ForumCreation {
     @Test
@@ -23,18 +24,18 @@ public class ForumCreation {
      */
     public void createForumWithCorrectData_SystemInitialized_NewForumInWaitingState(){
         System.out.print("testing 'createForumWithCorrectData_SystemInitialized_NewForumInWaitingState' \n");
-        // TODO: Setup system to initial state :
-        ForumFacade forumFacade = new ForumFacade();
+        // Setup system to initial state :
+        //ForumFacade forumFacade = new ForumFacade();
 
-        // TODO: Simulate Super-Admin clicks Create-Forum button
+        // Simulate Super-Admin clicks Create-Forum button
         int forumID = 1234;
         String forumName = "Tapuz";
 
-        // TODO: Insert valid data
-        Forum forumCreated = forumFacade.createForum(forumID, forumName);
+        // Insert valid data
+        Forum forumCreated = ForumFacade.createForum(forumID, forumName);
 
-        // TODO: verify : Query system so it has a new forum in waiting state
-        Forum forumReturned = forumFacade.getForum(forumID);
+        // verify : Query system so it has a new forum in waiting state
+        Forum forumReturned = ForumFacade.getForum(forumID);
 
         if (forumCreated!=null &&
                 forumReturned!=null &&
@@ -49,8 +50,8 @@ public class ForumCreation {
             System.out.print("Failed! :( \n");
         }
 
-        // TODO: Clear forum data
-        forumFacade.resetForums();
+        // Clear forum data
+        ForumFacade.resetForums();
     }
 
     @Test
