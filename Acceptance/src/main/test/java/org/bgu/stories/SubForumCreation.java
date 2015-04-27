@@ -1,5 +1,9 @@
 package org.bgu.stories;
 
+import org.bgu.domain.facades.ForumFacade;
+import org.bgu.domain.model.Forum;
+import org.bgu.domain.model.Member;
+import org.bgu.domain.model.SubForum;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -19,15 +23,41 @@ public class SubForumCreation {
     *
      */
     public void createSubForumWithCorrectData_ForumCreation_NewSubForumIsCreated(){
-        // TODO: Setup system to initial state
+        System.out.print("testing 'createForumWithCorrectData_SystemInitialized_NewForumInWaitingState' \n");
+        // Setup system to initial state
+        //ForumFacade forumFacade = new ForumFacade();
 
-        // TODO: Forum creation
+        // Forum creation
+        int forumID = 1234;
+        String forumName = "Tapuz";
+        Forum forumCreated = ForumFacade.createForum(forumID, forumName);
 
-        // TODO: Simulate Super-Admin clicks Create Sub Forum button
+        // Member creation
+        String memberName = "Milky";
+        String memberPass = "ParrotOnTheShoulder";
+        Member member = new Member(memberName, memberPass);
 
-        // TODO: Insert valid data
+        // Simulate Super-Admin clicks Create Sub Forum button
+        String subName = "Cars";
 
-        // TODO: verify : Query system so it has a new Sub forum is created
+        // Insert valid data
+        boolean flag = forumCreated.addNewSubForum(subName, member);
+
+        // verify : Query system so it has a new Sub forum is created
+        SubForum subForumReturned = forumCreated.getSubForum(subName);
+        if (flag &&
+                subForumReturned != null &&
+                subName.equals(subForumReturned.getName())
+            ){
+            System.out.print("Passed! :) \n");
+        }else {
+            System.out.print("Failed! :( \n");
+        }
+
+        // Clear forum data
+        ForumFacade.resetForums();
+
+
     }
 
         @Test
