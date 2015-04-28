@@ -1,4 +1,4 @@
-package org.bgu.stories;
+package org.bgu.stories.ForumStories;
 
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.model.Forum;
@@ -12,7 +12,6 @@ import org.junit.Test;
  */
 public class SubForumCreation {
     @Test
-    @Ignore
     /*
     *Test purpose: Sub Forum is in created after giving correct data
     *
@@ -20,6 +19,7 @@ public class SubForumCreation {
     * 1. insert correct data
     * 2. verify: sub forum is created
     *
+    * TODO - work with Junit !!!
     *
      */
     public void createSubForumWithCorrectData_ForumCreation_NewSubForumIsCreated(){

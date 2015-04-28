@@ -1,4 +1,4 @@
-package org.bgu.stories;
+package org.bgu.stories.ForumStories;
 
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.model.Forum;
@@ -10,7 +10,7 @@ import java.lang.System;
  * Created by gur on 21/04/2015.
  *
  */
-public class ForumCreation {
+public class DeleteForum {
     @Test
     @Ignore
     /*

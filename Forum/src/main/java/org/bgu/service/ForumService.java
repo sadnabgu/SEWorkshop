@@ -36,11 +36,11 @@ public class ForumService {
             return false;
         return true;
     }
-
+/* TODO
     public Collection<SubForum> getSubForums(){
         return forum.getSubForums();
     }
-
+*/
     public boolean addNewThread(String threadName){
         //TODO - validate
         boolean result = forum.addNewThread(threadName);

@@ -1,4 +1,4 @@
-package org.bgu.stories.usersStories;
+package org.bgu.stories;
 
 import org.junit.Ignore;
 import org.junit.Test;

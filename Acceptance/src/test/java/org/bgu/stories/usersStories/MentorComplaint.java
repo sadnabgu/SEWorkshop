@@ -66,7 +66,7 @@ public class MentorComplaint {
     *
     *
      */
-    public void ComplaintWasNotSentWithInCorrectDataByMember_UserIsLogin_ComplaintWasNotSent(){
+    public void ComplaintWasNotSentWithGuest_UserIsLogin_ComplaintWasNotSent(){
         // TODO: Setup system to initial state
 
         // TODO: Simulate guest clicks Complaint mentor button

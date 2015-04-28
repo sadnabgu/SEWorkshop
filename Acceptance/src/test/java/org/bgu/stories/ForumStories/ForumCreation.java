@@ -1,4 +1,5 @@
-package org.bgu.stories;
+package org.bgu.stories.ForumStories;
+
 
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.model.Forum;

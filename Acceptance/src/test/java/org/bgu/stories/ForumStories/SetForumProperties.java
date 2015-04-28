@@ -1,4 +1,4 @@
-package org.bgu.stories;
+package org.bgu.stories.ForumStories;
 
 import org.junit.Ignore;
 import org.junit.Test;
