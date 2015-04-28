@@ -15,18 +15,20 @@ public class UserServiceTest {
     public static final String MEMBER2 = "member2";
     public static final String MEMBER2_PASS = "member2Pass";
 
+    public static final int FORUM1_ID = 1;
+
     public static UserService userService;
 
 
     @BeforeClass
     public static void initialSystem(){
         AdminServiceTest.initialSystem();
-        userService = new UserService();
+        userService = new UserService(FORUM1_ID);
         //AdminServiceTest.createForum("forum");
         Assert.assertTrue("can't create member1",
-                UserService.addMember(MEMBER1, MEMBER1_PASS));
+                userService.addMember(MEMBER1, MEMBER1_PASS));
         Assert.assertTrue("can't create member2",
-                UserService.addMember(MEMBER2, MEMBER2_PASS));
+                userService.addMember(MEMBER2, MEMBER2_PASS));
     }
 
     @Before
@@ -36,7 +38,7 @@ public class UserServiceTest {
 
     @Test
     public void guestUserEntry_constructUserService_logginAsGuest(){
-        userService = new UserService();
+        userService = new UserService(FORUM1_ID);
         Assert.assertTrue(userService.getUser().getClass() == Guest.class);
     }
 

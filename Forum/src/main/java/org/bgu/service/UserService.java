@@ -1,6 +1,7 @@
 package org.bgu.service;
 
 import org.bgu.domain.facades.UserFacade;
+import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Guest;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.User;
@@ -11,13 +12,15 @@ import org.bgu.domain.model.User;
  * Created by hodai on 4/18/15.
  */
 public class UserService {
+    private final int forumId;
     private User user;
 
     /**
      * construct user service per client (connection)
      * initial state the client identify as Guest
      */
-    public UserService(){
+    public UserService(int forumId){
+        this.forumId = forumId;
         user = UserFacade.createGuest();
     }
 
@@ -27,7 +30,7 @@ public class UserService {
             return false;
         }
         // TODO - identify user
-        user = UserFacade.getMember(userName, pass);
+        user = UserFacade.getMember(forumId, userName, pass);
         if (user == null){
             user = UserFacade.createGuest();
             return false;
@@ -44,13 +47,13 @@ public class UserService {
     }
 
     /* create new member while user ask for signUp */
-    public static boolean addMember(String userName,
+    public boolean addMember(String userName,
                                     String pass){
         Member result;
         //TODO -  validate parameters
 
         // if OK create and add the user
-        result = UserFacade.addMember(userName, pass);
+        result = UserFacade.addMember(forumId, userName, pass);
         if(result == null){
             return false;
         }
@@ -88,4 +91,5 @@ public class UserService {
         //TODO - find better way to check if its Guest
         return (user.getClass() != Guest.class);
     }
+
 }
