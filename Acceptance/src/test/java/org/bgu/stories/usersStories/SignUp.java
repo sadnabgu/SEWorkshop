@@ -1,5 +1,13 @@
 package org.bgu.stories.usersStories;
 
+import junit.framework.Assert;
+import org.bgu.ForumTestDriver;
+import org.bgu.MemberCredentials;
+import org.bgu.SignUpTestDriver;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -7,8 +15,17 @@ import org.junit.Test;
  * Created by Sharon Kerzman on 24/04/2015.
  */
 public class SignUp {
+    DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
+    // Parsing the date
+    MemberCredentials credentials;
+
+    @Before
+    public void init(){
+         credentials = new MemberCredentials("sharon@kerzman", "kerzman", dtf.parseDateTime("16/3/1989"), "123456", "123456", "sharon", "kerzman");
+    }
+
     @Test
-    @Ignore
+    //@Ignore
     /*
     *Test purpose: user is a member after signing up with correct data
     *
@@ -18,18 +35,24 @@ public class SignUp {
     *
     *
      */
-    public void UserSignUpWithCorrectData_UserIsSignedUp_UserIsActive(){
+    public void SignUp_UserSignUpWithCorrectData_UserFoundInSystem(){
         // TODO: Setup system to initial state
 
-        // TODO: Simulate guest clicks sign up button
+        // Simulate guest clicks sign up button
+        ForumTestDriver forumTestDriver = ForumTestDriver.create();
+        SignUpTestDriver signUpTestDriver = forumTestDriver.clickSignUp();
 
-        // TODO: Insert valid data
+        // Insert valid data
+        signUpTestDriver.setCredentials(credentials);
+        MemberCredentials result = signUpTestDriver.clickSignUp();
 
-        // TODO: verify : Query system so user is now log in and exists
+        // verify : Query system so user is now log in and exists
+        Assert.assertEquals("given credentials are different from server", credentials, result);
     }
 
+
+
     @Test
-    @Ignore
     /*
     *Test purpose: user is a guest after signed up with incorrect data
     *
@@ -40,12 +63,6 @@ public class SignUp {
     *
      */
     public void UserLoginWithIncorrectData_UserIsSignedUp_UserIsAGuest(){
-        // TODO: Setup system to initial state
 
-        // TODO: Simulate guest clicks sign up button
-
-        // TODO: Insert invalid data
-
-        // TODO: verify : Query system so user is guest and not exists
     }
 }
