@@ -18,18 +18,27 @@ public class UserService {
     /**
      * construct user service per client (connection)
      * initial state the client identify as Guest
+     *
+     * @param forumId - the forum we want to login to
      */
     public UserService(int forumId){
         this.forumId = forumId;
         user = UserFacade.createGuest();
     }
 
+    /**
+     * login user, change user from guest to relevant member
+     *
+     * @param userName - user name
+     * @param pass - user password
+     * @return - true if login success
+     */
     public  boolean logIn(String userName, String pass){
         // only Guest can loggin
         if(isLoggedin()){
             return false;
         }
-        // TODO - identify user
+        // identify user
         user = UserFacade.getMember(forumId, userName, pass);
         if (user == null){
             user = UserFacade.createGuest();
@@ -46,7 +55,9 @@ public class UserService {
 
     }
 
-    /* create new member while user ask for signUp */
+    /**
+     * create new member, user not suppose to use this function directly
+     */
     public boolean addMember(String userName,
                                     String pass){
         Member result;

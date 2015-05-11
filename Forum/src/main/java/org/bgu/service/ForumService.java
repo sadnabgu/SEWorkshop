@@ -49,4 +49,15 @@ public class ForumService {
         return true;
     }
 
+    /**
+     * change the properties of this specific forum
+     *
+     * TODO - need to implement
+     *
+     * @return - true if changes success
+     */
+    public boolean setProperties(){
+        //TODO - implement
+        return false;
+    }
 }
