@@ -1,7 +1,5 @@
 package org.bgu;
 
-import org.joda.time.DateTime;
-
 /**
  * Created by gur on 28/04/2015.
  */
@@ -18,7 +16,7 @@ public class SignUpTestDriver {
 
     public MembersListDriver clickSignUp() {
         MembersListDriver newList = new MembersListDriver();
-        newList.addMember(member);
+        newList.addMemberToWaitingList(member);
         return newList;
     }
 /*

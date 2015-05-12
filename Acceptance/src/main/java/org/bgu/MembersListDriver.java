@@ -1,35 +1,35 @@
 package org.bgu;
-import org.bgu.domain.model.Member;
 
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by Sharon Kerzman on 12/05/2015.
  */
 public class MembersListDriver {
-    private LinkedList<MemberDriver> membersList;
+    private LinkedList<MemberDriver> waitingEmailMembersList;
+    private LinkedList<MemberDriver> onlineMembersList;
+    private LinkedList<MemberDriver> offlineMembersList;
 
     public MembersListDriver() {
-        this.membersList = new LinkedList<MemberDriver> (){
+        this.waitingEmailMembersList = new LinkedList<MemberDriver> (){
         };
     }
 
     public MembersListDriver(LinkedList<MemberDriver> membersList) {
-        this.membersList = membersList;
+        this.waitingEmailMembersList = membersList;
     }
 
 
-    public void addMember(MemberDriver member){
-        membersList.add(member);
+    public void addMemberToWaitingList(MemberDriver member){
+        waitingEmailMembersList.add(member);
     }
 
-    public boolean isMember(MemberDriver member){
-        return membersList.contains(member);
+    public boolean isMemberInWaitingList(MemberDriver member){
+        return waitingEmailMembersList.contains(member);
     }
 
-    public MemberDriver getFirstMember(){
-       return membersList.getFirst();
+    public MemberDriver getFirstMemberFromWaitingList(){
+       return waitingEmailMembersList.getFirst();
     }
 }
 

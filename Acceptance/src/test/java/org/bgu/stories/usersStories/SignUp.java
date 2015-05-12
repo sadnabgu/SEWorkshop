@@ -2,12 +2,9 @@ package org.bgu.stories.usersStories;
 
 import junit.framework.Assert;
 import org.bgu.*;
-import org.bgu.domain.model.Member;
-import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -49,7 +46,7 @@ public class SignUp {
         MembersListDriver members = signUpTestDriver.clickSignUp();
 
         // verify : Query system so user is now log in and exists
-        Assert.assertTrue("member do not exist in data base", members.isMember(member));
+        Assert.assertTrue("member do not exist in data base", members.isMemberInWaitingList(member));
         MemberCredentials testedMemberCredentials = member.getCredentials();
         Assert.assertEquals("given credentials are different from server", credentials, testedMemberCredentials);
     }
@@ -79,7 +76,7 @@ public class SignUp {
         MembersListDriver members = signUpTestDriver.clickSignUp();
 
         // verify : Query system so user is now log in and exists
-        Assert.assertNull("member user name is exist when it shouldn't",members.getFirstMember().getCredentials());
+        Assert.assertNull("member user name is exist when it shouldn't", members.getFirstMemberFromWaitingList().getCredentials());
 
     }
 }
