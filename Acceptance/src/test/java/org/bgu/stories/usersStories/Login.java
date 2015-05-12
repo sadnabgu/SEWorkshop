@@ -45,7 +45,8 @@ public class Login {
     *
     *
      */
-    public void UserLoginWithIncorrectData_UserIsSignedUp_UserIsAGuest(){UserService user = new UserService(1);
+    public void UserLoginWithIncorrectData_UserIsSignedUp_UserIsAGuest(){
+        UserService user = new UserService(1);
         user.registerMember("bar", "refaeli");
         user.logOut();
         assertFalse("user is logged in", user.isLoggedin());
