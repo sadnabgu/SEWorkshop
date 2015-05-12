@@ -37,7 +37,6 @@ public class SignUp {
     *
      */
     public void SignUp_UserSignUpWithCorrectData_UserFoundInSystem(){
-        // TODO: Setup system to initial state
 
         // Simulate guest clicks sign up button
         ForumTestDriver forumTestDriver = ForumTestDriver.create();
@@ -68,7 +67,6 @@ public class SignUp {
     *
      */
     public void UserLoginWithIncorrectData_UserIsSignedUp_UserIsAGuest(){
-        // TODO: Setup system to initial state
 
         // Simulate guest clicks sign up button
         ForumTestDriver forumTestDriver = ForumTestDriver.create();
