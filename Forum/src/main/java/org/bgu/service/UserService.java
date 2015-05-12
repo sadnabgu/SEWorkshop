@@ -12,84 +12,62 @@ import org.bgu.domain.model.User;
  * Created by hodai on 4/18/15.
  */
 public class UserService {
-    private final int forumId;
-    private User user;
 
+    private final int _forumId;
+    private User _user;
     /**
      * construct user service per client (connection)
      * initial state the client identify as Guest
      */
     public UserService(int forumId){
-        this.forumId = forumId;
-        user = UserFacade.createGuest();
+        _forumId = forumId;
+        _user = UserFacade.createGuest();
     }
 
-    public  boolean logIn(String userName, String pass){
-        // only Guest can loggin
+    public  boolean logIn(int userId, String pass){
+        // only Guest can login
         if(isLoggedin()){
             return false;
         }
-        // TODO - identify user
-        user = UserFacade.getMember(forumId, userName, pass);
-        if (user == null){
-            user = UserFacade.createGuest();
+        _user = UserFacade.loginMember(_forumId, userId, pass);
+        if (_user == null){
+            _user = UserFacade.createGuest();
             return false;
         }
         return true;
     }
 
     public void logOut(){
-        // TODO - wadafak am I doing here ? :|
-        UserFacade.memberLogOut(user);
-        user = UserFacade.createGuest();
-
-
-    }
-
-    /* create new member while user ask for signUp */
-    public boolean addMember(String userName,
-                                    String pass){
-        Member result;
-        //TODO -  validate parameters
-
-        // if OK create and add the user
-        result = UserFacade.addMember(forumId, userName, pass);
-        if(result == null){
-            return false;
-        }
-
-        return true;
+        UserFacade.memberLogOut(_user);
+        _user = UserFacade.createGuest();
     }
 
     /**
-     * client oriented registration
-     * TODO - add rest of the member properties and validate it
-     * TODO - verify by mail (left for release 2??)
-     * @param userName - unique user name (id)
-     * @param pass - the new user password
-     * @return true if success
+     *
+     * @param userName
+     * @param pass
+     * @param email
+     * @return true if a user entered legal data, and an email was sent to him in order to finish registration process.
+     * false otherwise
      */
-    public boolean registerMember(String userName,
-                                  String pass){
-        // only guest can register new member
-        if(isLoggedin()){
-            return false;
-        }
-        // TODO - validate permisions??
-        if(!addMember(userName, pass)){
-            return false;
-        }
+    public boolean registerMember(int userId, String pass, String email){
+        return UserFacade.register(_forumId, userId, pass, email);
+    }
 
-        return logIn(userName, pass);
+    public boolean emailValidation(int userId){
+        _user = UserFacade.addMember(userId);
+        if (_user == null)
+            return false;
+        return true;
     }
 
     public User getUser() {
-        return user;
+        return _user;
     }
 
     public boolean isLoggedin() {
         //TODO - find better way to check if its Guest
-        return (user.getClass() != Guest.class);
+        return (_user.getClass() != Guest.class);
     }
 
 }

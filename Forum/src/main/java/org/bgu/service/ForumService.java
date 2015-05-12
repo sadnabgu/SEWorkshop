@@ -35,8 +35,12 @@ public class ForumService {
     }
 
     public boolean removeMessage(int msgId, String userName){
-        return ForumFacade.removeMsg(_forum, msgId, userName);
+        //TODO - how to implement in an efficient way (recursion, pointers..)
+        return true;
+    }
 
+    public boolean removeSubForum(String subForumName){
+        
     }
 
 }

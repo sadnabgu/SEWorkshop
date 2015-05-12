@@ -4,25 +4,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Member extends User{
-    private String name;
-    private String pass;
-    private boolean logedIn; //TODO - it's really nessesary???
+    private String _name;
+    private String _pass;
+    private String _email;
+    private boolean _isLogedIn;
+    private int _msgsTotal;
+    private Collection<Member> _friends;
+    private State _membershipStatus; //Regmember, SilverMember, GoldMember;
+    //TODO - add field of total logged in time
 
-    Collection<Member> friends;
-
-    public Member(String name, String pass){
-        this.friends = new ArrayList<Member>();
-        this.name = name;
-        this.pass = pass;
-    }
-
-    public Collection<Member> getFriends(){
-        return friends;
-    }
-
-    @Override
-    public String getUserName() {
-        return name;
+    public Member(String name, String pass, String email){
+        _name = name;
+        _pass = pass;
+        _email = email;
+        _isLogedIn = false;
+        _msgsTotal = 0;
+        _friends = new ArrayList<Member>();
+        _membershipStatus = new RegMemberStatus();      //state class of a member. default - regular member
     }
 
     @Override
@@ -30,17 +28,55 @@ public class Member extends User{
         /*
         if(logedIn)
             return false; // TODO - hidden assumption, no paralel connections to the same user
-            */
-        if(this.pass.equals(pass)){
-            logedIn = true;
+         */
+        if(_pass.equals(pass)){
+            _isLogedIn = true;
             return true;
         } else {
             return false;
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+    public int getUserId(){
+        return _id;
+    }
+
+    public boolean legalDetails(String name, String pass, String email){
+        //TODO - check if legal member attributes
+        return true;
+    }
+
+    public void emailValidate(){
+        _logedIn = true;
+    }
+
+    public Collection<Member> getFriends(){
+        return _friends;
+    }
+
+    @Override
+    public String getUserName() {
+        return _name;
+    }
+
+
+
     @Override
     public void logOut() {
-        logedIn = false;
+        _logedIn = false;
     }
+
+
 }
