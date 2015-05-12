@@ -12,71 +12,63 @@ import org.bgu.domain.model.Member;
  */
 public class AdminService {
 
-    /** static flag - indicate if the forum was initialized */
-    static private boolean initialized = false;
+    // TODO - check if can be more then one super admin
+    Member _superAdminMember;
 
-    Member adminMember; // TODO - check if can be more then one super admin
+   public AdminService(){
+       _superAdminMember = null;
+   }
 
-    public AdminService(){
-        adminMember = null;
-
+    public boolean isInitialized(){
+        return (UserFacade.isInitialized());
     }
 
-   /**
-    * first init routine  - initial administrator details
-    */
-   public boolean initializeSystem(String adminName,
-                            String adminPass){
-       //TODO - validate legal data
+    /**
+     * first init routine  - initial administrator details
+     */
+    public boolean initializeSystem(String adminName, String adminPass) throws Exception {
+        //TODO - validate legal data
+        _superAdminMember = UserFacade.createSuperAdmin(adminName, adminPass);
+        if(_superAdminMember == null)
+            return false;
+        return true;
+    }
 
-       // make sure the system wasn't initiated before
-       if (initialized){
-           System.err.println("system already initialized");
-           return false;
-       }
-
-       //initial the system
-       initialized = true;
-       adminMember = UserFacade.createSuperAdmin(adminName, adminPass);
-       return true;
-   }
     /**
      * login to the whole damn system as the super admin
      */
-    public boolean loginSystem(String adminName,
-                        String adminPass){
+    public boolean loginSystem(String adminName, String adminPass){
         // check authentication
-        if(!initialized){
-            System.err.println("system un-initialized");
+        _superAdminMember = UserFacade.loginSuperAdmin(adminName, adminPass);
+        if(_superAdminMember == null)
             return false;
-        }
-        adminMember = UserFacade.loginSuperAdmin(adminName, adminPass);
-        if(adminMember == null)
-            return false;
-
         return true;
     }
 
-    public boolean createForum(int forumId, String ForumName){
-        if (adminMember == null){
-            System.err.println("need to be loggedin");
-            return false;       // only logged in admin can create new forum
+    //TODO - logout form system
+
+    /**
+     *
+     * @param forumName
+     * @param forumAdminName
+     * @return true if a new Forum was added to the system, "on-hold", before any policy was configured
+     */
+    public boolean createForum(String forumName, String forumAdminName, String forumAdminPass) throws Exception {
+        if (_superAdminMember == null){
+            throw new Exception("Log in first!");
         }
-
-        Forum forum = ForumFacade.createForum(forumId, ForumName);
-        if (forum == null)
-            return false;        // fail creating forum
-
+        if (!ForumFacade.createForum(forumName, forumAdminName, forumAdminPass))
+            throw new Exception("Forum creation process failed!");
         return true;
     }
 
+    //TODO - erase!!
     /**
      * un-initialize the system
      * used only for the testing
      */
     public void resetSystem() {
-        initialized = false;
-        adminMember = null;
+        _superAdminMember = null;
         UserFacade.resetUsers();
         ForumFacade.resetForums();
     }
