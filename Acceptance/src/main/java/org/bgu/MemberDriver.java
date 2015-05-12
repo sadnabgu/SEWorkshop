@@ -3,7 +3,7 @@ package org.bgu;
 /**
  * Created by Sharon Kerzman on 12/05/2015.
  */
-public class MemberDriver {
+public class MemberDriver extends UserDriver {
     private MemberCredentials credentials;
     private String name = "";
     private String state;
