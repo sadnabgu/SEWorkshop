@@ -27,6 +27,18 @@ public class MemberCredentials {
         this.lastname = lastname;
     }
 
+    public MemberCredentials(MemberCredentials other){
+        if (other.getPassword() == other.getRepassword()) {
+            this.email = other.getEmail();
+            this.username = other.getUsername();
+            this.dob = other.getDob();
+            this.password = other.getPassword();
+            this.repassword = other.getRepassword();
+            this.firstname = other.getFirstname();
+            this.lastname = other.getLastname();
+        }
+    }
+
     @Override
     public boolean equals(Object obj){
         if (obj == null || !(obj instanceof MemberCredentials)){
