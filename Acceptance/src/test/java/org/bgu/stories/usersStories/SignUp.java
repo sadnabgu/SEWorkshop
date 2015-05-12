@@ -46,7 +46,8 @@ public class SignUp {
         MembersListDriver members = signUpTestDriver.clickSignUp();
 
         // verify : Query system so user is now log in and exists
-        Assert.assertTrue("member do not exist in data base", members.isMemberInWaitingList(member));
+        Assert.assertTrue("member is not exist in data base", members.isMemberInWaitingList(member));
+        Assert.assertEquals("member is not in waiting state", members.getFirstMemberFromWaitingList().getState(), "waiting");
         MemberCredentials testedMemberCredentials = member.getCredentials();
         Assert.assertEquals("given credentials are different from server", credentials, testedMemberCredentials);
     }
