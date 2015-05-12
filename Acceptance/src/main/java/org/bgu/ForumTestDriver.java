@@ -8,6 +8,10 @@ public class ForumTestDriver {
        return new ForumTestDriver();
     }
 
+    public SubForumTestDriver createNewSubForum(){
+        return new SubForumTestDriver();
+    }
+
     public SignUpTestDriver clickSignUp(MemberDriver member) {
         return new SignUpTestDriver(member);
     }
