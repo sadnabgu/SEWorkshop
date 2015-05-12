@@ -26,6 +26,14 @@ public class MemberCredentials {
         this.firstname = firstname;
         this.lastname = lastname;
     }
+    public MemberCredentials(String email, String username, String password, String repassword, String firstname, String lastname){
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.repassword = repassword;
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
 
     public MemberCredentials(MemberCredentials other){
         if (other.getPassword() == other.getRepassword()) {
