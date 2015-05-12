@@ -1,9 +1,8 @@
 package org.bgu.stories.usersStories;
 
 import junit.framework.Assert;
-import org.bgu.ForumTestDriver;
-import org.bgu.MemberCredentials;
-import org.bgu.SignUpTestDriver;
+import org.bgu.*;
+import org.bgu.domain.model.Member;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -18,10 +17,12 @@ public class SignUp {
     DateTimeFormatter dtf = DateTimeFormat.forPattern("dd/MM/yyyy");
     // Parsing the date
     MemberCredentials credentials;
+    MemberCredentials falseCredentials;
 
     @Before
     public void init(){
          credentials = new MemberCredentials("sharon@kerzman", "kerzman", dtf.parseDateTime("16/3/1989"), "123456", "123456", "sharon", "kerzman");
+        falseCredentials = new MemberCredentials("sharon@kerzman", "kerzman", dtf.parseDateTime("16/3/1989"), "123456", "111111", "sharon", "kerzman");
     }
 
     @Test
@@ -40,14 +41,18 @@ public class SignUp {
 
         // Simulate guest clicks sign up button
         ForumTestDriver forumTestDriver = ForumTestDriver.create();
-        SignUpTestDriver signUpTestDriver = forumTestDriver.clickSignUp();
+
+        MemberDriver member = new MemberDriver(credentials);
+        SignUpTestDriver signUpTestDriver = forumTestDriver.clickSignUp(member);
 
         // Insert valid data
-        signUpTestDriver.setCredentials(credentials);
-        MemberCredentials result = signUpTestDriver.clickSignUp();
+
+        MembersListDriver members = signUpTestDriver.clickSignUp();
 
         // verify : Query system so user is now log in and exists
-        Assert.assertEquals("given credentials are different from server", credentials, result);
+        Assert.assertTrue("member do not exist in data base", members.isMember(member));
+        MemberCredentials testedMemberCredentials = member.getCredentials();
+        Assert.assertEquals("given credentials are different from server", credentials, testedMemberCredentials);
     }
 
 
@@ -63,6 +68,20 @@ public class SignUp {
     *
      */
     public void UserLoginWithIncorrectData_UserIsSignedUp_UserIsAGuest(){
+        // TODO: Setup system to initial state
+
+        // Simulate guest clicks sign up button
+        ForumTestDriver forumTestDriver = ForumTestDriver.create();
+
+        MemberDriver member = new MemberDriver(falseCredentials);
+        SignUpTestDriver signUpTestDriver = forumTestDriver.clickSignUp(member);
+
+        // Insert valid data
+
+        MembersListDriver members = signUpTestDriver.clickSignUp();
+
+        // verify : Query system so user is now log in and exists
+        Assert.assertNull("member user name is exist when it shouldn't",members.getFirstMember().getCredentials());
 
     }
 }

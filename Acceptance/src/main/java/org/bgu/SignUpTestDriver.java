@@ -6,16 +6,22 @@ import org.joda.time.DateTime;
  * Created by gur on 28/04/2015.
  */
 public class SignUpTestDriver {
-    private MemberCredentials credentials;
+    private MemberDriver member;
 
-    public void setCredentials(MemberCredentials credentials) {
-        this.credentials = credentials;
+    public SignUpTestDriver(MemberDriver member) {
+        this.member = member;
     }
 
-    public MemberCredentials clickSignUp() {
-        return credentials;
+    public void setCredentials(MemberDriver member) {
+        member = new MemberDriver(member.getCredentials());
     }
 
+    public MembersListDriver clickSignUp() {
+        MembersListDriver newList = new MembersListDriver();
+        newList.addMember(member);
+        return newList;
+    }
+/*
     public boolean CheckEmailIsValid(){
         String email = credentials.getEmail();
 
@@ -23,5 +29,5 @@ public class SignUpTestDriver {
 
         return email.matches(EMAIL_REGEX);
     }
-
+*/
 }
