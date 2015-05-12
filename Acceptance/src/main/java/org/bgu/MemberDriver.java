@@ -7,6 +7,7 @@ public class MemberDriver {
     private MemberCredentials credentials;
     private String name = "";
     private String state;
+    private String requiredEmailPassword;
 
     public MemberDriver(MemberCredentials credentials) {
         if (credentials.getPassword() == credentials.getRepassword()) {
@@ -30,5 +31,20 @@ public class MemberDriver {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+
+    public String getRequiredEmailPassword() {
+        return requiredEmailPassword;
+    }
+
+    public void setRequiredEmailPassword(String requiredEmailPassword) {
+        this.requiredEmailPassword = requiredEmailPassword;
+    }
+
+    public void insertEmailVerificaion(String emailVerification) {
+        if (emailVerification == requiredEmailPassword){
+            state = "online";
+        }
     }
 }

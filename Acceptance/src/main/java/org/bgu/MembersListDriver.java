@@ -11,8 +11,9 @@ public class MembersListDriver {
     private LinkedList<MemberDriver> offlineMembersList;
 
     public MembersListDriver() {
-        this.waitingEmailMembersList = new LinkedList<MemberDriver> (){
-        };
+        this.waitingEmailMembersList = new LinkedList<MemberDriver> ();
+        this.onlineMembersList = new LinkedList<MemberDriver> ();
+        this.offlineMembersList = new LinkedList<MemberDriver> ();
     }
 
     public MembersListDriver(LinkedList<MemberDriver> membersList) {
@@ -30,6 +31,23 @@ public class MembersListDriver {
 
     public MemberDriver getFirstMemberFromWaitingList(){
        return waitingEmailMembersList.getFirst();
+    }
+
+    public MemberDriver getFirstMemberFromOnlineList(){
+        return onlineMembersList.getFirst();
+    }
+
+    public void changeUserListFromWaitingToOnline(MemberDriver member) {
+        waitingEmailMembersList.remove(member);
+        onlineMembersList.add(member);
+    }
+
+    public int returnMemberIntFromWaitingList(MemberDriver member){
+        return waitingEmailMembersList.indexOf(member);
+    }
+
+    public int returnMemberIntFromOnlineList(MemberDriver member){
+        return onlineMembersList.indexOf(member);
     }
 }
 
