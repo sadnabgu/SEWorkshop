@@ -1,9 +1,6 @@
 package org.bgu.domain.facades;
 
-import org.bgu.domain.model.Guest;
-import org.bgu.domain.model.Member;
-import org.bgu.domain.model.User;
-import org.bgu.domain.model.UserCollection;
+import org.bgu.domain.model.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +12,6 @@ import java.util.Iterator;
 public class UserFacade {
     //TODO - need to decide ho we manage te users collections, as starting have only one collection
 
-    private static Collection<UserCollection> users = new ArrayList<>();
     private static Collection<Member> superAdmins = new ArrayList<>();
 
     public static User createGuest() {
@@ -24,12 +20,14 @@ public class UserFacade {
     }
 
     public static User getMember(int forumId, String userName, String pass) {
-        UserCollection collection = getCollection(forumId);
-        if (collection == null)
+        Forum forum = ForumFacade.getForum(forumId);
+        if (forum == null)
             return null;
-        for (Iterator<User> userIterator = collection.users.iterator(); userIterator.hasNext(); ) {
-            User next =  userIterator.next();
-            if(next.getUserName() == userName){
+        Collection<Member> members = forum.getMembers();
+
+        for (Iterator<Member> memberIterator = members.iterator(); memberIterator.hasNext(); ) {
+            User next =  memberIterator.next();
+            if(next.getUserName().equals(userName)){
                 if(next.login(pass)){
                     return next;
                 } else {
@@ -57,7 +55,7 @@ public class UserFacade {
     public static Member loginSuperAdmin(String adminName, String adminPass) {
         for (Iterator<Member> iterator = superAdmins.iterator(); iterator.hasNext(); ) {
             Member next =  iterator.next();
-            if(next.getUserName() == adminName){
+            if(next.getUserName().equals(adminName)){
                 if(next.login(adminPass)){
                     return next;
                 } else {
@@ -71,26 +69,27 @@ public class UserFacade {
     }
 
     public static Member addMember(int forumId, String userName, String pass) {
-        UserCollection collaction = getCollection(forumId);
-        if (collaction == null){
-            collaction = addUserCollection(forumId);
-        }
+        // TODO refactor
+        Forum forum = ForumFacade.getForum(forumId);
+        if (forum == null)
+            return null;
+        Collection<Member> members = forum.getMembers();
 
         // check that the userName not exist
-        for (Iterator<User> iterator = collaction.users.iterator(); iterator.hasNext(); ) {
+        for (Iterator<Member> iterator = members.iterator(); iterator.hasNext(); ) {
             User next =  iterator.next();
             if(next.getUserName().equals(userName)){
                 return null;
             }
         }
 
+        //TODO - password / user policy
         Member member = new Member(userName, pass); //TODO - should be a member or specific admin class??
-        if (member == null)
-            return null;
-        collaction.users.add(member);
+
+        members.add(member);
         return member;
     }
-
+/*
     private static UserCollection addUserCollection(int forumId) {
         UserCollection collaction = new UserCollection(forumId);
         collaction.forumId = forumId;
@@ -99,16 +98,17 @@ public class UserFacade {
         users.add(collaction);
         return collaction;
     }
-
+*/
     /**
      * clear all the user database
      * used only for the testing
      */
     public static void resetUsers() {
-        users.clear();
+        // TODO - users.clear();
         superAdmins.clear();
     }
 
+/* TODO
     private static UserCollection getCollection(int forumId){
         for (Iterator<UserCollection> iterator = users.iterator(); iterator.hasNext(); ) {
             UserCollection nextCollaction =  iterator.next();
@@ -117,5 +117,5 @@ public class UserFacade {
         }
         return null;
     }
-
+*/
 }

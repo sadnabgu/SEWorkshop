@@ -1,7 +1,6 @@
 package org.bgu.service;
 
 import org.bgu.domain.facades.UserFacade;
-import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Guest;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.User;
@@ -103,4 +102,11 @@ public class UserService {
         return (user.getClass() != Guest.class);
     }
 
+    public Member getUserAsMember() {
+        //TODO - refactor
+        if (user.getClass() == Guest.class)
+            return null;
+
+        return (Member)user;
+    }
 }

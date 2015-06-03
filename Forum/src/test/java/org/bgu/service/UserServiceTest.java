@@ -1,6 +1,7 @@
 package org.bgu.service;
 
 import junit.framework.Assert;
+import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.model.Guest;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,6 +15,8 @@ public class UserServiceTest {
     public static final String MEMBER1_PASS = "member1Pass";
     public static final String MEMBER2 = "member2";
     public static final String MEMBER2_PASS = "member2Pass";
+    public static final String ADMIN = "admin";
+    public static final String ADMIN_PASS = "pass";
 
     public static final int FORUM1_ID = 1;
 
@@ -23,6 +26,7 @@ public class UserServiceTest {
     @BeforeClass
     public static void initialSystem(){
         AdminServiceTest.initialSystem();
+        ForumFacade.createForum(FORUM1_ID, "sex", ADMIN, ADMIN_PASS);
         userService = new UserService(FORUM1_ID);
         //AdminServiceTest.createForum("forum");
         Assert.assertTrue("can't create member1",
