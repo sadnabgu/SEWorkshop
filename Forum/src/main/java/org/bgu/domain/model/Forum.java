@@ -11,9 +11,15 @@ public class Forum {
     private static Collection<SubForum> subForums;
     private int id;
     private String name;
+    private Collection<Member> members;
+    private Collection<Member> managers;
 
-    public Forum(int forumId, String forumName){
+    public Forum(int forumId, String forumName, Member manager){
         this.subForums = new ArrayList<>();
+        members = new ArrayList<>();
+        managers = new ArrayList<>();
+        managers.add(manager);
+        members.add(manager);
         id = forumId;
         name = forumName;
     }
@@ -53,4 +59,9 @@ public class Forum {
     public String getName() {
         return name;
     }
+
+    public Collection<Member> getMembers() {
+        return members;
+    }
+
 }

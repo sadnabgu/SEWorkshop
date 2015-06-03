@@ -3,9 +3,6 @@ package org.bgu.service;
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
-import org.bgu.domain.model.SubForum;
-
-import java.util.Collection;
 
 /**
  * activate all the forum services (non-users)
@@ -17,20 +14,24 @@ import java.util.Collection;
 public class ForumService {
     //Fields
     private Forum forum;
+    private UserService userService;
 
-    public ForumService(int forumID){
+    public ForumService(int forumID, UserService us){
         //TODO - get the relevant forum object (singleton?)
         forum = ForumFacade.getForum(forumID);
         if (forum == null){
-            //TODO exeption??
+            throw new RuntimeException("forum not found");
         }
+        userService = us;
     }
 
-    public boolean addNewSubForum(String subForumName,
-                            String moderateName){
+    public boolean addNewSubForum(String subForumName){
         //TODO - validate data and add more shit to parameters
         //TODO - check
-        Member moderate = null; //TODO - find the moderator object;
+        Member moderate = userService.getUserAsMember(); // find the moderator object;
+        if(moderate == null)
+            return false;
+
         boolean result =forum.addNewSubForum(subForumName, moderate);
         if(result == false)
             return false;

@@ -25,12 +25,12 @@ public class SubForumCreation {
     public void createSubForumWithCorrectData_ForumCreation_NewSubForumIsCreated(){
         System.out.print("testing 'createForumWithCorrectData_SystemInitialized_NewForumInWaitingState' \n");
         // Setup system to initial state
-        //ForumFacade forumFacade = new ForumFacade();
+        // ForumFacade forumFacade = new ForumFacade();
 
         // Forum creation
         int forumID = 1234;
         String forumName = "Tapuz";
-        Forum forumCreated = ForumFacade.createForum(forumID, forumName);
+        Forum forumCreated = ForumFacade.createForum(forumID, forumName, "admin", "pass");
 
         // Member creation
         String memberName = "Milky";

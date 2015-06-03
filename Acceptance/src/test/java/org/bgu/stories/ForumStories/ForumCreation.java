@@ -13,7 +13,7 @@ import java.lang.System;
  */
 public class ForumCreation {
     @Test
-    @Ignore
+
     /*
     *Test purpose: Forum is in waiting state after giving correct data
     *
@@ -33,7 +33,7 @@ public class ForumCreation {
         String forumName = "Tapuz";
 
         // Insert valid data
-        Forum forumCreated = ForumFacade.createForum(forumID, forumName);
+        Forum forumCreated = ForumFacade.createForum(forumID, forumName, "admin", "pass");
 
         // verify : Query system so it has a new forum in waiting state
         Forum forumReturned = ForumFacade.getForum(forumID);
