@@ -1,7 +1,6 @@
 package org.bgu.service;
 
 import junit.framework.Assert;
-import org.bgu.service.AdminService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,6 +33,7 @@ public class AdminServiceTest {
         Assert.assertTrue(adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
     }
 
+    /** id 1.1.1 */
     @Test
     public void initializeSystem_innitialSequence_pass(){
         adminService.resetSystem();
@@ -42,6 +42,7 @@ public class AdminServiceTest {
         Assert.assertTrue(adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
     }
 
+    /** id 1.1.2 */
     @Test
     public void initializeSystem_innitialSequence_fail(){
         adminService.resetSystem();

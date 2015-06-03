@@ -63,7 +63,7 @@ public class AdminService {
             return false;       // only logged in admin can create new forum
         }
 
-        Forum forum = ForumFacade.createForum(forumId, ForumName);
+        Forum forum = ForumFacade.createForum(forumId, ForumName, "admin", "pass");
         if (forum == null)
             return false;        // fail creating forum
 
