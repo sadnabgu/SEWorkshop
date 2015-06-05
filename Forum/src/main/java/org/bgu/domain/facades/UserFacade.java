@@ -19,8 +19,8 @@ public class UserFacade {
         return new Guest();
     }
 
-    public static User getMember(int forumId, String userName, String pass) {
-        Forum forum = ForumFacade.getForum(forumId);
+    public static User getMember(String forumName, String userName, String pass) {
+        Forum forum = ForumFacade.getForum(forumName);
         if (forum == null)
             return null;
         Collection<Member> members = forum.getMembers();
@@ -68,9 +68,9 @@ public class UserFacade {
         return null;
     }
 
-    public static Member addMember(int forumId, String userName, String pass) {
+    public static Member addMember(String forumName, String userName, String pass) {
         // TODO refactor
-        Forum forum = ForumFacade.getForum(forumId);
+        Forum forum = ForumFacade.getForum(forumName);
         if (forum == null)
             return null;
         Collection<Member> members = forum.getMembers();

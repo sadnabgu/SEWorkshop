@@ -14,13 +14,12 @@ public class Forum {
     private Collection<Member> members;
     private Collection<Member> managers;
 
-    public Forum(int forumId, String forumName, Member manager){
+    public Forum(String forumName, Member manager){
         this.subForums = new ArrayList<>();
         members = new ArrayList<>();
         managers = new ArrayList<>();
         managers.add(manager);
         members.add(manager);
-        id = forumId;
         name = forumName;
     }
 

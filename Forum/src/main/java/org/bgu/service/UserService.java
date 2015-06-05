@@ -11,17 +11,17 @@ import org.bgu.domain.model.User;
  * Created by hodai on 4/18/15.
  */
 public class UserService {
-    private final int forumId;
+    private final String _forumName;
     private User user;
 
     /**
      * construct user service per client (connection)
      * initial state the client identify as Guest
      *
-     * @param forumId - the forum we want to login to
+     * @param forumName - the forum we want to login to
      */
-    public UserService(int forumId){
-        this.forumId = forumId;
+    public UserService(String forumName){
+        _forumName = forumName;
         user = UserFacade.createGuest();
     }
 
@@ -38,7 +38,7 @@ public class UserService {
             return false;
         }
         // identify user
-        user = UserFacade.getMember(forumId, userName, pass);
+        user = UserFacade.getMember(_forumName, userName, pass);
         if (user == null){
             user = UserFacade.createGuest();
             return false;
@@ -63,7 +63,7 @@ public class UserService {
         //TODO -  validate parameters
 
         // if OK create and add the user
-        result = UserFacade.addMember(forumId, userName, pass);
+        result = UserFacade.addMember(_forumName, userName, pass);
         if(result == null){
             return false;
         }

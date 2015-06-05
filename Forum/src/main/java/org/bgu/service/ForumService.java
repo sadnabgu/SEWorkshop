@@ -16,9 +16,9 @@ public class ForumService {
     private Forum forum;
     private UserService userService;
 
-    public ForumService(int forumID, UserService us){
+    public ForumService(String forumName, UserService us){
         //TODO - get the relevant forum object (singleton?)
-        forum = ForumFacade.getForum(forumID);
+        forum = ForumFacade.getForum(forumName);
         if (forum == null){
             throw new RuntimeException("forum not found");
         }

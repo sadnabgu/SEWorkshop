@@ -18,7 +18,7 @@ public class UserServiceTest {
     public static final String ADMIN = "admin";
     public static final String ADMIN_PASS = "pass";
 
-    public static final int FORUM1_ID = 1;
+    public static final String FORUM1_NAME = "sex";
 
     public static UserService userService;
 
@@ -26,8 +26,8 @@ public class UserServiceTest {
     @BeforeClass
     public static void initialSystem(){
         AdminServiceTest.initialSystem();
-        ForumFacade.createForum(FORUM1_ID, "sex", ADMIN, ADMIN_PASS);
-        userService = new UserService(FORUM1_ID);
+        ForumFacade.createForum(FORUM1_NAME, ADMIN, ADMIN_PASS);
+        userService = new UserService(FORUM1_NAME);
         //AdminServiceTest.createForum("forum");
         Assert.assertTrue("can't create member1",
                 userService.addMember(MEMBER1, MEMBER1_PASS));
@@ -42,7 +42,7 @@ public class UserServiceTest {
 
     @Test
     public void guestUserEntry_constructUserService_logginAsGuest(){
-        userService = new UserService(FORUM1_ID);
+        userService = new UserService(FORUM1_NAME);
         Assert.assertTrue(userService.getUser().getClass() == Guest.class);
     }
 
