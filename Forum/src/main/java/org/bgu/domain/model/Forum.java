@@ -28,19 +28,15 @@ public class Forum {
     }*/
 
     public boolean addNewSubForum(String subForumName, Member moderate) {
-        //TODO - maybe implement in the sub forum level
         SubForum subForum = new SubForum(subForumName);
-        if(subForum == null)
-            return false;
-        subForum.addModerate(moderate);
-
-        return true;
+        boolean result = subForum.addModerate(moderate);
+        return result;
     }
 
     public SubForum getSubForum(String subForumName) {
         for (Iterator<SubForum> iterator = subForums.iterator(); iterator.hasNext(); ) {
             SubForum next =  iterator.next();
-            if (next.getName() == subForumName)
+            if (next.getName().equals(subForumName))
                 return next;
         }
         return null;

@@ -32,7 +32,7 @@ public class UserService {
      * @param pass - user password
      * @return - true if login success
      */
-    public  boolean logIn(String userName, String pass){
+    public boolean logIn(String userName, String pass){
         // only Guest can loggin
         if(isLoggedin()){
             return false;

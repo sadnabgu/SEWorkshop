@@ -25,7 +25,11 @@ public class SubForum {
         return moderates;
     }
 
-    public void addModerate(Member moderate) {
+    public boolean addModerate(Member moderate) {
+        if (moderates.contains(moderate))
+            return false;
+        moderates.add(moderate);
+        return true;
     }
 
     public String getName() {

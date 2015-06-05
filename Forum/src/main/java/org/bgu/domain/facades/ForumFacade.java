@@ -2,6 +2,7 @@ package org.bgu.domain.facades;
 
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
+import org.bgu.domain.model.SubForum;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +29,12 @@ public class ForumFacade {
 
         forums.add(forum);
         return forum;
+    }
+
+    public static boolean createSubForum(Forum forum, String subForumName, Member moderator) {
+        if (forum.getSubForum(subForumName) != null)
+            return false;
+        return forum.addNewSubForum(subForumName, moderator);
     }
 
     public static Forum getForum(String forumName) {
