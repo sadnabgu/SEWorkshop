@@ -89,16 +89,7 @@ public class UserFacade {
         members.add(member);
         return member;
     }
-/*
-    private static UserCollection addUserCollection(int forumId) {
-        UserCollection collaction = new UserCollection(forumId);
-        collaction.forumId = forumId;
-        collaction.admins = new ArrayList<>();
-        collaction.users = new ArrayList<>();
-        users.add(collaction);
-        return collaction;
-    }
-*/
+
     /**
      * clear all the user database
      * used only for the testing
@@ -108,14 +99,5 @@ public class UserFacade {
         superAdmins.clear();
     }
 
-/* TODO
-    private static UserCollection getCollection(int forumId){
-        for (Iterator<UserCollection> iterator = users.iterator(); iterator.hasNext(); ) {
-            UserCollection nextCollaction =  iterator.next();
-            if(nextCollaction.forumId == forumId)
-                return nextCollaction;
-        }
-        return null;
-    }
-*/
+
 }
