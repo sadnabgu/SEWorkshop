@@ -16,32 +16,26 @@ public class ForumService {
     private Forum forum;
     private UserService userService;
 
-    public ForumService(String forumName, UserService us){
-        //TODO - get the relevant forum object (singleton?)
+    //TODO - replace exception with factory method
+    public ForumService(String forumName, UserService us) throws Exception {
         forum = ForumFacade.getForum(forumName);
         if (forum == null){
-            throw new RuntimeException("forum not found");
+            throw new Exception("forum not found");
         }
         userService = us;
     }
 
-    public boolean addNewSubForum(String subForumName){
-        //TODO - validate data and add more shit to parameters
-        //TODO - check
-        Member moderate = userService.getUserAsMember(); // find the moderator object;
-        if(moderate == null)
-            return false;
+    public Result addNewSubForum(String subForumName){
+        //TODO - validate data according to POLICY
+        Member moderator = userService.getUserAsMember(); // find the moderator object;
+        if(moderator == null)
+            return Result.MODERATOR_NOT_MEMBER;
+        if (!ForumFacade.createSubForum(forum, subForumName,moderator)){
+            return Result.DUPLICATED_SUBFORUM;
+        }
+       return Result.SUCCESS;
+    }
 
-        boolean result =forum.addNewSubForum(subForumName, moderate);
-        if(result == false)
-            return false;
-        return true;
-    }
-/* TODO
-    public Collection<SubForum> getSubForums(){
-        return forum.getSubForums();
-    }
-*/
     public boolean addNewThread(String threadName){
         //TODO - validate
         boolean result = forum.addNewThread(threadName);
