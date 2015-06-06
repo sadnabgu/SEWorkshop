@@ -10,7 +10,9 @@ import java.util.Iterator;
 public class Forum {
     private static Collection<SubForum> subForums;
     private String name;
+    /** collection of all the members and moderates and managers of this forum */
     private Collection<Member> members;
+    /** Collection of all the managers of this forum (sub-set of members) */
     private Collection<Member> managers;
 
     public Forum(String forumName, Member manager){
