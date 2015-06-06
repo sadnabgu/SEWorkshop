@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
  */
 public class MemberCredentials {
     // TODO: add getters & setters
-    private String email = "";
+    private String email = "" ;
     private String username = "";
     private DateTime dob = DateTime.now();
     private String password = "";
