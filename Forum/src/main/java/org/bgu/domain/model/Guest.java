@@ -16,4 +16,9 @@ public class Guest extends User{
     public void logOut() {
         // do nothing
     }
+
+    @Override
+    public Member getMember() {
+        return null;
+    }
 }

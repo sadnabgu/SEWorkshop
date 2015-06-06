@@ -1,6 +1,7 @@
 package org.bgu.domain.facades;
 
 import org.bgu.domain.model.*;
+import org.bgu.service.Result;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,8 +47,7 @@ public class UserFacade {
 
     public static Member createSuperAdmin(String adminName, String adminPass) {
         Member admin = new Member(adminName, adminPass); //TODO - should be a member or specific admin class??
-        if (admin == null)
-            return null;
+
         superAdmins.add(admin);
         return admin;
     }
@@ -68,18 +68,18 @@ public class UserFacade {
         return null;
     }
 
-    public static Member addMember(String forumName, String userName, String pass) {
+    public static Result addMember(String forumName, String userName, String pass) {
         // TODO refactor
         Forum forum = ForumFacade.getForum(forumName);
         if (forum == null)
-            return null;
+            return Result.FORUM_NOT_FOUND;
         Collection<Member> members = forum.getMembers();
 
         // check that the userName not exist
         for (Iterator<Member> iterator = members.iterator(); iterator.hasNext(); ) {
             User next =  iterator.next();
             if(next.getUserName().equals(userName)){
-                return null;
+                return Result.DUPLICATED_USERNAME;
             }
         }
 
@@ -87,7 +87,7 @@ public class UserFacade {
         Member member = new Member(userName, pass); //TODO - should be a member or specific admin class??
 
         members.add(member);
-        return member;
+        return Result.SUCCESS;
     }
 
     /**
