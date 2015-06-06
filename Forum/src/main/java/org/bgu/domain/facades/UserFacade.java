@@ -100,4 +100,7 @@ public class UserFacade {
     }
 
 
+    public static boolean isForumManager(Forum forum, Member member) {
+        return forum.isForumManager(member);
+    }
 }

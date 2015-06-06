@@ -31,10 +31,12 @@ public class ForumFacade {
         return forum;
     }
 
-    public static boolean createSubForum(Forum forum, String subForumName, Member moderator) {
-        if (forum.getSubForum(subForumName) != null)
-            return false;
-        return forum.addNewSubForum(subForumName, moderator);
+    public static SubForum createSubForum(Forum forum, String subForumName, Collection<String> moderators){
+        return forum.addNewSubForum(subForumName, moderators);
+    }
+
+    public static SubForum getSubForum(Forum forum, String subForumName) {
+        return forum.getSubForum(subForumName);
     }
 
     public static Forum getForum(String forumName) {
@@ -44,6 +46,11 @@ public class ForumFacade {
                 return next;
         }
         return null;
+    }
+
+    public static boolean addModeratorToSubForum(Forum forum, String subForumName, Member moderator){
+        SubForum sForum = forum.getSubForum(subForumName);
+        return sForum.addModerate(moderator);
     }
 
     /*public static boolean addNewSubForum(Forum forum, String subForumName, String moderartorName) {
