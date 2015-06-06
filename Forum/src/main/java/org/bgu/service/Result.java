@@ -12,7 +12,11 @@ public enum Result {
     NOT_LOGGEDIN_SYSTEM("not logged in to the system!"),
     FORUM_EXISTS("the given forum already exists!"),
     MODERATOR_NOT_MEMBER("a moderate must be a member in the forum!"),
-    DUPLICATED_SUBFORUM("a sub forum with same name wxists!");
+    DUPLICATED_SUBFORUM("a sub forum with same name wxists!"),
+    ALREADY_LOGDIN("user already loged in, please logout first"),
+    WRONG_USER_PASS("Wrong username or password"),
+    FORUM_NOT_FOUND("the forum not exist"),
+    DUPLICATED_USERNAME("already exist user with this username");
 
     final public String _desc;
 

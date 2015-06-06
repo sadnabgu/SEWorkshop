@@ -1,10 +1,6 @@
 package org.bgu.stories.usersStories;
 
-import org.bgu.domain.model.Forum;
-import org.bgu.domain.model.SubForum;
-import org.bgu.domain.model.User;
 import org.bgu.service.UserService;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -25,12 +21,12 @@ public class Login {
     *
      */
     public void UserLoginWithCorrectData_UserIsSignedUp_UserIsActive(){
-        UserService user = new UserService(1);
+        UserService user = new UserService("bad forum"); // TODO - what the hell
         user.registerMember("bar", "refaeli");
         user.logOut();
-        assertFalse("user is logged in", user.isLoggedin());
+        assertFalse("user is logged in", user.isLogedin());
         user.logIn("bar", "refaeli");
-        assertTrue("user is not logged in", user.isLoggedin());
+        assertTrue("user is not logged in", user.isLogedin());
 
 
     }
@@ -46,12 +42,12 @@ public class Login {
     *
      */
     public void UserLoginWithIncorrectData_UserIsSignedUp_UserIsAGuest(){
-        UserService user = new UserService(1);
+        UserService user = new UserService("bad forum"); // TODO - what the hell
         user.registerMember("bar", "refaeli");
         user.logOut();
-        assertFalse("user is logged in", user.isLoggedin());
+        assertFalse("user is logged in", user.isLogedin());
         user.logIn("bar", "sella");
-        assertFalse("user is not logged in", user.isLoggedin());
+        assertFalse("user is not logged in", user.isLogedin());
     }
 
 }

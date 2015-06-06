@@ -11,6 +11,10 @@ import org.junit.Test;
 public class AdminServiceTest {
     public static final String ADMIN1_NAME = "admin1";
     public static final String ADMIN1_PASS = "pass1";
+    public static final String MANAGER1_NAME = "manager1";
+    public static final String MANAGER1_PASS = "pass1";
+    public static final String MANAGER2_NAME = "manager2";
+    public static final String MANAGER2_PASS = "pass2";
 
     public static AdminService adminService;
 
@@ -26,7 +30,6 @@ public class AdminServiceTest {
     public void logoutSystem(){
         initialSystem();
         adminService = new AdminService();
-        Assert.assertFalse(adminService == null);
     }
 
     /** utils */
@@ -36,7 +39,7 @@ public class AdminServiceTest {
 
     /** id 1.1.1 */
     @Test
-    public void initializeSystem_innitialSequence_pass(){
+    public void initializeSystem_initialSequence_pass(){
         adminService.resetSystem();
         Assert.assertEquals(Result.SUCCESS, adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
         logoutSystem();
@@ -45,7 +48,7 @@ public class AdminServiceTest {
 
     /** id 1.1.2 */
     @Test
-    public void initializeSystem_innitialSequence_fail(){
+    public void initializeSystem_initialSequence_fail(){
         adminService.resetSystem();
 
         Assert.assertEquals(Result.UNINITIALIZED_SYSTEM, adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
@@ -53,7 +56,7 @@ public class AdminServiceTest {
     }
 
     @Test
-    public void logginSystem_innitialSequence_fail(){
+    public void logginSystem_initialSequence_fail(){
 
         logoutSystem();
         Assert.assertEquals(Result.FAIL, adminService.loginSystem(ADMIN1_NAME, "wrongPass"));
@@ -66,8 +69,8 @@ public class AdminServiceTest {
     public void createForum_createFunction_pass(){
         loginSystem();
 
-        Assert.assertEquals(Result.SUCCESS, adminService.createForum("form1"));
-        Assert.assertEquals(Result.SUCCESS, adminService.createForum("form2"));
+        Assert.assertEquals(Result.SUCCESS, adminService.createForum("form1", MANAGER1_NAME, MANAGER1_PASS));
+        Assert.assertEquals(Result.SUCCESS, adminService.createForum("form2", MANAGER2_NAME, MANAGER2_PASS));
 
         //TODO - test forum creation throw the ForumService
     }
@@ -76,21 +79,17 @@ public class AdminServiceTest {
     public void createForum_createFunction_fail(){
         // create forum while not logedin
         logoutSystem();
-        Assert.assertEquals(Result.NOT_LOGGEDIN_SYSTEM, adminService.createForum("form1"));
+        Assert.assertEquals(Result.NOT_LOGGEDIN_SYSTEM, adminService.createForum("form1", MANAGER1_NAME, MANAGER1_PASS));
 
         loginSystem();
 
-        Assert.assertEquals(Result.SUCCESS, adminService.createForum("form1"));
-        Assert.assertEquals(Result.FORUM_EXISTS, adminService.createForum("form1"));
-        Assert.assertEquals(Result.SUCCESS, adminService.createForum("newForumName"));
+        Assert.assertEquals(Result.SUCCESS,      adminService.createForum("form1", MANAGER1_NAME, MANAGER1_PASS));
+        Assert.assertEquals(Result.FORUM_EXISTS, adminService.createForum("form1", MANAGER2_NAME, MANAGER2_PASS));
 
-        //TODO - test forum wasn't changed through the ForumService
-    }
+        // the error not affect the system (still can create forums)
+        Assert.assertEquals(Result.SUCCESS,      adminService.createForum("newForumName", MANAGER1_NAME, MANAGER1_PASS));
 
-    @Test
-    public void testError(){
-        Result err1 = Result.FAIL;
-        System.out.println(err1.toString());
+        //TODO - test that forum wasn't changed through the ForumService
     }
 
 

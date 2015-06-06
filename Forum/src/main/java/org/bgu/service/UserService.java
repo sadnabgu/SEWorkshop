@@ -1,7 +1,6 @@
 package org.bgu.service;
 
 import org.bgu.domain.facades.UserFacade;
-import org.bgu.domain.model.Guest;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.User;
 
@@ -30,66 +29,75 @@ public class UserService {
      *
      * @param userName - user name
      * @param pass - user password
-     * @return - true if login success
+     * @return Result.SUCCESS upon success
      */
-    public boolean logIn(String userName, String pass){
+    public Result logIn(String userName, String pass){
         // only Guest can loggin
-        if(isLoggedin()){
-            return false;
+        if(isLogedin()){
+            return Result.ALREADY_LOGDIN;
         }
         // identify user
         user = UserFacade.getMember(_forumName, userName, pass);
         if (user == null){
             user = UserFacade.createGuest();
-            return false;
+            return Result.WRONG_USER_PASS;
         }
-        return true;
+        return Result.SUCCESS;
     }
 
-    public void logOut(){
-        // TODO - wadafak am I doing here ? :|
+    /**
+     * logout the user from system (chang his type to Guest)
+     *
+     * TODO - wadafak am I doing here ? :|
+     *
+     * @return - Result.SUCCESS upon success,
+     *           or Result.FAIL if user is not login.
+     */
+    public Result logOut(){
+        // guest can't logout
+        if (!isLogedin())
+            return Result.FAIL;
+
         UserFacade.memberLogOut(user);
         user = UserFacade.createGuest();
 
-
+        return Result.SUCCESS;
     }
 
     /**
      * create new member, user not suppose to use this function directly
+     * TODO -  validate parameters
+     *
+     * @param userName - unique user name (id)
+     * @param pass - the new user password
+     * @return Result.SUCCESS upon success.
      */
-    public boolean addMember(String userName,
+    public Result addMember(String userName,
                                     String pass){
-        Member result;
-        //TODO -  validate parameters
-
-        // if OK create and add the user
-        result = UserFacade.addMember(_forumName, userName, pass);
-        if(result == null){
-            return false;
-        }
-
-        return true;
+        return UserFacade.addMember(_forumName, userName, pass);
     }
 
     /**
      * client oriented registration
      * TODO - add rest of the member properties and validate it
-     * TODO - verify by mail (left for release 2??)
+     * TODO - verify by mail
      * @param userName - unique user name (id)
      * @param pass - the new user password
-     * @return true if success
+     * @return Result.SUCCESS if sucsses
      */
-    public boolean registerMember(String userName,
+    public Result registerMember(String userName,
                                   String pass){
+        Result result;
         // only guest can register new member
-        if(isLoggedin()){
-            return false;
+        if(isLogedin()){
+            return Result.ALREADY_LOGDIN;
         }
         // TODO - validate permisions??
-        if(!addMember(userName, pass)){
-            return false;
-        }
+        result = addMember(userName, pass);
+        if(result != Result.SUCCESS)
+            return result;
 
+        // try to login
         return logIn(userName, pass);
     }
 
@@ -97,16 +105,18 @@ public class UserService {
         return user;
     }
 
-    public boolean isLoggedin() {
-        //TODO - find better way to check if its Guest
-        return (user.getClass() != Guest.class);
+    /**
+     * return true if user is loged in
+     * @return true if user is loged in
+     */
+    public boolean isLogedin() {
+        return (user.getMember() != null);
     }
 
+    /**
+     * @return - the user as Member object
+     */
     public Member getUserAsMember() {
-        //TODO - refactor
-        if (user.getClass() == Guest.class)
-            return null;
-
-        return (Member)user;
+        return user.getMember();
     }
 }

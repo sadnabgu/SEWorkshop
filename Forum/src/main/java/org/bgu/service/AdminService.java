@@ -58,12 +58,13 @@ public class AdminService {
         return Result.SUCCESS;
     }
 
-    public Result createForum(String ForumName){
+    public Result createForum(String ForumName, String managerName, String managerPass){
         if (adminMember == null){
-            return Result.NOT_LOGGEDIN_SYSTEM;       // only logged in admin can create new forum
+            // only logged in admin can create new forum
+            return Result.NOT_LOGGEDIN_SYSTEM;
         }
 
-        Forum forum = ForumFacade.createForum(ForumName, "admin", "pass");
+        Forum forum = ForumFacade.createForum(ForumName, managerName, managerPass);
         if (forum == null)
             return Result.FORUM_EXISTS;        // fail creating forum
 

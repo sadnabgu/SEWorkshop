@@ -11,7 +11,7 @@ public class Member extends User{
     Collection<Member> friends;
 
     public Member(String name, String pass){
-        this.friends = new ArrayList<Member>();
+        this.friends = new ArrayList<>();
         this.name = name;
         this.pass = pass;
     }
@@ -42,5 +42,10 @@ public class Member extends User{
     @Override
     public void logOut() {
         logedIn = false;
+    }
+
+    @Override
+    public Member getMember() {
+        return this;
     }
 }
