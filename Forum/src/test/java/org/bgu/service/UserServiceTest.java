@@ -2,6 +2,7 @@ package org.bgu.service;
 
 import junit.framework.Assert;
 import org.bgu.domain.facades.ForumFacade;
+import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Guest;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -27,8 +28,8 @@ public class UserServiceTest {
     public static void initialSystem(){
         ForumFacade.createForum(FORUM1_NAME, ADMIN, ADMIN_PASS);
         userService = new UserService(FORUM1_NAME);
-        Assert.assertEquals(Result.SUCCESS, userService.addMember(MEMBER1, MEMBER1_PASS));
-        Assert.assertEquals(Result.SUCCESS, userService.addMember(MEMBER2, MEMBER2_PASS));
+        Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(FORUM1_NAME, MEMBER1, MEMBER1_PASS));
+        Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(FORUM1_NAME, MEMBER2, MEMBER2_PASS));
     }
 
     @Before

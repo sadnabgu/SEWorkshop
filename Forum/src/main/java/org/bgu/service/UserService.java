@@ -65,19 +65,6 @@ public class UserService {
     }
 
     /**
-     * create new member, user not suppose to use this function directly
-     * TODO -  validate parameters
-     *
-     * @param userName - unique user name (id)
-     * @param pass - the new user password
-     * @return Result.SUCCESS upon success.
-     */
-    public Result addMember(String userName,
-                                    String pass){
-        return UserFacade.addMember(_forumName, userName, pass);
-    }
-
-    /**
      * client oriented registration
      * TODO - add rest of the member properties and validate it
      * TODO - verify by mail
@@ -93,7 +80,8 @@ public class UserService {
             return Result.ALREADY_LOGDIN;
         }
         // TODO - validate permisions??
-        result = addMember(userName, pass);
+        result = UserFacade.addMember(_forumName, userName, pass);
+
         if(result != Result.SUCCESS)
             return result;
 

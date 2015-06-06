@@ -4,7 +4,6 @@ import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
-import org.bgu.domain.model.SubForum;
 
 import java.util.Collection;
 
@@ -71,5 +70,17 @@ public class ForumService {
     public boolean setProperties(){
         //TODO - implement
         return false;
+    }
+
+    /**********************************************************************************************************/
+    /*****************FOR TESTING*********************************************************************************/
+
+    /**
+     * un-initialize the system
+     * used only for the testing
+     */
+    public void resetForum() {
+        UserFacade.resetForumMembers(forum);
+        ForumFacade.resetForum(forum);
     }
 }

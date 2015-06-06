@@ -22,7 +22,6 @@ public class AdminServiceTest {
     public static void initialSystem(){
         adminService = new AdminService();
         adminService.resetSystem();
-        //adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS);
         Assert.assertEquals(Result.SUCCESS, adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
     }
 

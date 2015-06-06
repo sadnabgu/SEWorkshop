@@ -90,17 +90,20 @@ public class UserFacade {
         return Result.SUCCESS;
     }
 
-    /**
-     * clear all the user database
-     * used only for the testing
-     */
-    public static void resetUsers() {
-        // TODO - users.clear();
-        superAdmins.clear();
-    }
-
-
     public static boolean isForumManager(Forum forum, Member member) {
         return forum.isForumManager(member);
     }
+
+                    /*****************FOR TESTING******************/
+                    /**********************************************/
+
+    public static void resetSuperAdmins() {
+        // TODO - users.clear();
+        superAdmins.clear();
+    }
+    public static void resetForumMembers(Forum forum) {
+        // TODO - users.clear();
+        forum.resetMembers();
+    }
+
 }

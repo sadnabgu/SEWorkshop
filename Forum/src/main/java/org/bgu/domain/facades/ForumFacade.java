@@ -53,18 +53,6 @@ public class ForumFacade {
         return sForum.addModerate(moderator);
     }
 
-    /*public static boolean addNewSubForum(Forum forum, String subForumName, String moderartorName) {
-        Member
-        return forum.addNewSubForum(subForumName, moderartorName);
-    }*/
-
-    /**
-     * clear all the forums database
-     * used only for the testing
-     */
-    public static void resetForums() {
-        forums.clear();
-    }
 
     /**
      * remove the forum
@@ -79,4 +67,20 @@ public class ForumFacade {
         }
         return false;
     }
+
+   /**********************************************************************************************************/
+    /*****************FOR TESTING*********************************************************************************/
+
+    /**
+     * clear all the forums database
+     * used only for the testing
+     */
+    public static void resetForums() {
+        forums.clear();
+    }
+
+    public static void resetForum(Forum forum){
+        forum.resetSubForums();
+    }
 }
+

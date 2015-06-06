@@ -26,7 +26,7 @@ public class SubForum {
     }
 
     public boolean addModerate(Member moderate) {
-        if (moderates.contains(moderate))
+        if (moderates.contains(moderate) || null == moderate)
             return false;
         moderates.add(moderate);
         return true;

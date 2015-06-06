@@ -78,7 +78,7 @@ public class AdminService {
     public void resetSystem() {
         initialized = false;
         adminMember = null;
-        UserFacade.resetUsers();
+        UserFacade.resetSuperAdmins();
         ForumFacade.resetForums();
     }
 }

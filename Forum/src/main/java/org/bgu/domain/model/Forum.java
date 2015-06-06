@@ -22,17 +22,18 @@ public class Forum {
         name = forumName;
     }
 
-    /*public Collection<SubForum> getSubForums(){
-        return this.subForums;
-    }*/
-
     public SubForum addNewSubForum(String subForumName, Collection<String> moderators) {
+        for (String s : moderators) {
+            Member m = getMemberByName(s);
+            if (null == m)
+                return null;
+        }
         SubForum subForum = new SubForum(subForumName);
         for (String s : moderators) {
             Member m = getMemberByName(s);
-            if (!subForum.addModerate(m))
-                return null;
+            subForum.addModerate(m);
         }
+        subForums.add(subForum);
         return subForum;
     }
 
@@ -70,5 +71,17 @@ public class Forum {
 
     public Collection<Member> getMembers() {
         return members;
+    }
+
+    /**********************************************************************************************************/
+    /*****************FOR TESTING*********************************************************************************/
+
+    public void resetMembers(){
+        members.clear();
+        managers.clear();
+    }
+
+    public void resetSubForums(){
+        subForums.clear();
     }
 }
