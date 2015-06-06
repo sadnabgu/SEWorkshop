@@ -1,6 +1,7 @@
 package org.bgu.service;
 
 import org.bgu.domain.facades.ForumFacade;
+import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.SubForum;
@@ -17,30 +18,41 @@ import java.util.Collection;
 public class ForumService {
     //Fields
     private Forum forum;
+    private UserService userService;
 
-    public ForumService(int forumID){
-        //TODO - get the relevant forum object (singleton?)
-        forum = ForumFacade.getForum(forumID);
+    //TODO - replace exception with factory method
+    public ForumService(String forumName, UserService us) throws Exception {
+        forum = ForumFacade.getForum(forumName);
         if (forum == null){
-            //TODO exeption??
+            throw new Exception("forum not found");
         }
+        userService = us;
     }
 
-    public boolean addNewSubForum(String subForumName,
-                            String moderateName){
-        //TODO - validate data and add more shit to parameters
-        //TODO - check
-        Member moderate = null; //TODO - find the moderator object;
-        boolean result =forum.addNewSubForum(subForumName, moderate);
-        if(result == false)
-            return false;
-        return true;
+    /**
+     * adds new Sub forum with the initial moderator as the connected forum's manager
+     * @param subForumName
+     * @return Result for the operation
+     */
+    public Result addNewSubForum(String subForumName, Collection<String> moderators){
+        //TODO - validate data according to POLICY
+        Member member = userService.getUserAsMember();
+        if(member == null)
+            return Result.MODERATOR_NOT_MEMBER;
+        if (!UserFacade.isForumManager(forum, member))
+            return Result.MEMBER_NOT_FORUM_ADMIN;
+        if (null != ForumFacade.getSubForum(forum, subForumName)){
+            return Result.DUPLICATED_SUBFORUM;
+        }
+        if (moderators.isEmpty()){
+            return Result.NO_MODERATORS_WERE_GIVEN;
+        }
+        if (ForumFacade.createSubForum(forum, subForumName, moderators) == null){
+            return Result.SUBFORUM_MODERATOR_NOT_MEMBER;
+        }
+       return Result.SUCCESS;
     }
-/* TODO
-    public Collection<SubForum> getSubForums(){
-        return forum.getSubForums();
-    }
-*/
+
     public boolean addNewThread(String threadName){
         //TODO - validate
         boolean result = forum.addNewThread(threadName);

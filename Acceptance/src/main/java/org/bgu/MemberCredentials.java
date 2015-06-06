@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
  */
 public class MemberCredentials {
     // TODO: add getters & setters
-    private String email = "";
+    private String email = "" ;
     private String username = "";
     private DateTime dob = DateTime.now();
     private String password = "";
@@ -25,6 +25,26 @@ public class MemberCredentials {
         this.repassword = repassword;
         this.firstname = firstname;
         this.lastname = lastname;
+    }
+    public MemberCredentials(String email, String username, String password, String repassword, String firstname, String lastname){
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.repassword = repassword;
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
+
+    public MemberCredentials(MemberCredentials other){
+        if (other.getPassword() == other.getRepassword()) {
+            this.email = other.getEmail();
+            this.username = other.getUsername();
+            this.dob = other.getDob();
+            this.password = other.getPassword();
+            this.repassword = other.getRepassword();
+            this.firstname = other.getFirstname();
+            this.lastname = other.getLastname();
+        }
     }
 
     @Override

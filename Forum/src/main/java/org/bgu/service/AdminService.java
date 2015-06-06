@@ -15,7 +15,8 @@ public class AdminService {
     /** static flag - indicate if the forum was initialized */
     static private boolean initialized = false;
 
-    Member adminMember; // TODO - check if can be more then one super admin
+    Member adminMember;
+    // TODO - check if can be more then one super admin
 
     public AdminService(){
         adminMember = null;
@@ -24,50 +25,50 @@ public class AdminService {
 
    /**
     * first init routine  - initial administrator details
+    *
+    * TODO - validate legal data, POLICY
     */
-   public boolean initializeSystem(String adminName,
+   public Result initializeSystem(String adminName,
                             String adminPass){
-       //TODO - validate legal data
 
        // make sure the system wasn't initiated before
        if (initialized){
-           System.err.println("system already initialized");
-           return false;
+           return Result.REINITIALIZE_SYSTEM;
        }
 
        //initial the system
        initialized = true;
        adminMember = UserFacade.createSuperAdmin(adminName, adminPass);
-       return true;
+       return Result.SUCCESS;
    }
     /**
      * login to the whole damn system as the super admin
+     *
+     * TODO - validate legal data, POLICY
      */
-    public boolean loginSystem(String adminName,
+    public Result loginSystem(String adminName,
                         String adminPass){
-        // check authentication
         if(!initialized){
-            System.err.println("system un-initialized");
-            return false;
+            return Result.UNINITIALIZED_SYSTEM;
         }
         adminMember = UserFacade.loginSuperAdmin(adminName, adminPass);
         if(adminMember == null)
-            return false;
+            return Result.FAIL;
 
-        return true;
+        return Result.SUCCESS;
     }
 
-    public boolean createForum(int forumId, String ForumName){
+    public Result createForum(String ForumName, String managerName, String managerPass){
         if (adminMember == null){
-            System.err.println("need to be loggedin");
-            return false;       // only logged in admin can create new forum
+            // only logged in admin can create new forum
+            return Result.NOT_LOGGEDIN_SYSTEM;
         }
 
-        Forum forum = ForumFacade.createForum(forumId, ForumName);
+        Forum forum = ForumFacade.createForum(ForumName, managerName, managerPass);
         if (forum == null)
-            return false;        // fail creating forum
+            return Result.FORUM_EXISTS;        // fail creating forum
 
-        return true;
+        return Result.SUCCESS;
     }
 
     /**

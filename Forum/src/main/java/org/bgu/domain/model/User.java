@@ -10,5 +10,7 @@ public abstract class User {
     public abstract boolean login(String pass);
 
     public abstract void logOut();
+
+    public abstract Member getMember();
 }
 

@@ -9,12 +9,16 @@ import java.util.Iterator;
  */
 public class Forum {
     private static Collection<SubForum> subForums;
-    private int id;
     private String name;
+    private Collection<Member> members;
+    private Collection<Member> managers;
 
-    public Forum(int forumId, String forumName){
+    public Forum(String forumName, Member manager){
         this.subForums = new ArrayList<>();
-        id = forumId;
+        members = new ArrayList<>();
+        managers = new ArrayList<>();
+        managers.add(manager);
+        members.add(manager);
         name = forumName;
     }
 
@@ -22,20 +26,28 @@ public class Forum {
         return this.subForums;
     }*/
 
-    public boolean addNewSubForum(String subForumName, Member moderate) {
-        //TODO - maybe implement in the sub forum level
+    public SubForum addNewSubForum(String subForumName, Collection<String> moderators) {
         SubForum subForum = new SubForum(subForumName);
-        if(subForum == null)
-            return false;
-        subForum.addModerate(moderate);
+        for (String s : moderators) {
+            Member m = getMemberByName(s);
+            if (!subForum.addModerate(m))
+                return null;
+        }
+        return subForum;
+    }
 
-        return true;
+    public Member getMemberByName(String memberName){
+        for (Member m : members){
+            if (m.getUserName().equals(memberName))
+                return m;
+        }
+        return null;
     }
 
     public SubForum getSubForum(String subForumName) {
         for (Iterator<SubForum> iterator = subForums.iterator(); iterator.hasNext(); ) {
             SubForum next =  iterator.next();
-            if (next.getName() == subForumName)
+            if (next.getName().equals(subForumName))
                 return next;
         }
         return null;
@@ -46,11 +58,17 @@ public class Forum {
         return false;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public boolean isForumManager(Member member) {
+        if (managers.contains(member))
+            return true;
+        return false;
+    }
+
+    public Collection<Member> getMembers() {
+        return members;
     }
 }

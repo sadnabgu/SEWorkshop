@@ -13,7 +13,7 @@ import java.lang.System;
  */
 public class ForumCreation {
     @Test
-    @Ignore
+
     /*
     *Test purpose: Forum is in waiting state after giving correct data
     *
@@ -21,7 +21,7 @@ public class ForumCreation {
     * 1. insert correct data
     * 2. verify: forum is in Waiting state
     *
-    *
+    *   TODO - acceptance test cant use the facade, can only use the service layer objects!!
      */
     public void createForumWithCorrectData_SystemInitialized_NewForumInWaitingState(){
         System.out.print("testing 'createForumWithCorrectData_SystemInitialized_NewForumInWaitingState' \n");
@@ -29,20 +29,19 @@ public class ForumCreation {
         //ForumFacade forumFacade = new ForumFacade();
 
         // Simulate Super-Admin clicks Create-Forum button
-        int forumID = 1234;
         String forumName = "Tapuz";
 
         // Insert valid data
-        Forum forumCreated = ForumFacade.createForum(forumID, forumName);
+        Forum forumCreated = ForumFacade.createForum(forumName, "admin", "pass");
 
         // verify : Query system so it has a new forum in waiting state
-        Forum forumReturned = ForumFacade.getForum(forumID);
+        Forum forumReturned = ForumFacade.getForum(forumName);
 
         if (forumCreated!=null &&
                 forumReturned!=null &&
                 forumCreated == forumReturned &&
                 forumName.equals(forumReturned.getName()) &&
-                forumReturned.getId() == forumID
+                forumReturned.getName().equals(forumName)
             ){
 
             System.out.print("Passed! :) \n");
