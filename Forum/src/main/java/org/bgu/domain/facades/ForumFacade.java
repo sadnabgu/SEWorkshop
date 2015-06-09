@@ -70,7 +70,6 @@ public class ForumFacade {
 
     /**
      * remove the forum
-     * used only for the testing
      * @param forum - the forum object
      * @return - false if forum not found
      */
@@ -82,8 +81,19 @@ public class ForumFacade {
         return false;
     }
 
-    public static int removeSubForum(Forum forum, String subForumName) {
-        return 0;
+    public static boolean removeSubForum(Forum forum, String subForumName) {
+        return (forum.removeSubForum(subForumName));
+    }
+
+
+    public static boolean addModerate(String forumName, String subForumName, Member moderate) {
+        Forum forum = getForum(forumName);
+        return forum.getSubForum(subForumName).addModerate(moderate);
+    }
+
+    public static boolean removeModerate(String forumName, String subForumName, Member moderate) {
+        Forum forum = getForum(forumName);
+        return forum.getSubForum(subForumName).removeModerate(moderate);
     }
    /**********************************************************************************************************/
     /*****************FOR TESTING*********************************************************************************/
@@ -108,15 +118,6 @@ public class ForumFacade {
     }
 
 
-    public static boolean addModerate(String forumName, String subForumName, Member moderate) {
-        Forum forum = getForum(forumName);
-        return forum.getSubForum(subForumName).addModerate(moderate);
-    }
-
-    public static boolean removeModerate(String forumName, String subForumName, Member moderate) {
-        Forum forum = getForum(forumName);
-        return forum.getSubForum(subForumName).removeModerate(moderate);
-    }
 
 
 }

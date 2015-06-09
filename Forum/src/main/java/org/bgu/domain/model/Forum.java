@@ -101,6 +101,13 @@ public class Forum {
         return subForumNames;
     }
 
+    public boolean removeSubForum(String subForumName) {
+        SubForum subForum = getSubForum(subForumName);
+        if (null == subForum) return false;
+        _subForums.remove(subForum);
+        return true;
+    }
+
     /**********************************************************************************************************/
     /*****************FOR TESTING*********************************************************************************/
 
@@ -112,5 +119,6 @@ public class Forum {
     public void resetSubForums(){
         _subForums.clear();
     }
+
 
 }
