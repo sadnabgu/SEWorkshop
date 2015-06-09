@@ -1,5 +1,6 @@
 package org.bgu.service;
 
+import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.User;
@@ -126,6 +127,46 @@ public class UserService {
         }
         if(!(UserFacade.removeFriend(user.getMember(), friend))){
             return Result.NOT_FRIENDS;
+        }
+        return Result.SUCCESS;
+    }
+
+    public Result addModerator(String subForumName, String otherUserName){
+        if(!isLogedin()) {
+            return Result.NOT_LOGGED_IN;
+        }
+        if(!ForumFacade.isManager(_forumName, user.getMember())){
+            return Result.MEMBER_NOT_FORUM_ADMIN;
+        }
+        if(ForumFacade.getForum(_forumName).getSubForum(subForumName)==null){
+            return Result.FORUM_NOT_FOUND;
+        }
+        Member moderate = UserFacade.getUser(_forumName, otherUserName).getMember();
+        if (moderate == null){
+            return Result.MEMBER_NOT_FOUND;
+        }
+        if(!(ForumFacade.addModerate(_forumName, subForumName, moderate))){
+            return Result.ALREADY_MODERATE;
+        }
+        return Result.SUCCESS;
+    }
+
+    public Result removeModerator(String subForumName, String otherUserName){
+        if(!isLogedin()) {
+            return Result.NOT_LOGGED_IN;
+        }
+        if(!ForumFacade.isManager(_forumName, user.getMember())){
+            return Result.MEMBER_NOT_FORUM_ADMIN;
+        }
+        if(ForumFacade.getForum(_forumName).getSubForum(subForumName)==null){
+            return Result.FORUM_NOT_FOUND;
+        }
+        Member moderate = UserFacade.getUser(_forumName, otherUserName).getMember();
+        if (moderate == null){
+            return Result.MEMBER_NOT_FOUND;
+        }
+        if(!(ForumFacade.removeModerate(_forumName, subForumName, moderate))){
+            return Result.NOT_A_MODERATE;
         }
         return Result.SUCCESS;
     }
