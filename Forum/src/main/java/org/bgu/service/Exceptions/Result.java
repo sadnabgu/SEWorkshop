@@ -14,6 +14,7 @@ public enum Result {
     /* Forum view */
     FORUM_EXISTS("the given forum already exists"),
     DUPLICATED_SUBFORUM("a sub forum with same name exists"),
+    MEMBER_NOT_FOUND("the member not registered to forum "),
     MEMBER_NOT_FORUM_ADMIN("the action is allowed to forum admins only"),
     FORUM_NOT_FOUND("the forum not exist"),
     /* Sub Forum view */
@@ -22,6 +23,10 @@ public enum Result {
     NO_MODERATORS_WERE_GIVEN("moderators must be delivered"),
     SUBFORUM_MODERATOR_NOT_MEMBER("the moderator delivered is not a member"),
     /* User-manage view */
+    NOT_LOGGED_IN("user is not logged in"),
+    FRIEND_NOT_EXIST("friend does not exist"),
+    ALREADY_FRIENDS("the users are already friends"),
+
     ALREADY_LOGDIN("user already loged in, please logout first"),
     WRONG_USER_PASS("Wrong username or password"),
     DUPLICATED_USERNAME("already exist user with this username");

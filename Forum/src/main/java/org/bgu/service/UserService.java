@@ -38,7 +38,7 @@ public class UserService {
             return Result.ALREADY_LOGDIN;
         }
         // identify user
-        user = UserFacade.getMember(_forumName, userName, pass);
+        user = UserFacade.loginMember(_forumName, userName, pass);
         if (user == null){
             user = UserFacade.createGuest();
             return Result.WRONG_USER_PASS;
@@ -65,7 +65,7 @@ public class UserService {
         return Result.SUCCESS;
     }
 
-    /**
+     /**
      * client oriented registration
      * TODO - add rest of the member properties and validate it
      * TODO - verify by mail
@@ -100,6 +100,21 @@ public class UserService {
      */
     public boolean isLogedin() {
         return (user.getMember() != null);
+    }
+
+    public Result addFriend(String otherUserName){
+        if(!isLogedin()) {
+            return Result.NOT_LOGGED_IN;
+        }
+        Member friend = UserFacade.getUser(_forumName, otherUserName).getMember();
+        if (friend == null){
+            return Result.FRIEND_NOT_EXIST;
+        }
+        if(!(UserFacade.addFriend(user.getMember(), friend))){
+            return Result.ALREADY_FRIENDS;
+        }
+        return Result.SUCCESS;
+
     }
 
     /**

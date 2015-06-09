@@ -20,7 +20,20 @@ public class UserFacade {
         return new Guest();
     }
 
-    public static User getMember(String forumName, String userName, String pass) {
+    public static User loginMember(String forumName, String userName, String pass) {
+        User user = getUser(forumName, userName);
+        if(user==null){
+            return null;
+        }
+        if(user.login(pass)){
+            return user;
+        } else {
+            // wrong user password or already connected
+            return null;
+        }
+    }
+
+    public static User getUser(String forumName, String userName){
         Forum forum = ForumFacade.getForum(forumName);
         if (forum == null)
             return null;
@@ -29,15 +42,10 @@ public class UserFacade {
         for (Iterator<Member> memberIterator = members.iterator(); memberIterator.hasNext(); ) {
             User next =  memberIterator.next();
             if(next.getUserName().equals(userName)){
-                if(next.login(pass)){
-                    return next;
-                } else {
-                    // wrong user password or already connected
-                    return null;
-                }
+                return next;
             }
         }
-        // user not found
+        // not found
         return null;
     }
 
@@ -106,4 +114,12 @@ public class UserFacade {
         forum.resetMembers();
     }
 
+    public static boolean addFriend(Member user, Member friend) {
+        if(user.isFriendOf(friend)){
+            return false;
+        }
+        user.addFriend(friend);
+        friend.addFriend(user);
+        return true;
+    }
 }

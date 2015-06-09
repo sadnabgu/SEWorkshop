@@ -48,4 +48,12 @@ public class Member extends User{
     public Member getMember() {
         return this;
     }
+
+    public boolean isFriendOf(Member friend) {
+        return friends.contains(friend);
+    }
+
+    public void addFriend(Member friend) {
+        friends.add(friend);
+    }
 }
