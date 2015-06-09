@@ -7,14 +7,16 @@ import java.util.Collection;
  * Created by gur on 20/04/2015.
  */
 public class SubForum {
-    Collection<ForumThread> threads;
-    Collection<Member> moderates;   // TODO - way need this in sub-forum?
-    String name;
+    private Collection<ForumThread> threads;
+    private Collection<Member> moderates;   // TODO - way need this in sub-forum?
+    private String name;
+    private int subForumId;
 
-    public SubForum(String subForumName){
+    public SubForum(String subForumName, int subForumId){
         this.name = subForumName;
         this.moderates = new ArrayList<Member>();
         this.threads = new ArrayList<ForumThread>();
+        this.subForumId = subForumId;
     }
 
     public Collection<ForumThread> getThreads(){
@@ -34,5 +36,9 @@ public class SubForum {
 
     public String getName() {
         return name;
+    }
+
+    public int getSubForumId() {
+        return subForumId;
     }
 }

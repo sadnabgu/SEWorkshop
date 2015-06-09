@@ -28,7 +28,7 @@ public class AdminServiceTest {
         try {
             Assert.assertTrue(adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
         } catch (ForumException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 

@@ -8,42 +8,49 @@ import java.util.Iterator;
  * Created by gur on 20/04/2015.
  */
 public class Forum {
-    private int id;
-    private static Collection<SubForum> subForums;
-    private String name;
+    private int _forumId;
+    private static Collection<SubForum> _subForums;
+    private String _name;
     /** collection of all the members and moderates and managers of this forum */
-    private Collection<Member> members;
+    private Collection<Member> _members;
     /** Collection of all the managers of this forum (sub-set of members) */
-    private Collection<Member> managers;
-    private int forumId;
+    private Collection<Member> _managers;
+    private int _subForumId;
+
 
     public Forum(int forumId, String forumName, Member manager){
-        id = forumId;
-        name = forumName;
-        subForums = new ArrayList<>();
-        members = new ArrayList<>();
-        managers = new ArrayList<>();
-        managers.add(manager);
-        members.add(manager);
+        _forumId = forumId;
+        _name = forumName;
+        _subForums = new ArrayList<>();
+        _members = new ArrayList<>();
+        _managers = new ArrayList<>();
+        _managers.add(manager);
+        _members.add(manager);
+        _subForumId=0;
     }
 
-    public SubForum addNewSubForum(String subForumName, Collection<String> moderators) {
+    private int generateSubForumId(){
+        return _subForumId++;
+    }
+
+    public int addNewSubForum(String subForumName, Collection<String> moderators) {
         for (String s : moderators) {
             Member m = getMemberByName(s);
             if (null == m)
-                return null;
+                return -1;
         }
-        SubForum subForum = new SubForum(subForumName);
+        int subForumId = generateSubForumId();
+        SubForum subForum = new SubForum(subForumName, subForumId);
         for (String s : moderators) {
             Member m = getMemberByName(s);
             subForum.addModerate(m);
         }
-        subForums.add(subForum);
-        return subForum;
+        _subForums.add(subForum);
+        return subForum.getSubForumId();
     }
 
     public Member getMemberByName(String memberName){
-        for (Member m : members){
+        for (Member m : _members){
             if (m.getUserName().equals(memberName))
                 return m;
         }
@@ -51,7 +58,7 @@ public class Forum {
     }
 
     public SubForum getSubForum(String subForumName) {
-        for (Iterator<SubForum> iterator = subForums.iterator(); iterator.hasNext(); ) {
+        for (Iterator<SubForum> iterator = _subForums.iterator(); iterator.hasNext(); ) {
             SubForum next =  iterator.next();
             if (next.getName().equals(subForumName))
                 return next;
@@ -65,33 +72,33 @@ public class Forum {
     }
 
     public String getForumName() {
-        return name;
+        return _name;
     }
 
     public boolean isForumManager(Member member) {
-        if (managers.contains(member))
+        if (_managers.contains(member))
             return true;
         return false;
     }
 
     public int getForumId() {
-        return forumId;
+        return _forumId;
     }
 
     public Collection<Member> getMembers() {
-        return members;
+        return _members;
     }
 
     /**********************************************************************************************************/
     /*****************FOR TESTING*********************************************************************************/
 
     public void resetMembers(){
-        members.clear();
-        managers.clear();
+        _members.clear();
+        _managers.clear();
     }
 
     public void resetSubForums(){
-        subForums.clear();
+        _subForums.clear();
     }
 
 
