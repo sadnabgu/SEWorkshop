@@ -54,11 +54,6 @@ public class ForumFacade {
         return null;
     }
 
-    public static boolean addModeratorToSubForum(Forum forum, String subForumName, Member moderator){
-        SubForum sForum = forum.getSubForum(subForumName);
-        return sForum.addModerate(moderator);
-    }
-
 
     /**
      * remove the forum
@@ -88,5 +83,24 @@ public class ForumFacade {
     public static void resetForum(Forum forum){
         forum.resetSubForums();
     }
+
+    public static boolean isManager(String forumName, Member member) {
+        if(member==null){
+            return false;
+        }
+        return getForum(forumName).isManager(member);
+    }
+
+
+    public static boolean addModerate(String forumName, String subForumName, Member moderate) {
+        Forum forum = getForum(forumName);
+        return forum.getSubForum(subForumName).addModerate(moderate);
+    }
+
+    public static boolean removeModerate(String forumName, String subForumName, Member moderate) {
+        Forum forum = getForum(forumName);
+        return forum.getSubForum(subForumName).removeModerate(moderate);
+    }
+
 }
 
