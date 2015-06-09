@@ -90,6 +90,18 @@ public class UserServiceTest {
     }
 
     @Test
+    public void addFriend_alreadyFriends_fail(){
+        Assert.assertEquals(Result.SUCCESS, userService.logIn(MEMBER1, MEMBER1_PASS));
+        Assert.assertEquals(Result.SUCCESS, userService.addFriend(MEMBER2));
+        userService.logOut();
+        Assert.assertEquals(Result.SUCCESS, userService.logIn(MEMBER2, MEMBER2_PASS));
+        Assert.assertEquals(Result.ALREADY_FRIENDS, userService.addFriend(MEMBER1));
+        userService.logOut();
+        Assert.assertEquals(Result.SUCCESS, userService.logIn(MEMBER1, MEMBER1_PASS));
+        Assert.assertEquals(Result.ALREADY_FRIENDS, userService.addFriend(MEMBER2));
+    }
+
+    @Test
     public void loginMember_wrongLogin_fail(){
         // wrong member identifiers
         Assert.assertEquals(Result.WRONG_USER_PASS, userService.logIn("notMember", "somePass"));
