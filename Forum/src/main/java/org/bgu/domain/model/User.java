@@ -12,5 +12,7 @@ public abstract class User {
     public abstract void logOut();
 
     public abstract Member getMember();
+
+
 }
 

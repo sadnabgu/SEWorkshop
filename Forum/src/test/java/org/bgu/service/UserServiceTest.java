@@ -75,8 +75,18 @@ public class UserServiceTest {
         //TODO - verify member is loggedin
         logoutSystem();
         Assert.assertEquals(Result.SUCCESS, userService.logIn(MEMBER2, MEMBER2_PASS));
-        //TODO - verify member is loggedin
+    //TODO - verify member is loggedin
 
+}
+
+    @Test
+    public void addFriend_login_usersAreFriends(){
+        Assert.assertEquals(Result.SUCCESS, userService.logIn(MEMBER1, MEMBER1_PASS));
+        Assert.assertEquals(Result.SUCCESS, userService.addFriend(MEMBER2));
+        // Verify member1 is friend of member2
+        Assert.assertTrue("users aren't friends", userService.getUser().getMember().isFriendOf(UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember()));
+        // Verify member1 is friend of member2
+        Assert.assertTrue("users aren't friends", UserFacade.getUser(FORUM1_NAME,MEMBER2).getMember().isFriendOf(userService.getUser().getMember()));
     }
 
     @Test
