@@ -88,6 +88,7 @@ public class UserServiceTest {
         Assert.assertTrue("users aren't friends", userService.getUser().getMember().isFriendOf(UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember()));
         // Verify member1 is friend of member2
         Assert.assertTrue("users aren't friends", UserFacade.getUser(FORUM1_NAME,MEMBER2).getMember().isFriendOf(userService.getUser().getMember()));
+        Assert.assertEquals(Result.SUCCESS, userService.removeFriend(MEMBER2));
     }
 
     @Test
@@ -100,6 +101,7 @@ public class UserServiceTest {
         userService.logOut();
         Assert.assertEquals(Result.SUCCESS, userService.logIn(MEMBER1, MEMBER1_PASS));
         Assert.assertEquals(Result.ALREADY_FRIENDS, userService.addFriend(MEMBER2));
+        Assert.assertEquals(Result.SUCCESS, userService.removeFriend(MEMBER2));
     }
 
     @Test

@@ -122,4 +122,13 @@ public class UserFacade {
         friend.addFriend(user);
         return true;
     }
+
+    public static boolean removeFriend(Member user, Member friend) {
+        if(!(user.isFriendOf(friend))){
+            return false;
+        }
+        user.removeFriend(friend);
+        friend.removeFriend(user);
+        return true;
+    }
 }

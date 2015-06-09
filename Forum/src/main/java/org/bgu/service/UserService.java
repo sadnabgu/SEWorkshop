@@ -114,7 +114,20 @@ public class UserService {
             return Result.ALREADY_FRIENDS;
         }
         return Result.SUCCESS;
+    }
 
+    public Result removeFriend(String otherUserName){
+        if(!isLogedin()) {
+            return Result.NOT_LOGGED_IN;
+        }
+        Member friend = UserFacade.getUser(_forumName, otherUserName).getMember();
+        if (friend == null){
+            return Result.FRIEND_NOT_EXIST;
+        }
+        if(!(UserFacade.removeFriend(user.getMember(), friend))){
+            return Result.NOT_FRIENDS;
+        }
+        return Result.SUCCESS;
     }
 
     /**

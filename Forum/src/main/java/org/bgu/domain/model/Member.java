@@ -56,4 +56,8 @@ public class Member extends User{
     public void addFriend(Member friend) {
         friends.add(friend);
     }
+
+    public void removeFriend(Member friend) {
+        friends.remove(friend);
+    }
 }
