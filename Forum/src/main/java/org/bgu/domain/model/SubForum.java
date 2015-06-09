@@ -35,4 +35,15 @@ public class SubForum {
     public String getName() {
         return name;
     }
+
+    public boolean isModerator(Member moderate){
+        return moderates.contains(moderate);
+    }
+
+    public boolean removeModerate(Member moderate) {
+        if (!(moderates.contains(moderate)) || null == moderate)
+            return false;
+        moderates.remove(moderate);
+        return true;
+    }
 }
