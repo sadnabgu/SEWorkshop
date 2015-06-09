@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
+import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,52 +40,89 @@ public class ForumServiceTestAdmin {
         mods = new ArrayList<>();
         mods.add("hodai");
         mods.add("melki");
-        Assert.assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin"));
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
     }
-/*
+
+    /* SUB-FORUM tets */
+
     @Test
     public void createSubForum_correctData_newSubForumCreated(){
-        Assert.assertEquals(Result.SUCCESS, forumServiceManager.addNewSubForum("protection", mods));
+        Assert.assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin"));
+        try {
+            Assert.assertTrue(forumServiceManager.addNewSubForum("protection", mods));
+        } catch (ForumException e) {
+            e.printStackTrace();
+        }
+        Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
     }
 
     @Test
     public void createSubForum_notLoggedIn_creationFaild(){
-        Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
-        Assert.assertEquals(Result.MODERATOR_NOT_MEMBER, forumServiceManager.addNewSubForum("protection2", mods));
-        Assert.assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin"));
-
+        try{
+            forumServiceManager.addNewSubForum("protection2", mods);
+        }catch (ForumException e){
+            System.out.println("***" + e.getMessage() + "***");
+            Assert.assertEquals(Result.MODERATOR_NOT_MEMBER.toString(), e.getMessage());
+        }
     }
 
     @Test
-    public void createSubForum_notForumAdmin_newSubForumCreated(){
-        Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
+    public void createSubForum_notForumAdmin_creationFaild(){
         Assert.assertEquals(Result.SUCCESS, userServiceManager.logIn("hodai", "hodai"));
-        Assert.assertEquals(Result.MEMBER_NOT_FORUM_ADMIN, forumServiceManager.addNewSubForum("protection2", mods));
+        try{
+            forumServiceManager.addNewSubForum("protection2", mods);
+        }catch (ForumException e){
+            Assert.assertEquals(Result.MEMBER_NOT_FORUM_ADMIN.toString(), e.getMessage());
+            System.out.println("***" + e.getMessage() + "***");
+        }
+        Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
     }
 
     @Test
-    public void createSubForum_duplicatedSubForumName_newSubForumCreated(){
-        Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
+    public void createSubForum_duplicatedSubForumName_creationFaild(){
         Assert.assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin"));
-        Assert.assertEquals(Result.DUPLICATED_SUBFORUM, forumServiceManager.addNewSubForum("protection", mods));
+        try {
+            Assert.assertTrue(forumServiceManager.addNewSubForum("protection2", mods));
+        } catch (ForumException e) {
+            e.printStackTrace();
+        }
+        try{
+            forumServiceManager.addNewSubForum("protection2", mods);
+        }catch (ForumException e){
+            System.out.println("***" + e.getMessage() + "***");
+            Assert.assertEquals(Result.DUPLICATED_SUBFORUM.toString(), e.getMessage());
+        }
+        Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
     }
 
     @Test
-    public void createSubForum_noModeratesGiven_newSubForumCreated(){
-        Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
+    public void createSubForum_noModeratesGiven_creationFaild(){
         Assert.assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin"));
-        Assert.assertEquals(Result.NO_MODERATORS_WERE_GIVEN, forumServiceManager.addNewSubForum("protection2", new ArrayList<String>()));
+        try {
+            forumServiceManager.addNewSubForum("protection3", new ArrayList<String>());
+        }catch (ForumException e){
+            System.out.println("***" + e.getMessage() + "***");
+            Assert.assertEquals(Result.NO_MODERATORS_WERE_GIVEN.toString(), e.getMessage());
+        }
+        Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
     }
 
     @Test
     public void createSubForum_moderateNotMember_newSubForumCreated(){
+        Assert.assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin"));
         mods2 = new ArrayList<>();
         mods2.add("hodai");
         mods2.add("tyrion");
         Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
         Assert.assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin"));
-        Assert.assertEquals(Result.SUBFORUM_MODERATOR_NOT_MEMBER, forumServiceManager.addNewSubForum("protection2", mods2));
-    }*/
+        try {
+            forumServiceManager.addNewSubForum("protection3", mods2);
+        }catch(ForumException e){
+            Assert.assertEquals(Result.SUBFORUM_MODERATOR_NOT_MEMBER.toString(), e.getMessage());
+        }
+        Assert.assertEquals(Result.SUCCESS, userServiceManager.logOut());
+    }
+
+
 }

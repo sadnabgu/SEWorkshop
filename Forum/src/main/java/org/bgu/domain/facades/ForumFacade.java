@@ -30,14 +30,14 @@ public class ForumFacade {
         Forum forum = new Forum(forumId, forumName, manager);
 
         forums.add(forum);
-        return forumId;
+        return forum.getForumId();
     }
 
     private static int generateForumId() {
         return forumIdGenerator++;
     }
 
-    public static SubForum createSubForum(Forum forum, String subForumName, Collection<String> moderators){
+    public static int createSubForum(Forum forum, String subForumName, Collection<String> moderators){
         return forum.addNewSubForum(subForumName, moderators);
     }
 

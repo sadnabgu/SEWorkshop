@@ -4,6 +4,8 @@ import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
+import org.bgu.domain.model.SubForum;
+import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 
 import java.util.Collection;
@@ -33,31 +35,32 @@ public class ForumService {
      * adds new Sub forum with the initial moderator as the connected forum's manager
      * @param subForumName
      * @param moderators
-     * @return id of subForum, or exception upon failure
+     * @return id of subForum, or exception{Result.MODERATOR_NOT_MEMBER, Result.MEMBER_NOT_FORUM_ADMIN, Result.DUPLICATED_SUBFORUM, Result.NO_MODERATORS_WERE_GIVEN, Result.SUBFORUM_MODERATOR_NOT_MEMBER;} upon failure
      */
-    public Result addNewSubForum(String subForumName, Collection<String> moderators){
+    public boolean addNewSubForum(String subForumName, Collection<String> moderators) throws ForumException {
         //TODO - validate data according to POLICY
         Member member = userService.getUserAsMember();
-        if(member == null)
-            return Result.MODERATOR_NOT_MEMBER;
+        if(member == null) {
+            throw new ForumException(Result.MODERATOR_NOT_MEMBER.toString());
+        }
         if (!UserFacade.isForumManager(forum, member))
-            return Result.MEMBER_NOT_FORUM_ADMIN;
+            throw new ForumException(Result.MEMBER_NOT_FORUM_ADMIN.toString());
         if (null != ForumFacade.getSubForum(forum, subForumName)){
-            return Result.DUPLICATED_SUBFORUM;
+            throw new ForumException(Result.DUPLICATED_SUBFORUM.toString());
         }
         if (moderators.isEmpty()){
-            return Result.NO_MODERATORS_WERE_GIVEN;
+            throw new ForumException(Result.NO_MODERATORS_WERE_GIVEN.toString());
         }
-        if (ForumFacade.createSubForum(forum, subForumName, moderators) == null){
-            return Result.SUBFORUM_MODERATOR_NOT_MEMBER;
+        if (ForumFacade.createSubForum(forum, subForumName, moderators) < 0){
+            throw new ForumException(Result.SUBFORUM_MODERATOR_NOT_MEMBER.toString());
         }
-       return Result.SUCCESS;
+       return true;
     }
 
     public boolean addNewThread(String threadName){
-        //TODO - validate
+        //TODO - validate data according to POLICY
         boolean result = forum.addNewThread(threadName);
-        if(result == false)
+        if(!result)
             return false;
         return true;
     }
