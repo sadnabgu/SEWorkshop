@@ -8,6 +8,7 @@ import org.bgu.service.Exceptions.Result;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import sun.misc.ASCIICaseInsensitiveComparator;
 
 /**
  * Created by hodai on 4/21/15.
@@ -89,6 +90,10 @@ public class UserServiceTest {
         // Verify member1 is friend of member2
         Assert.assertTrue("users aren't friends", UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember().isFriendOf(userService.getUser().getMember()));
         Assert.assertEquals(Result.SUCCESS, userService.removeFriend(MEMBER2));
+        Assert.assertFalse("users are friends when they shouldn't", userService.getUser().getMember().isFriendOf(UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember()));
+        // Verify member1 is friend of member2
+        Assert.assertFalse("users are friends when they shouldn't", UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember().isFriendOf(userService.getUser().getMember()));
+
     }
 
     @Test
@@ -102,12 +107,18 @@ public class UserServiceTest {
         Assert.assertEquals(Result.SUCCESS, userService.logIn(MEMBER1, MEMBER1_PASS));
         Assert.assertEquals(Result.ALREADY_FRIENDS, userService.addFriend(MEMBER2));
         Assert.assertEquals(Result.SUCCESS, userService.removeFriend(MEMBER2));
+        Assert.assertFalse("users are friends when they shouldn't", userService.getUser().getMember().isFriendOf(UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember()));
+        // Verify member1 is friend of member2
+        Assert.assertFalse("users are friends when they shouldn't", UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember().isFriendOf(userService.getUser().getMember()));
     }
 
     @Test
     public void removeFriends_notFriends_fail(){
         Assert.assertEquals(Result.SUCCESS, userService.logIn(MEMBER1, MEMBER1_PASS));
         Assert.assertEquals(Result.NOT_FRIENDS, userService.removeFriend(MEMBER2));
+        Assert.assertFalse("users are friends when they shouldn't", userService.getUser().getMember().isFriendOf(UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember()));
+        // Verify member1 is friend of member2
+        Assert.assertFalse("users are friends when they shouldn't", UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember().isFriendOf(userService.getUser().getMember()));
     }
 
     @Test
