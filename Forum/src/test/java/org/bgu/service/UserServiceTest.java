@@ -3,12 +3,17 @@ package org.bgu.service;
 import junit.framework.Assert;
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
+import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Guest;
+import org.bgu.domain.model.Member;
 import org.bgu.service.Exceptions.Result;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sun.misc.ASCIICaseInsensitiveComparator;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by hodai on 4/21/15.
@@ -22,13 +27,15 @@ public class UserServiceTest {
     public static final String ADMIN_PASS = "pass";
 
     public static final String FORUM1_NAME = "sex";
+    public static final String SUB_FORUM1_NAME = "ilansMother";
 
     public static UserService userService;
-
+    public static Forum forum;
 
     @BeforeClass
     public static void initialSystem(){
         ForumFacade.createForum(FORUM1_NAME, ADMIN, ADMIN_PASS);
+        forum = ForumFacade.getForum(FORUM1_NAME);
         userService = new UserService(FORUM1_NAME);
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(FORUM1_NAME, MEMBER1, MEMBER1_PASS));
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(FORUM1_NAME, MEMBER2, MEMBER2_PASS));
@@ -119,6 +126,56 @@ public class UserServiceTest {
         Assert.assertFalse("users are friends when they shouldn't", userService.getUser().getMember().isFriendOf(UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember()));
         // Verify member1 is friend of member2
         Assert.assertFalse("users are friends when they shouldn't", UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember().isFriendOf(userService.getUser().getMember()));
+    }
+
+    @Test
+    public void addAndRemoveModerate_login_userIsModerate(){
+        Assert.assertEquals(Result.SUCCESS, userService.logIn(ADMIN, ADMIN_PASS));
+        //Member admin = UserFacade.getUser(ADMIN,ADMIN_PASS).getMember();
+        Collection<String> mediators = new ArrayList<>();
+        mediators.add(ADMIN);
+        ForumFacade.createSubForum(forum, SUB_FORUM1_NAME, mediators);
+        // verify member1 isn't a madiator
+        Assert.assertFalse("user is a moderator when he shouldn't", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER1).getMember()));
+        Assert.assertEquals(Result.SUCCESS, userService.addModerator(SUB_FORUM1_NAME, MEMBER1));
+        // verify member1 is a madiator
+        Assert.assertTrue("user is not moderator", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER1).getMember()));
+        // verify member2 isn't a madiator
+        Assert.assertFalse("user is a moderator when he shouldn't", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember()));
+        Assert.assertEquals(Result.SUCCESS, userService.removeModerator(SUB_FORUM1_NAME, MEMBER1));
+        // verify member1 isn't a modiator
+        Assert.assertFalse("user is a moderator when he shouldn't", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER1).getMember()));
+    }
+
+    @Test
+    public void addAndRemoveModerate_alreadyModerate_fail(){
+        Assert.assertEquals(Result.SUCCESS, userService.logIn(ADMIN, ADMIN_PASS));
+        //Member admin = UserFacade.getUser(ADMIN,ADMIN_PASS).getMember();
+        Collection<String> mediators = new ArrayList<>();
+        mediators.add(ADMIN);
+        ForumFacade.createSubForum(forum, SUB_FORUM1_NAME, mediators);
+        // verify member1 isn't a madiator
+        Assert.assertFalse("user is a moderator when he shouldn't", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER1).getMember()));
+        Assert.assertEquals(Result.SUCCESS, userService.addModerator(SUB_FORUM1_NAME, MEMBER1));
+        Assert.assertEquals(Result.ALREADY_MODERATE, userService.addModerator(SUB_FORUM1_NAME, MEMBER1));
+        // verify member1 is a madiator
+        Assert.assertTrue("user is not moderator", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER1).getMember()));
+        // verify member2 isn't a madiator
+        Assert.assertFalse("user is a moderator when he shouldn't", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER2).getMember()));
+        Assert.assertEquals(Result.SUCCESS, userService.removeModerator(SUB_FORUM1_NAME, MEMBER1));
+        // verify member1 isn't a modiator
+        Assert.assertFalse("user is a moderator when he shouldn't", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER1).getMember()));
+        }
+
+    @Test
+    public void removeModerator_notAModerator_fail(){
+        Assert.assertEquals(Result.SUCCESS, userService.logIn(ADMIN, ADMIN_PASS));
+        //Member admin = UserFacade.getUser(ADMIN,ADMIN_PASS).getMember();
+        Collection<String> mediators = new ArrayList<>();
+        mediators.add(ADMIN);
+        ForumFacade.createSubForum(forum, SUB_FORUM1_NAME, mediators);
+        Assert.assertEquals(Result.NOT_A_MODERATE, userService.removeModerator(SUB_FORUM1_NAME, MEMBER1));
+        Assert.assertFalse("user is a moderator when he shouldn't", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER1).getMember()));
     }
 
     @Test

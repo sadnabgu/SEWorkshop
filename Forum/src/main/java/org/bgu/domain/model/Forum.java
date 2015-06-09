@@ -90,7 +90,7 @@ public class Forum {
     }
 
     public boolean isManager(Member manager){
-        return managers.contains(manager);
+        return _managers.contains(manager);
     }
 
     /**********************************************************************************************************/
