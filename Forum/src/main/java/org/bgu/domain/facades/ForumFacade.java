@@ -54,6 +54,19 @@ public class ForumFacade {
         return null;
     }
 
+    public static ArrayList<String> getAllForums(){
+        ArrayList<String> forumNames = new ArrayList<String>();
+        for (Forum forum : forums){
+            forumNames.add(forum.getForumName());
+        }
+        return forumNames;
+    }
+
+    public static ArrayList<String> getAllSubForums(Forum forum){
+        ArrayList<String> subForumNames = forum.getAllSubForums();
+        return subForumNames;
+    }
+
 
     /**
      * remove the forum
@@ -69,6 +82,9 @@ public class ForumFacade {
         return false;
     }
 
+    public static int removeSubForum(Forum forum, String subForumName) {
+        return 0;
+    }
    /**********************************************************************************************************/
     /*****************FOR TESTING*********************************************************************************/
 
@@ -101,6 +117,7 @@ public class ForumFacade {
         Forum forum = getForum(forumName);
         return forum.getSubForum(subForumName).removeModerate(moderate);
     }
+
 
 }
 

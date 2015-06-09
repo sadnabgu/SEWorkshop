@@ -11,6 +11,7 @@ public class SubForum {
     private Collection<Member> moderates;   // TODO - way need this in sub-forum?
     private String name;
     private int subForumId;
+    private String subForumName;
 
     public SubForum(String subForumName, int subForumId){
         this.name = subForumName;
@@ -34,7 +35,7 @@ public class SubForum {
         return true;
     }
 
-    public String getName() {
+    public String getSubForumName() {
         return name;
     }
 

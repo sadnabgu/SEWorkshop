@@ -8,6 +8,7 @@ import org.bgu.domain.model.SubForum;
 import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -57,13 +58,40 @@ public class ForumService {
        return true;
     }
 
-    public boolean addNewThread(String threadName){
+    public boolean removeSubForum(String subForumName) throws ForumException {
+        //TODO - validate data according to POLICY
+        Member member = userService.getUserAsMember();
+        if(member == null) {
+            throw new ForumException(Result.MODERATOR_NOT_MEMBER.toString());
+        }
+        if (!UserFacade.isForumManager(forum, member))
+            throw new ForumException(Result.MEMBER_NOT_FORUM_ADMIN.toString());
+        if (null != ForumFacade.getSubForum(forum, subForumName)){
+            throw new ForumException(Result.SUBFORUM_ALREADY_REMOVED.toString());
+        }
+        if (ForumFacade.removeSubForum(forum, subForumName) < 0){
+            throw new ForumException(Result.SUBFORUM_MODERATOR_NOT_MEMBER.toString());
+        }
+        return true;
+    }
+
+    public ArrayList<String> getAllForums(){
+        return ForumFacade.getAllForums();
+    }
+
+    public ArrayList<String> getAllSubForums(){
+        return ForumFacade.getAllSubForums(forum);
+    }
+
+
+
+   /* public boolean addNewThread(String threadName){
         //TODO - validate data according to POLICY
         boolean result = forum.addNewThread(threadName);
         if(!result)
             return false;
         return true;
-    }
+    }*/
 
     /**
      * change the properties of this specific forum

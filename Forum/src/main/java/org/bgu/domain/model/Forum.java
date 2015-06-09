@@ -60,7 +60,7 @@ public class Forum {
     public SubForum getSubForum(String subForumName) {
         for (Iterator<SubForum> iterator = _subForums.iterator(); iterator.hasNext(); ) {
             SubForum next =  iterator.next();
-            if (next.getName().equals(subForumName))
+            if (next.getSubForumName().equals(subForumName))
                 return next;
         }
         return null;
@@ -90,7 +90,15 @@ public class Forum {
     }
 
     public boolean isManager(Member manager){
-        return managers.contains(manager);
+        return _managers.contains(manager);
+    }
+
+    public ArrayList<String> getAllSubForums() {
+        ArrayList<String> subForumNames = new ArrayList<String>();
+        for (SubForum subForum : _subForums){
+            subForumNames.add(subForum.getSubForumName());
+        }
+        return subForumNames;
     }
 
     /**********************************************************************************************************/
