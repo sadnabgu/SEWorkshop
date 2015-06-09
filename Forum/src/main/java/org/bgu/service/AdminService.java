@@ -4,6 +4,8 @@ import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
+import org.bgu.service.Exceptions.ForumException;
+import org.bgu.service.Exceptions.Result;
 
 /**
  * one object per admin connection/session
@@ -23,52 +25,60 @@ public class AdminService {
 
     }
 
-   /**
-    * first init routine  - initial administrator details
-    *
-    * TODO - validate legal data, POLICY
-    */
-   public Result initializeSystem(String adminName,
-                            String adminPass){
+    /**
+     * first init routine  - initial administrator details
+     * TODO - check the nature of system-init ("initialized" state per super-admin first initialization? ; any POLICY enforcement on chosen username-password?...)
+     * @param adminName - initial
+     * @param adminPass - initial
+     * @return true upon success. exception upon failure.
+     * @throws Exception, exception {Result.REINITIALIZE_SYSTEM} upon failure
+     */
+   public boolean initializeSystem(String adminName, String adminPass) throws ForumException{
 
        // make sure the system wasn't initiated before
        if (initialized){
-           return Result.REINITIALIZE_SYSTEM;
+           throw new ForumException(Result.REINITIALIZE_SYSTEM.toString());
        }
 
        //initial the system
        initialized = true;
        adminMember = UserFacade.createSuperAdmin(adminName, adminPass);
-       return Result.SUCCESS;
+       return true;
    }
+
     /**
      * login to the whole damn system as the super admin
-     *
-     * TODO - validate legal data, POLICY
+     * TODO - any POLICY enforcement on chosen username-password?...)
+     * @param adminName
+     * @param adminPass
+     * @return true upon success. exception of Result.FAIL upon failure.
      */
-    public Result loginSystem(String adminName,
-                        String adminPass){
-        if(!initialized){
-            return Result.UNINITIALIZED_SYSTEM;
-        }
+    public boolean loginSystem(String adminName,
+                        String adminPass) throws ForumException{
+        if(!initialized)
+            throw new ForumException(Result.UNINITIALIZED_SYSTEM.toString());
         adminMember = UserFacade.loginSuperAdmin(adminName, adminPass);
         if(adminMember == null)
-            return Result.FAIL;
+            throw new ForumException(Result.FAIL.toString());
 
-        return Result.SUCCESS;
+        return true;
     }
 
-    public Result createForum(String ForumName, String managerName, String managerPass){
-        if (adminMember == null){
+    /**
+     *
+     * @param ForumName
+     * @param managerName
+     * @param managerPass
+     * @return true upon success, Exception {Result.FORUM_EXISTS, Result.NOT_LOGGEDIN_SYSTEM} upon failure
+     */
+    public boolean createForum(String ForumName, String managerName, String managerPass)throws ForumException {
+        if (adminMember == null)
             // only logged in admin can create new forum
-            return Result.NOT_LOGGEDIN_SYSTEM;
-        }
+            throw new ForumException(Result.NOT_LOGGEDIN_SYSTEM.toString());
 
-        Forum forum = ForumFacade.createForum(ForumName, managerName, managerPass);
-        if (forum == null)
-            return Result.FORUM_EXISTS;        // fail creating forum
-
-        return Result.SUCCESS;
+        if(ForumFacade.createForum(ForumName, managerName, managerPass) < 0)
+            throw new ForumException(Result.FORUM_EXISTS.toString());
+        return true;
     }
 
     /**

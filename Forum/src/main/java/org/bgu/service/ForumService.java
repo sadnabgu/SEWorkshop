@@ -4,6 +4,7 @@ import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
+import org.bgu.service.Exceptions.Result;
 
 import java.util.Collection;
 
@@ -31,7 +32,8 @@ public class ForumService {
     /**
      * adds new Sub forum with the initial moderator as the connected forum's manager
      * @param subForumName
-     * @return Result for the operation
+     * @param moderators
+     * @return id of subForum, or exception upon failure
      */
     public Result addNewSubForum(String subForumName, Collection<String> moderators){
         //TODO - validate data according to POLICY
@@ -72,8 +74,8 @@ public class ForumService {
         return false;
     }
 
-    /**********************************************************************************************************/
-    /*****************FOR TESTING*********************************************************************************/
+    /***************************************************/
+    /*****************FOR TESTING***********************/
 
     /**
      * un-initialize the system

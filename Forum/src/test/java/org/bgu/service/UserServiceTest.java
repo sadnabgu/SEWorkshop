@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Guest;
+import org.bgu.service.Exceptions.Result;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
