@@ -82,6 +82,10 @@ public class Forum {
         return members;
     }
 
+    public boolean isManager(Member manager){
+        return managers.contains(manager);
+    }
+
     /**********************************************************************************************************/
     /*****************FOR TESTING*********************************************************************************/
 
@@ -93,6 +97,5 @@ public class Forum {
     public void resetSubForums(){
         subForums.clear();
     }
-
 
 }
