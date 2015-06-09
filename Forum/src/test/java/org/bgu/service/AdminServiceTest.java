@@ -1,6 +1,9 @@
 package org.bgu.service;
 
 import junit.framework.Assert;
+import org.bgu.domain.model.Forum;
+import org.bgu.service.Exceptions.ForumException;
+import org.bgu.service.Exceptions.Result;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -19,57 +22,99 @@ public class AdminServiceTest {
     public static AdminService adminService;
 
     @BeforeClass
-    public static void initialSystem(){
+    public static void initialSystem() {
         adminService = new AdminService();
         adminService.resetSystem();
-        Assert.assertEquals(Result.SUCCESS, adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
+        try {
+            Assert.assertTrue(adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
+        } catch (ForumException e) {
+            e.printStackTrace();
+        }
     }
 
     @Before
-    public void logoutSystem(){
+    public void logoutSystem() {
         initialSystem();
         adminService = new AdminService();
     }
 
-    /** utils */
-    public void loginSystem(){
-        Assert.assertEquals(Result.SUCCESS, adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
+    @Test
+    public void loginSystem() {
+        try {
+            Assert.assertTrue(adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
+        } catch (ForumException e) {
+            e.printStackTrace();
+        }
     }
 
-    /** id 1.1.1 */
     @Test
-    public void initializeSystem_initialSequence_pass(){
+    public void initializeSystem_initialSequence_pass() {
         adminService.resetSystem();
-        Assert.assertEquals(Result.SUCCESS, adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
+        try {
+            Assert.assertTrue(adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
+        } catch (ForumException e) {
+            e.printStackTrace();
+        }
         logoutSystem();
-        Assert.assertEquals(Result.SUCCESS, adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
+        try {
+            Assert.assertTrue(adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
+        } catch (ForumException e) {
+            e.printStackTrace();
+        }
     }
 
-    /** id 1.1.2 */
     @Test
-    public void initializeSystem_initialSequence_fail(){
+    public void initializeSystem_initialSequence_fail() {
         adminService.resetSystem();
 
-        Assert.assertEquals(Result.UNINITIALIZED_SYSTEM, adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
-        Assert.assertEquals(Result.SUCCESS, adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
+        try {
+            adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS);
+        } catch (ForumException e) {
+            Assert.assertEquals(Result.UNINITIALIZED_SYSTEM.toString(), e.getMessage());
+        }
+        try {
+            Assert.assertTrue(adminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS));
+        } catch (ForumException e) {
+            e.getMessage();
+        }
+
     }
 
     @Test
-    public void logginSystem_initialSequence_fail(){
+    public void logginSystem_initialSequence_fail() {
 
         logoutSystem();
-        Assert.assertEquals(Result.FAIL, adminService.loginSystem(ADMIN1_NAME, "wrongPass"));
-        Assert.assertEquals(Result.FAIL, adminService.loginSystem("wrongName", ADMIN1_PASS));
-        Assert.assertEquals(Result.FAIL, adminService.loginSystem("wrongName", "wrongPass"));
+        try {
+            adminService.loginSystem(ADMIN1_NAME, "wrongPass");
+        } catch (ForumException e) {
+            Assert.assertEquals(Result.FAIL.toString(), e.getMessage());
+        }
+        try {
+            adminService.loginSystem("wrongName", ADMIN1_PASS);
+        } catch (ForumException e) {
+            Assert.assertEquals(Result.FAIL.toString(), e.getMessage());
+        }
+        try {
+            adminService.loginSystem("wrongName", "wrongPass");
+        } catch (ForumException e) {
+            Assert.assertEquals(Result.FAIL.toString(), e.getMessage());
+        }
     }
-
 
     @Test
     public void createForum_createFunction_pass(){
         loginSystem();
 
-        Assert.assertEquals(Result.SUCCESS, adminService.createForum("form1", MANAGER1_NAME, MANAGER1_PASS));
-        Assert.assertEquals(Result.SUCCESS, adminService.createForum("form2", MANAGER2_NAME, MANAGER2_PASS));
+        try {
+            Assert.assertTrue(adminService.createForum("form1", MANAGER1_NAME, MANAGER1_PASS));
+        }catch(ForumException e){
+            e.printStackTrace();
+        }
+        try {
+            Assert.assertTrue(adminService.createForum("form2", MANAGER2_NAME, MANAGER2_PASS));
+        }catch(ForumException e){
+            e.printStackTrace();
+        }
 
         //TODO - test forum creation throw the ForumService
     }
@@ -78,15 +123,32 @@ public class AdminServiceTest {
     public void createForum_createFunction_fail(){
         // create forum while not logedin
         logoutSystem();
-        Assert.assertEquals(Result.NOT_LOGGEDIN_SYSTEM, adminService.createForum("form1", MANAGER1_NAME, MANAGER1_PASS));
+        try{
+            adminService.createForum("form1", MANAGER1_NAME, MANAGER1_PASS);
+        }catch(ForumException e){
+            Assert.assertEquals(Result.NOT_LOGGEDIN_SYSTEM.toString(),e.getMessage());
+        }
 
         loginSystem();
 
-        Assert.assertEquals(Result.SUCCESS,      adminService.createForum("form1", MANAGER1_NAME, MANAGER1_PASS));
-        Assert.assertEquals(Result.FORUM_EXISTS, adminService.createForum("form1", MANAGER2_NAME, MANAGER2_PASS));
+        try {
+            Assert.assertTrue(adminService.createForum("form1", MANAGER1_NAME, MANAGER1_PASS));
+        }catch(ForumException e){
+            e.printStackTrace();
+        }
+        try{
+            Assert.assertEquals(Result.FORUM_EXISTS, adminService.createForum("form1", MANAGER2_NAME, MANAGER2_PASS));
+        }catch(ForumException e){
+            Assert.assertEquals(Result.FORUM_EXISTS.toString(), e.getMessage());
+        }
 
         // the error not affect the system (still can create forums)
-        Assert.assertEquals(Result.SUCCESS,      adminService.createForum("newForumName", MANAGER1_NAME, MANAGER1_PASS));
+
+        try{
+            adminService.createForum("newForumName", MANAGER1_NAME, MANAGER1_PASS);
+        }catch(ForumException e){
+            Assert.assertEquals(Result.SUCCESS.toString(), e.getMessage());
+        }
 
         //TODO - test that forum wasn't changed through the ForumService
     }

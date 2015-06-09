@@ -8,20 +8,23 @@ import java.util.Iterator;
  * Created by gur on 20/04/2015.
  */
 public class Forum {
+    private int id;
     private static Collection<SubForum> subForums;
     private String name;
     /** collection of all the members and moderates and managers of this forum */
     private Collection<Member> members;
     /** Collection of all the managers of this forum (sub-set of members) */
     private Collection<Member> managers;
+    private int forumId;
 
-    public Forum(String forumName, Member manager){
-        this.subForums = new ArrayList<>();
+    public Forum(int forumId, String forumName, Member manager){
+        id = forumId;
+        name = forumName;
+        subForums = new ArrayList<>();
         members = new ArrayList<>();
         managers = new ArrayList<>();
         managers.add(manager);
         members.add(manager);
-        name = forumName;
     }
 
     public SubForum addNewSubForum(String subForumName, Collection<String> moderators) {
@@ -61,7 +64,7 @@ public class Forum {
         return false;
     }
 
-    public String getName() {
+    public String getForumName() {
         return name;
     }
 
@@ -69,6 +72,10 @@ public class Forum {
         if (managers.contains(member))
             return true;
         return false;
+    }
+
+    public int getForumId() {
+        return forumId;
     }
 
     public Collection<Member> getMembers() {
@@ -86,4 +93,6 @@ public class Forum {
     public void resetSubForums(){
         subForums.clear();
     }
+
+
 }

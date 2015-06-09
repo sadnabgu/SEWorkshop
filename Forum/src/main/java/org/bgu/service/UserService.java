@@ -3,6 +3,7 @@ package org.bgu.service;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.User;
+import org.bgu.service.Exceptions.Result;
 
 /**
  * interface for the user management functionality

@@ -14,21 +14,27 @@ import java.util.Iterator;
 public class ForumFacade {
     /** collection of all the Forums in the system */
     private static Collection<Forum> forums = new ArrayList<>();
+    private static int forumIdGenerator = 1;
 
-    public static Forum createForum(String forumName, String managerName, String managerPass) {
+    public static int createForum(String forumName, String managerName, String managerPass) {
         // check that the forum didn't exist already
         for (Iterator<Forum> iterator = forums.iterator(); iterator.hasNext(); ) {
             Forum next =  iterator.next();
-            if (next.getName().equals(forumName)){
-                return null;
+            if (next.getForumName().equals(forumName)){
+                return -1;
             }
         }
 
+        int forumId = generateForumId();
         Member manager = new Member(managerName, managerPass);
-        Forum forum = new Forum(forumName, manager);
+        Forum forum = new Forum(forumId, forumName, manager);
 
         forums.add(forum);
-        return forum;
+        return forumId;
+    }
+
+    private static int generateForumId() {
+        return forumIdGenerator++;
     }
 
     public static SubForum createSubForum(Forum forum, String subForumName, Collection<String> moderators){
@@ -42,7 +48,7 @@ public class ForumFacade {
     public static Forum getForum(String forumName) {
         for (Iterator<Forum> iterator = forums.iterator(); iterator.hasNext(); ) {
             Forum next =  iterator.next();
-            if (next.getName().equals(forumName))
+            if (next.getForumName().equals(forumName))
                 return next;
         }
         return null;
