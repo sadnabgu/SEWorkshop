@@ -27,6 +27,8 @@ public enum Result {
     FRIEND_NOT_EXIST("friend does not exist"),
     ALREADY_FRIENDS("the users are already friends"),
     NOT_FRIENDS("the users are not friends"),
+    ALREADY_MODERATE("the user is already a moderate"),
+    NOT_A_MODERATE("not a moderator"),
 
     ALREADY_LOGDIN("user already loged in, please logout first"),
     WRONG_USER_PASS("Wrong username or password"),
