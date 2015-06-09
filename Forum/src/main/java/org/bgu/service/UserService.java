@@ -4,6 +4,7 @@ import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.User;
+import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 
 /**
@@ -33,18 +34,18 @@ public class UserService {
      * @param pass - user password
      * @return Result.SUCCESS upon success
      */
-    public Result logIn(String userName, String pass){
+    public boolean logIn(String userName, String pass) throws ForumException{
         // only Guest can loggin
         if(isLogedin()){
-            return Result.ALREADY_LOGDIN;
+            throw new ForumException(Result.ALREADY_LOGDIN.toString());
         }
         // identify user
         user = UserFacade.loginMember(_forumName, userName, pass);
         if (user == null){
             user = UserFacade.createGuest();
-            return Result.WRONG_USER_PASS;
+            throw new ForumException(Result.WRONG_USER_PASS.toString());
         }
-        return Result.SUCCESS;
+        return true;
     }
 
     /**
@@ -55,15 +56,15 @@ public class UserService {
      * @return - Result.SUCCESS upon success,
      *           or Result.FAIL if user is not login.
      */
-    public Result logOut(){
+    public boolean logOut() throws ForumException {
         // guest can't logout
         if (!isLogedin())
-            return Result.FAIL;
+            throw new ForumException(Result.FAIL.toString());
 
         UserFacade.memberLogOut(user);
         user = UserFacade.createGuest();
 
-        return Result.SUCCESS;
+        return true;
     }
 
      /**
@@ -74,18 +75,18 @@ public class UserService {
      * @param pass - the new user password
      * @return Result.SUCCESS if sucsses
      */
-    public Result registerMember(String userName,
-                                  String pass){
+    public boolean registerMember(String userName,
+                                  String pass) throws ForumException {
         Result result;
         // only guest can register new member
         if(isLogedin()){
-            return Result.ALREADY_LOGDIN;
+            throw new ForumException(Result.ALREADY_LOGDIN.toString());
         }
         // TODO - validate permisions??
         result = UserFacade.addMember(_forumName, userName, pass);
 
         if(result != Result.SUCCESS)
-            return result;
+            throw new ForumException(result.toString());
 
         // try to login
         return logIn(userName, pass);
@@ -103,72 +104,72 @@ public class UserService {
         return (user.getMember() != null);
     }
 
-    public Result addFriend(String otherUserName){
+    public boolean addFriend(String otherUserName) throws ForumException {
         if(!isLogedin()) {
-            return Result.NOT_LOGGED_IN;
+            throw new ForumException(Result.NOT_LOGGED_IN.toString());
         }
         Member friend = UserFacade.getUser(_forumName, otherUserName).getMember();
         if (friend == null){
-            return Result.FRIEND_NOT_EXIST;
+            throw new ForumException(Result.FRIEND_NOT_EXIST.toString());
         }
         if(!(UserFacade.addFriend(user.getMember(), friend))){
-            return Result.ALREADY_FRIENDS;
+            throw new ForumException(Result.ALREADY_FRIENDS.toString());
         }
-        return Result.SUCCESS;
+        return true;
     }
 
-    public Result removeFriend(String otherUserName){
+    public boolean removeFriend(String otherUserName) throws ForumException {
         if(!isLogedin()) {
-            return Result.NOT_LOGGED_IN;
+            throw new ForumException(Result.NOT_LOGGED_IN.toString());
         }
         Member friend = UserFacade.getUser(_forumName, otherUserName).getMember();
         if (friend == null){
-            return Result.FRIEND_NOT_EXIST;
+            throw new ForumException(Result.FRIEND_NOT_EXIST.toString());
         }
         if(!(UserFacade.removeFriend(user.getMember(), friend))){
-            return Result.NOT_FRIENDS;
+            throw new ForumException(Result.NOT_FRIENDS.toString());
         }
-        return Result.SUCCESS;
+        return true;
     }
 
-    public Result addModerator(String subForumName, String otherUserName){
+    public boolean addModerator(String subForumName, String otherUserName) throws ForumException {
         if(!isLogedin()) {
-            return Result.NOT_LOGGED_IN;
+            throw new ForumException(Result.NOT_LOGGED_IN.toString());
         }
         if(!ForumFacade.isManager(_forumName, user.getMember())){
-            return Result.MEMBER_NOT_FORUM_ADMIN;
+            throw new ForumException(Result.MEMBER_NOT_FORUM_ADMIN.toString());
         }
         if(ForumFacade.getForum(_forumName).getSubForum(subForumName)==null){
-            return Result.FORUM_NOT_FOUND;
+            throw new ForumException(Result.FORUM_NOT_FOUND.toString());
         }
         Member moderate = UserFacade.getUser(_forumName, otherUserName).getMember();
         if (moderate == null){
-            return Result.MEMBER_NOT_FOUND;
+            throw new ForumException(Result.MEMBER_NOT_FOUND.toString());
         }
         if(!(ForumFacade.addModerate(_forumName, subForumName, moderate))){
-            return Result.ALREADY_MODERATE;
+            throw new ForumException(Result.ALREADY_MODERATE.toString());
         }
-        return Result.SUCCESS;
+        return true;
     }
 
-    public Result removeModerator(String subForumName, String otherUserName){
+    public boolean removeModerator(String subForumName, String otherUserName) throws ForumException {
         if(!isLogedin()) {
-            return Result.NOT_LOGGED_IN;
+            throw new ForumException(Result.NOT_LOGGED_IN.toString());
         }
         if(!ForumFacade.isManager(_forumName, user.getMember())){
-            return Result.MEMBER_NOT_FORUM_ADMIN;
+            throw new ForumException(Result.MEMBER_NOT_FORUM_ADMIN.toString());
         }
         if(ForumFacade.getForum(_forumName).getSubForum(subForumName)==null){
-            return Result.FORUM_NOT_FOUND;
+            throw new ForumException(Result.FORUM_NOT_FOUND.toString());
         }
         Member moderate = UserFacade.getUser(_forumName, otherUserName).getMember();
         if (moderate == null){
-            return Result.MEMBER_NOT_FOUND;
+            throw new ForumException(Result.MEMBER_NOT_FOUND.toString());
         }
         if(!(ForumFacade.removeModerate(_forumName, subForumName, moderate))){
-            return Result.NOT_A_MODERATE;
+            throw new ForumException(Result.NOT_A_MODERATE.toString());
         }
-        return Result.SUCCESS;
+        return true;
     }
 
     /**
