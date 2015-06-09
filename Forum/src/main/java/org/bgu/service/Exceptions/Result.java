@@ -1,4 +1,4 @@
-package org.bgu.service;
+package org.bgu.service.Exceptions;
 
 /**
  * Created by michael on 05/06/15.
