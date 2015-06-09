@@ -4,8 +4,6 @@ import org.bgu.communication.stomp.*;
 
 /**
  * a simple implementation of the server protocol interface
- * THIS IS WRONG INTERFACE BECAUSE THE FRAMES SHOULD NEVER BE ONLY ONE TYPE!!
- * THE RIGHT THING IS TO IMPLEMENT
  * implements AsyncServerProtocol<TClientMessage, TServerMessage>
  */
 public class StompProtocol implements AsyncServerProtocol<StompFrame>{

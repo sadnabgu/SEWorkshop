@@ -1,6 +1,7 @@
 package org.bgu.service;
 
 import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
 import org.bgu.domain.model.Forum;
 import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
@@ -41,9 +42,10 @@ public class AdminServiceTest {
     @Test
     public void loginSystem() {
         try {
-            Assert.assertTrue(adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
+            adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS);
         } catch (ForumException e) {
             e.printStackTrace();
+            throw new AssertionFailedError(e.getMessage());
         }
     }
 
@@ -57,9 +59,10 @@ public class AdminServiceTest {
         }
         logoutSystem();
         try {
-            Assert.assertTrue(adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS));
+            adminService.loginSystem(ADMIN1_NAME, ADMIN1_PASS);
         } catch (ForumException e) {
             e.printStackTrace();
+            throw new AssertionFailedError(e.getMessage());
         }
     }
 

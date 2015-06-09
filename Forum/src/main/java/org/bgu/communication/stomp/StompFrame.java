@@ -94,4 +94,8 @@ public abstract class StompFrame implements Message<StompFrame> {
 		
 		return builder.toString();
 	}
+
+    public HashMap<String, String> getHeaders() {
+        return _headers;
+    }
 }

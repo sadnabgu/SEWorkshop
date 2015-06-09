@@ -53,15 +53,13 @@ public class AdminService {
      * @param adminPass
      * @return true upon success. exception of Result.FAIL upon failure.
      */
-    public boolean loginSystem(String adminName,
+    public void loginSystem(String adminName,
                         String adminPass) throws ForumException{
         if(!initialized)
             throw new ForumException(Result.UNINITIALIZED_SYSTEM.toString());
         adminMember = UserFacade.loginSuperAdmin(adminName, adminPass);
         if(adminMember == null)
             throw new ForumException(Result.FAIL.toString());
-
-        return true;
     }
 
     /**
