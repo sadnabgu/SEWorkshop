@@ -5,6 +5,7 @@ import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.SubForum;
+import org.bgu.domain.model.User;
 import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 
@@ -61,17 +62,19 @@ public class ForumService {
 
     /**
      * adds a nre thread for some subForum
+     *
      * @param threadTitle
      * @param threadBody
      * @return msgId of the newly thread upon success. exception{} upon fail
      */
-   /* public int addNewThread(String subForumName, String threadTitle, String threadBody) {
+    public int addNewThread(String subForumName, String threadTitle, String threadBody) throws ForumException {
         //TODO - validate data according to POLICY
-        int newMsgId = forum.addNewThread(subForumName, threadTitle, threadTitle);
+        User creator = userService.getUser();
+        int newMsgId = ForumFacade.addNewThread(forum, creator, subForumName, threadTitle, threadBody);
         if (newMsgId < 0)
-            return new ForumException(Result.MSG);
-        return true;
-    }*/
+            throw new ForumException(Result.NEW_THREAD_FAIL.toString());
+        return newMsgId;
+    }
 
     public boolean removeSubForum(String subForumName) throws ForumException {
         //TODO - validate data according to POLICY

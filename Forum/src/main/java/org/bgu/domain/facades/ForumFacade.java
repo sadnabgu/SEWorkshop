@@ -3,6 +3,7 @@ package org.bgu.domain.facades;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.SubForum;
+import org.bgu.domain.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -117,8 +118,8 @@ public class ForumFacade {
         return getForum(forumName).isManager(member);
     }
 
-
-
-
+    public static int addNewThread(Forum forum, User creator, String subForumName, String threadTitle, String threadBody) {
+        return forum.addNewThread(creator, subForumName, threadTitle, threadBody);
+    }
 }
 

@@ -5,9 +5,11 @@ package org.bgu.domain.model;
  */
 public class ForumThread {
     Message openingMessage;
+    int threadId;
 
-    public ForumThread(Message openingMessage){
+    public ForumThread(int threadId, Message openingMessage){
         this.openingMessage = openingMessage;
+        this.threadId = threadId;
     }
 
     public Message getOpeningMessage(){

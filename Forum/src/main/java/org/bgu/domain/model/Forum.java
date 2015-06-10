@@ -15,7 +15,7 @@ public class Forum {
     private Collection<Member> _members;
     /** Collection of all the managers of this forum (sub-set of members) */
     private Collection<Member> _managers;
-    private int _subForumId;
+    private int _subForumIdGenerate;
 
 
     public Forum(int forumId, String forumName, Member manager){
@@ -26,11 +26,11 @@ public class Forum {
         _managers = new ArrayList<>();
         _managers.add(manager);
         _members.add(manager);
-        _subForumId=0;
+        _subForumIdGenerate = 1;
     }
 
     private int generateSubForumId(){
-        return _subForumId++;
+        return _subForumIdGenerate++;
     }
 
     public int addNewSubForum(String subForumName, Collection<String> moderators) {
@@ -66,9 +66,10 @@ public class Forum {
         return null;
     }
 
-    public boolean addNewThread(String threadName) {
-        //TODO - implement in the sub forum level
-        return false;
+    public int addNewThread(User creator, String subForumName, String threadTitle, String threadBody) {
+        SubForum subForum = getSubForum(subForumName);
+        int newMsgId = subForum.addNewThread(creator, threadTitle, threadBody);
+        return newMsgId;
     }
 
     public String getForumName() {

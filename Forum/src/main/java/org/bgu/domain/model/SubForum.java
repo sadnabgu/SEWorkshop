@@ -7,17 +7,19 @@ import java.util.Collection;
  * Created by gur on 20/04/2015.
  */
 public class SubForum {
-    private Collection<ForumThread> threads;
-    private Collection<Member> moderates;   // TODO - way need this in sub-forum?
-    private String name;
+    //TODO - maybe make a collection of type "Messages" instead of "Forum-Threads" and eliminate "Forum-Thread" class
     private int subForumId;
+    private Collection<ForumThread> threads;
+    private Collection<Member> moderates;
     private String subForumName;
+    private int threadIdGenerate;
 
     public SubForum(String subForumName, int subForumId){
-        this.name = subForumName;
+        this.subForumName = subForumName;
+        this.subForumId = subForumId;
         this.moderates = new ArrayList<Member>();
         this.threads = new ArrayList<ForumThread>();
-        this.subForumId = subForumId;
+        this.threadIdGenerate = 1;
     }
 
     public Collection<ForumThread> getThreads(){
@@ -36,7 +38,7 @@ public class SubForum {
     }
 
     public String getSubForumName() {
-        return name;
+        return subForumName;
     }
 
     public int getSubForumId() {
@@ -52,5 +54,22 @@ public class SubForum {
             return false;
         moderates.remove(moderate);
         return true;
+    }
+
+    public int addNewThread(User creator, String threadTitle, String threadBody) {
+        if (threadBody.isEmpty() && threadTitle.isEmpty()){
+            return -1;
+        }
+        else{
+            int newThreadID = generaThreadId();
+            Message newMessage = new Message(creator, threadTitle, threadBody);
+            ForumThread newThread = new ForumThread(newThreadID, newMessage);
+            threads.add(newThread);
+            return newThreadID;
+        }
+    }
+
+    private int generaThreadId() {
+        return threadIdGenerate++;
     }
 }

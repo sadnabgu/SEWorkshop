@@ -33,7 +33,8 @@ public enum Result {
     ALREADY_LOGDIN("user already loged in, please logout first"),
     WRONG_USER_PASS("Wrong username or password"),
     DUPLICATED_USERNAME("already exist user with this username"),
-    SUBFORUM_ALREADY_REMOVED("the subforum was already removed from forum");
+    SUBFORUM_ALREADY_REMOVED("the subforum was already removed from forum"),
+    NEW_THREAD_FAIL("the new thread was failed. please fill title or body");
     final public String _desc;
 
     Result(String description){
