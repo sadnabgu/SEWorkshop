@@ -6,6 +6,7 @@ import org.bgu.domain.model.Member;
 import org.bgu.domain.model.User;
 import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
+import org.bgu.service.Exceptions.RetObj;
 
 /**
  * interface for the user management functionality
@@ -34,18 +35,18 @@ public class UserService {
      * @param pass - user password
      * @return Result.SUCCESS upon success
      */
-    public boolean logIn(String userName, String pass) throws ForumException{
+    public RetObj<Boolean> logIn(String userName, String pass) {
         // only Guest can loggin
         if(isLogedin()){
-            throw new ForumException(Result.ALREADY_LOGDIN.toString());
+            return new RetObj<>(Result.ALREADY_LOGDIN);
         }
         // identify user
         user = UserFacade.loginMember(_forumName, userName, pass);
         if (user == null){
             user = UserFacade.createGuest();
-            throw new ForumException(Result.WRONG_USER_PASS.toString());
+            return new RetObj<>(Result.WRONG_USER_PASS);
         }
-        return true;
+        return new RetObj<>(Result.SUCCESS);
     }
 
     /**
@@ -75,18 +76,17 @@ public class UserService {
      * @param pass - the new user password
      * @return Result.SUCCESS if sucsses
      */
-    public boolean registerMember(String userName,
-                                  String pass) throws ForumException {
+    public RetObj<Boolean> registerMember(String userName, String pass){
         Result result;
         // only guest can register new member
         if(isLogedin()){
-            throw new ForumException(Result.ALREADY_LOGDIN.toString());
+            return new RetObj<>(Result.ALREADY_LOGDIN);
         }
         // TODO - validate permisions??
         result = UserFacade.addMember(_forumName, userName, pass);
 
         if(result != Result.SUCCESS)
-            throw new ForumException(result.toString());
+            return new RetObj<>(result);
 
         // try to login
         return logIn(userName, pass);

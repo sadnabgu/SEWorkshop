@@ -5,16 +5,17 @@ import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Guest;
-import org.bgu.domain.model.Member;
 import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import sun.misc.ASCIICaseInsensitiveComparator;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by hodai on 4/21/15.
@@ -34,7 +35,7 @@ public class UserServiceTest {
     public static Forum forum;
 
     @BeforeClass
-    public static void initialSystem(){
+    public static void initialSystem() {
         ForumFacade.createForum(FORUM1_NAME, ADMIN, ADMIN_PASS);
         forum = ForumFacade.getForum(FORUM1_NAME);
         userService = new UserService(FORUM1_NAME);
@@ -43,95 +44,58 @@ public class UserServiceTest {
     }
 
     @Before
-    public void logoutSystem(){
+    public void logoutSystem() {
         try {
             userService.logOut();
         } catch (ForumException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
     @Test
-    public void guestUserEntry_constructUserService_logginAsGuest(){
+    public void guestUserEntry_constructUserService_logginAsGuest() {
         userService = new UserService(FORUM1_NAME);
         Assert.assertTrue(userService.getUser().getClass() == Guest.class);
     }
 
     @Test
-    public void registerNewMember_memberRegistration_newMemberRegistred(){
+    public void registerNewMember_memberRegistration_newMemberRegistred() {
         // verify we are loggin now as Guest (pre condition)
         Assert.assertTrue(userService.getUser().getClass() == Guest.class);
-
-        try {
-            Assert.assertTrue(userService.registerMember("newMember1", "pass1"));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+        Assert.assertTrue(userService.registerMember("newMember1", "pass1").compareResult(Result.SUCCESS));
         //TODO - check that users really was created
         logoutSystem();
-        try {
-            Assert.assertTrue(userService.registerMember("newMember2", "pass2"));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+        Assert.assertTrue(userService.registerMember("newMember2", "pass2").compareResult(Result.SUCCESS));
         //TODO - check that users really was created
     }
 
     @Test
-    public void registerNewMember_memberRegistration_fail(){
+    public void registerNewMember_memberRegistration_fail() {
         // register while member is loggedin
-        try {
-            Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
-        try {
-            userService.registerMember("newMember1", "pass1");
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.ALREADY_LOGDIN.toString(), e.getMessage());
-        }
+        Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS).compareResult(Result.SUCCESS));
+        assertTrue(userService.registerMember("newMember1", "pass1").compareResult(Result.ALREADY_LOGDIN));
         //TODO - check that users wasn't created
 
         // register member with already used userName
         logoutSystem();
-        try {
-            userService.registerMember(MEMBER1, MEMBER1_PASS);
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.DUPLICATED_USERNAME.toString(), e.getMessage());
-        }
-        try {
-            userService.registerMember(MEMBER1, "newPass");
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.DUPLICATED_USERNAME.toString(), e.getMessage());
-        }
+        assertTrue(userService.registerMember(MEMBER1, MEMBER1_PASS).compareResult(Result.DUPLICATED_USERNAME));
+        assertTrue(userService.registerMember(MEMBER1, "newPass").compareResult(Result.DUPLICATED_USERNAME));
         //TODO - check that users wasn't created
     }
 
     @Test
-    public void loginMember_login_userIsLoggedIn(){
-        try {
-            Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+    public void loginMember_login_userIsLoggedIn() {
+        Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS).compareResult(Result.SUCCESS));
         //TODO - verify member is loggedin
         logoutSystem();
-        try {
-            userService.logIn(MEMBER2, MEMBER2_PASS);
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.SUCCESS.toString(), e.getMessage());
-        }
+        assertTrue(userService.logIn(MEMBER2, MEMBER2_PASS).compareResult(Result.SUCCESS));
         //TODO - verify member is loggedin
 
-}
+    }
 
     @Test
-    public void addAndRemoveFriend_login_usersAreFriends(){
-        try {
-            Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+    public void addAndRemoveFriend_login_usersAreFriends() {
+        Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS).compareResult(Result.SUCCESS));
         try {
             Assert.assertTrue(userService.addFriend(MEMBER2));
         } catch (ForumException e) {
@@ -153,12 +117,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void addAndRemoveFriend_alreadyFriends_fail(){
-        try {
-            Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+    public void addAndRemoveFriend_alreadyFriends_fail() {
+        Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS).compareResult(Result.SUCCESS));
         try {
             Assert.assertTrue(userService.addFriend(MEMBER2));
         } catch (ForumException e) {
@@ -169,11 +129,7 @@ public class UserServiceTest {
         } catch (ForumException e) {
             e.printStackTrace();
         }
-        try {
-            Assert.assertTrue(userService.logIn(MEMBER2, MEMBER2_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+        Assert.assertTrue(userService.logIn(MEMBER2, MEMBER2_PASS).compareResult(Result.SUCCESS));
         try {
             userService.addFriend(MEMBER1);
         } catch (ForumException e) {
@@ -184,11 +140,7 @@ public class UserServiceTest {
         } catch (ForumException e) {
             e.printStackTrace();
         }
-        try {
-            Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+        Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS).compareResult(Result.SUCCESS));
         try {
             userService.addFriend(MEMBER2);
         } catch (ForumException e) {
@@ -205,12 +157,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void removeFriends_notFriends_fail(){
-        try {
-            Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+    public void removeFriends_notFriends_fail() {
+        Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS).compareResult(Result.SUCCESS));
         try {
             userService.removeFriend(MEMBER2);
         } catch (ForumException e) {
@@ -222,12 +170,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void addAndRemoveModerate_login_userIsModerate(){
-        try {
-            Assert.assertTrue(userService.logIn(ADMIN, ADMIN_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+    public void addAndRemoveModerate_login_userIsModerate() {
+        Assert.assertTrue(userService.logIn(ADMIN, ADMIN_PASS).compareResult(Result.SUCCESS));
         //Member admin = UserFacade.getUser(ADMIN,ADMIN_PASS).getMember();
         Collection<String> mediators = new ArrayList<>();
         mediators.add(ADMIN);
@@ -253,12 +197,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void addAndRemoveModerate_alreadyModerate_fail(){
-        try {
-            Assert.assertTrue(userService.logIn(ADMIN, ADMIN_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+    public void addAndRemoveModerate_alreadyModerate_fail() {
+        Assert.assertTrue(userService.logIn(ADMIN, ADMIN_PASS).compareResult(Result.SUCCESS));
         //Member admin = UserFacade.getUser(ADMIN,ADMIN_PASS).getMember();
         Collection<String> mediators = new ArrayList<>();
         mediators.add(ADMIN);
@@ -286,15 +226,11 @@ public class UserServiceTest {
         }
         // verify member1 isn't a modiator
         Assert.assertFalse("user is a moderator when he shouldn't", ForumFacade.getForum(FORUM1_NAME).getSubForum(SUB_FORUM1_NAME).isModerator(UserFacade.getUser(FORUM1_NAME, MEMBER1).getMember()));
-        }
+    }
 
     @Test
-    public void removeModerator_notAModerator_fail(){
-        try {
-            Assert.assertTrue(userService.logIn(ADMIN, ADMIN_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+    public void removeModerator_notAModerator_fail() {
+        Assert.assertTrue(userService.logIn(ADMIN, ADMIN_PASS).compareResult(Result.SUCCESS));
         //Member admin = UserFacade.getUser(ADMIN,ADMIN_PASS).getMember();
         Collection<String> mediators = new ArrayList<>();
         mediators.add(ADMIN);
@@ -308,54 +244,25 @@ public class UserServiceTest {
     }
 
     @Test
-    public void loginMember_wrongLogin_fail(){
+    public void loginMember_wrongLogin_fail() {
         // wrong member identifiers
-        try {
-            userService.logIn("notMember", "somePass");
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.WRONG_USER_PASS.toString(), e.getMessage());
-        }
-        try {
-            userService.logIn("notMember", MEMBER1_PASS);
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.WRONG_USER_PASS.toString(), e.getMessage());
-        }
-        try {
-            userService.logIn("Guest", "somePass");
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.WRONG_USER_PASS.toString(), e.getMessage());
-        }
-        try {
-            userService.logIn(MEMBER1, "notPassOfMember1");
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.WRONG_USER_PASS.toString(), e.getMessage());
-        }
+        assertTrue(userService.logIn("notMember", "somePass").compareResult(Result.WRONG_USER_PASS));
+        assertTrue(userService.logIn("notMember", MEMBER1_PASS).compareResult(Result.WRONG_USER_PASS));
+        assertTrue(userService.logIn("Guest", "somePass").compareResult(Result.WRONG_USER_PASS));
+        assertTrue(userService.logIn(MEMBER1, "notPassOfMember1").compareResult(Result.WRONG_USER_PASS));
         //verify that no member is logged in
         Assert.assertFalse(userService.isLogedin());
 
         // user is already loggedin
-        try {
-            Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
-        try {
-            userService.logIn(MEMBER1, MEMBER1_PASS);
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.ALREADY_LOGDIN.toString(), e.getMessage());
-        }
+        Assert.assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS).compareResult(Result.SUCCESS));
+        assertTrue(userService.logIn(MEMBER1, MEMBER1_PASS).compareResult(Result.ALREADY_LOGDIN));
+        Assert.assertTrue(userService.logIn(MEMBER2, MEMBER2_PASS).compareResult(Result.ALREADY_LOGDIN));
 
-        try {
-            Assert.assertEquals(Result.ALREADY_LOGDIN, userService.logIn(MEMBER2, MEMBER2_PASS));
-        } catch (ForumException e) {
-            Assert.assertEquals(Result.ALREADY_LOGDIN.toString(), e.getMessage());
-        }
 
         // verify member1 still loggedin
         Assert.assertEquals(true, userService.isLogedin());
         Assert.assertTrue(userService.getUser().getUserName().equals(MEMBER1));
     }
-
 
 
 }
