@@ -57,15 +57,15 @@ public class UserService {
      * @return - Result.SUCCESS upon success,
      *           or Result.FAIL if user is not login.
      */
-    public boolean logOut() throws ForumException {
+    public RetObj<Object> logOut() {
         // guest can't logout
         if (!isLogedin())
-            throw new ForumException(Result.FAIL.toString());
+            return new RetObj<>(Result.FAIL);
 
         UserFacade.memberLogOut(user);
         user = UserFacade.createGuest();
 
-        return true;
+        return new RetObj<>(Result.FAIL);
     }
 
      /**
@@ -104,18 +104,18 @@ public class UserService {
         return (user.getMember() != null);
     }
 
-    public boolean addFriend(String otherUserName) throws ForumException {
+    public RetObj<Object> addFriend(String otherUserName) {
         if(!isLogedin()) {
-            throw new ForumException(Result.NOT_LOGGED_IN.toString());
+            return new RetObj<>(Result.NOT_LOGGED_IN);
         }
         Member friend = UserFacade.getUser(_forumName, otherUserName).getMember();
         if (friend == null){
-            throw new ForumException(Result.FRIEND_NOT_EXIST.toString());
+            return new RetObj<>(Result.FRIEND_NOT_EXIST);
         }
         if(!(UserFacade.addFriend(user.getMember(), friend))){
-            throw new ForumException(Result.ALREADY_FRIENDS.toString());
+            return new RetObj<>(Result.ALREADY_FRIENDS);
         }
-        return true;
+        return new RetObj<>(Result.SUCCESS);
     }
 
     public boolean removeFriend(String otherUserName) throws ForumException {
