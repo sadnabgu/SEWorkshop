@@ -44,7 +44,7 @@ public class ForumServiseTestMembers {
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
         forum.addNewSubForum("moms", mods );
-        Assert.assertTrue(userService.logIn("hodai", "hodai").compareResult(Result.SUCCESS));
+        Assert.assertEquals(Result.SUCCESS, userService.logIn("hodai", "hodai")._result);
 
     }
 

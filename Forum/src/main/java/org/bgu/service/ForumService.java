@@ -8,6 +8,7 @@ import org.bgu.domain.model.SubForum;
 import org.bgu.domain.model.User;
 import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
+import org.bgu.service.Exceptions.RetObj;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,24 +41,24 @@ public class ForumService {
      * @param moderators
      * @return id of subForum, or exception{Result.MODERATOR_NOT_MEMBER, Result.MEMBER_NOT_FORUM_ADMIN, Result.DUPLICATED_SUBFORUM, Result.NO_MODERATORS_WERE_GIVEN, Result.SUBFORUM_MODERATOR_NOT_MEMBER;} upon failure
      */
-    public boolean addNewSubForum(String subForumName, Collection<String> moderators) throws ForumException {
+    public RetObj<Object> addNewSubForum(String subForumName, Collection<String> moderators){
         //TODO - validate data according to POLICY
         Member member = userService.getUserAsMember();
         if (member == null) {
-            throw new ForumException(Result.MODERATOR_NOT_MEMBER.toString());
+            return new RetObj<>(Result.MODERATOR_NOT_MEMBER);
         }
         if (!UserFacade.isForumManager(forum, member))
-            throw new ForumException(Result.MEMBER_NOT_FORUM_ADMIN.toString());
+            return new RetObj<>(Result.MEMBER_NOT_FORUM_ADMIN);
         if (null != ForumFacade.getSubForum(forum, subForumName)) {
-            throw new ForumException(Result.DUPLICATED_SUBFORUM.toString());
+            return new RetObj<>(Result.DUPLICATED_SUBFORUM);
         }
         if (moderators.isEmpty()) {
-            throw new ForumException(Result.NO_MODERATORS_WERE_GIVEN.toString());
+            return new RetObj<>(Result.NO_MODERATORS_WERE_GIVEN);
         }
         if (ForumFacade.createSubForum(forum, subForumName, moderators) < 0) {
-            throw new ForumException(Result.SUBFORUM_MODERATOR_NOT_MEMBER.toString());
+            return new RetObj<>(Result.SUBFORUM_MODERATOR_NOT_MEMBER);
         }
-        return true;
+        return new RetObj<>(Result.SUCCESS);
     }
 
     /**
