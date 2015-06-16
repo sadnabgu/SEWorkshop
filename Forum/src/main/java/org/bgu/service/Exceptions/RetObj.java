@@ -17,12 +17,4 @@ public class RetObj<T> {
         _result = result;
         _value = null;
     }
-
-    public boolean compareResult(Result result){
-        if(result != _result){
-            System.err.println("expected result:  " + _result + " but was: " + result);
-            return false;
-        }
-        return true;
-    }
 }
