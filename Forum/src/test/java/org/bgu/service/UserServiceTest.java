@@ -34,7 +34,8 @@ public class UserServiceTest {
 
     @BeforeClass
     public static void initialSystem() {
-        ForumFacade.createForum(FORUM1_NAME, ADMIN, ADMIN_PASS);
+        ForumFacade.resetForums();
+        assertTrue(0 <= ForumFacade.createForum(FORUM1_NAME, ADMIN, ADMIN_PASS));
         forum = ForumFacade.getForum(FORUM1_NAME);
         userService = new UserService(FORUM1_NAME);
         assertEquals(Result.SUCCESS, UserFacade.addMember(FORUM1_NAME, MEMBER1, MEMBER1_PASS));

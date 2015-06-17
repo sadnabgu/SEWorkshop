@@ -89,7 +89,7 @@ public class ForumServiceAdminTest {
         mods2.add("tyrion");
         assertEquals(Result.SUCCESS, userServiceManager.logOut()._result);
         assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin")._result);
-        assertEquals(Result.SUBFORUM_MODERATOR_NOT_MEMBER, forumServiceManager.addNewSubForum("protection3", mods2));
+        assertEquals(Result.SUBFORUM_MODERATOR_NOT_MEMBER, forumServiceManager.addNewSubForum("protection3", mods2)._result);
         assertEquals(Result.SUCCESS, userServiceManager.logOut()._result);
     }
 
