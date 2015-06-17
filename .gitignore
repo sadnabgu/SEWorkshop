@@ -6,3 +6,5 @@
 */target
 *.class
 
+Forum/src/META-INF/*
+Forum/web/*
