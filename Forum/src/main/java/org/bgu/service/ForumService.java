@@ -68,27 +68,27 @@ public class ForumService {
      * @param threadBody
      * @return msgId of the newly thread upon success. exception{} upon fail
      */
-    public int addNewThread(String subForumName, String threadTitle, String threadBody) throws ForumException {
+    public RetObj<Integer> addNewThread(String subForumName, String threadTitle, String threadBody){
         //TODO - validate data according to POLICY
         User creator = userService.getUser();
         int newMsgId = ForumFacade.addNewThread(forum, creator, subForumName, threadTitle, threadBody);
         if (newMsgId < 0)
-            throw new ForumException(Result.NEW_THREAD_FAIL.toString());
-        return newMsgId;
+            return new RetObj<Integer>(Result.NEW_THREAD_FAIL);
+        return new RetObj<Integer>(Result.SUCCESS,newMsgId);
     }
 
-    public boolean removeSubForum(String subForumName) throws ForumException {
+    public RetObj<Object> removeSubForum(String subForumName){
         //TODO - validate data according to POLICY
         Member member = userService.getUserAsMember();
         if (member == null) {
-            throw new ForumException(Result.MODERATOR_NOT_MEMBER.toString());
+            return new RetObj(Result.MODERATOR_NOT_MEMBER);
         }
         if (!UserFacade.isForumManager(forum, member))
-            throw new ForumException(Result.MEMBER_NOT_FORUM_ADMIN.toString());
+            return new RetObj<>(Result.MEMBER_NOT_FORUM_ADMIN);
         if (!ForumFacade.removeSubForum(forum, subForumName)) {
-            throw new ForumException(Result.SUBFORUM_ALREADY_REMOVED.toString());
+            return new RetObj<>(Result.SUBFORUM_ALREADY_REMOVED);
         }
-        return true;
+        return new RetObj<>(Result.SUCCESS);
     }
 
     public ArrayList<String> getAllForums() {

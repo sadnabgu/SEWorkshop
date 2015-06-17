@@ -97,11 +97,7 @@ public class ForumServiceAdminTest {
     public void removeSubForum_correctData_subForumRemoved() {
         assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin")._result);
         assertEquals(Result.SUCCESS, forumServiceManager.addNewSubForum("protection3", mods)._result);
-        try {
-            assertTrue(forumServiceManager.removeSubForum("protection3"));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
+        assertEquals(Result.SUCCESS, forumServiceManager.removeSubForum("protection3")._result);
         assertEquals(Result.SUCCESS, userServiceManager.logOut()._result);
     }
 
@@ -109,23 +105,9 @@ public class ForumServiceAdminTest {
     public void removeSubForum_removedOrnotExisted_failed() {
         assertEquals(Result.SUCCESS, userServiceManager.logIn("mike", "admin")._result);
         assertEquals(Result.SUCCESS, forumServiceManager.addNewSubForum("protection3", mods)._result);
-        try {
-            assertTrue(forumServiceManager.removeSubForum("protection3"));
-        } catch (ForumException e) {
-            e.printStackTrace();
-        }
-        try {
-            forumServiceManager.removeSubForum("protection3");
-        } catch (ForumException e) {
-            System.out.println("***" + e.getMessage() + "***");
-            assertEquals(Result.SUBFORUM_ALREADY_REMOVED.toString(), e.getMessage());
-        }
-        try {
-            forumServiceManager.removeSubForum("protection4");
-        } catch (ForumException e) {
-            System.out.println("***" + e.getMessage() + "***");
-            assertEquals(Result.SUBFORUM_ALREADY_REMOVED.toString(), e.getMessage());
-        }
+        assertEquals(Result.SUCCESS, forumServiceManager.removeSubForum("protection3")._result);
+        assertEquals(Result.SUBFORUM_ALREADY_REMOVED, forumServiceManager.removeSubForum("protection3")._result);
+        assertEquals(Result.SUBFORUM_ALREADY_REMOVED, forumServiceManager.removeSubForum("protection4")._result);
         assertEquals(Result.SUCCESS, userServiceManager.logOut()._result);
     }
 

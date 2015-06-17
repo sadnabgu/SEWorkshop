@@ -12,6 +12,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.junit.Assert.*;
+
 /**
  * members service unit test
  * Created by hodai on 4/28/15.
@@ -43,19 +45,14 @@ public class ForumServiseMembersTest {
         mods.add("melki");
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
-        forum.addNewSubForum(SUB_FORUM_NAME, mods );
-        Assert.assertEquals(Result.SUCCESS, userService.logIn("hodai", "hodai")._result);
+        forum.addNewSubForum(SUB_FORUM_NAME, mods);
+        assertEquals(Result.SUCCESS, userService.logIn("hodai", "hodai")._result);
 
     }
 
     @Test
-    public void addNewThread_correctData_newThreadAdded(){
-        try {
-            forumService.addNewThread(SUB_FORUM_NAME, "titel1", "opening message1");
-        } catch (ForumException e) {
-            e.printStackTrace();
-            Assert.assertTrue("fail to create thread", false);
-        }
+    public void addNewThread_correctData_newThreadAdded() {
+        assertEquals(Result.SUCCESS, forumService.addNewThread(SUB_FORUM_NAME, "titel1", "opening message1")._result);
     }
 
 }
