@@ -4,7 +4,6 @@ import junit.framework.Assert;
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
-import org.bgu.domain.model.Member;
 import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 import org.junit.BeforeClass;
@@ -17,7 +16,7 @@ import java.util.Collection;
  * members service unit test
  * Created by hodai on 4/28/15.
  */
-public class ForumServiseTestMembers {
+public class ForumServiseMembersTest {
     public static final String FORUM_NAME = "sex";
 
     public static ForumService forumService;

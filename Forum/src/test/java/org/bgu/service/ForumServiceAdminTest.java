@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * admin unit test
  * Created by hodai on 4/28/15.
  */
-public class ForumServiceTestAdmin {
+public class ForumServiceAdminTest {
     public static final String FORUM_NAME = "sex";
 
     public static ForumService forumServiceManager;
