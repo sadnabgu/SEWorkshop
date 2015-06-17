@@ -1,10 +1,5 @@
 package org.bgu.service;
-
-import junit.framework.Assert;
-import org.bgu.domain.model.Forum;
-import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
-import org.bgu.service.Exceptions.RetObj;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -4,7 +4,6 @@ import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.User;
-import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 import org.bgu.service.Exceptions.RetObj;
 

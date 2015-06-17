@@ -4,9 +4,7 @@ import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
-import org.bgu.domain.model.SubForum;
 import org.bgu.domain.model.User;
-import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 import org.bgu.service.Exceptions.RetObj;
 
@@ -73,15 +71,15 @@ public class ForumService {
         User creator = userService.getUser();
         int newMsgId = ForumFacade.addNewThread(forum, creator, subForumName, threadTitle, threadBody);
         if (newMsgId < 0)
-            return new RetObj<Integer>(Result.NEW_THREAD_FAIL);
-        return new RetObj<Integer>(Result.SUCCESS,newMsgId);
+            return new RetObj<>(Result.NEW_THREAD_FAIL);
+        return new RetObj<>(Result.SUCCESS,newMsgId);
     }
 
     public RetObj<Object> removeSubForum(String subForumName){
         //TODO - validate data according to POLICY
         Member member = userService.getUserAsMember();
         if (member == null) {
-            return new RetObj(Result.MODERATOR_NOT_MEMBER);
+            return new RetObj<>(Result.MODERATOR_NOT_MEMBER);
         }
         if (!UserFacade.isForumManager(forum, member))
             return new RetObj<>(Result.MEMBER_NOT_FORUM_ADMIN);

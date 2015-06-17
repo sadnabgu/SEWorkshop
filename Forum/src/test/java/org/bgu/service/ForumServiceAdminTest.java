@@ -3,7 +3,6 @@ package org.bgu.service;
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
-import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 import org.junit.BeforeClass;
 import org.junit.Test;

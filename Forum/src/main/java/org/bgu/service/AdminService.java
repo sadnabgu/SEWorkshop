@@ -2,9 +2,7 @@ package org.bgu.service;
 
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
-import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
-import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
 import org.bgu.service.Exceptions.RetObj;
 
@@ -32,7 +30,6 @@ public class AdminService {
      * @param adminName - initial
      * @param adminPass - initial
      * @return true upon success. exception upon failure.
-     * @throws Exception, exception {Result.REINITIALIZE_SYSTEM} upon failure
      */
    public RetObj<Object> initializeSystem(String adminName, String adminPass){
 
