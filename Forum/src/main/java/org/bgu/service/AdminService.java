@@ -6,6 +6,7 @@ import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
 import org.bgu.service.Exceptions.ForumException;
 import org.bgu.service.Exceptions.Result;
+import org.bgu.service.Exceptions.RetObj;
 
 /**
  * one object per admin connection/session
@@ -33,17 +34,17 @@ public class AdminService {
      * @return true upon success. exception upon failure.
      * @throws Exception, exception {Result.REINITIALIZE_SYSTEM} upon failure
      */
-   public boolean initializeSystem(String adminName, String adminPass) throws ForumException{
+   public RetObj<Object> initializeSystem(String adminName, String adminPass){
 
        // make sure the system wasn't initiated before
        if (initialized){
-           throw new ForumException(Result.REINITIALIZE_SYSTEM.toString());
+           return new RetObj<>(Result.REINITIALIZE_SYSTEM);
        }
 
        //initial the system
        initialized = true;
        adminMember = UserFacade.createSuperAdmin(adminName, adminPass);
-       return true;
+       return new RetObj<>(Result.SUCCESS);
    }
 
     /**
@@ -53,15 +54,14 @@ public class AdminService {
      * @param adminPass
      * @return true upon success. exception of Result.FAIL upon failure.
      */
-    public boolean loginSystem(String adminName,
-                        String adminPass) throws ForumException{
+    public RetObj<Object> loginSystem(String adminName,String adminPass){
         if(!initialized)
-            throw new ForumException(Result.UNINITIALIZED_SYSTEM.toString());
+            return new RetObj<>(Result.UNINITIALIZED_SYSTEM);
         adminMember = UserFacade.loginSuperAdmin(adminName, adminPass);
         if(adminMember == null)
-            throw new ForumException(Result.FAIL.toString());
+            return new RetObj<>(Result.FAIL);
 
-        return true;
+        return new RetObj<>(Result.SUCCESS);
     }
 
     /**
@@ -71,14 +71,14 @@ public class AdminService {
      * @param managerPass
      * @return true upon success, Exception {Result.FORUM_EXISTS, Result.NOT_LOGGEDIN_SYSTEM} upon failure
      */
-    public boolean createForum(String ForumName, String managerName, String managerPass)throws ForumException {
-        if (adminMember == null)
+    public RetObj<Object> createForum(String ForumName, String managerName, String managerPass){
+        if (adminMember == null) {
             // only logged in admin can create new forum
-            throw new ForumException(Result.NOT_LOGGEDIN_SYSTEM.toString());
-
+            return new RetObj<>(Result.NOT_LOGGEDIN_SYSTEM);
+        }
         if(ForumFacade.createForum(ForumName, managerName, managerPass) < 0)
-            throw new ForumException(Result.FORUM_EXISTS.toString());
-        return true;
+            return new RetObj<>(Result.FORUM_EXISTS);
+        return new RetObj<>(Result.SUCCESS);
     }
 
     /**
