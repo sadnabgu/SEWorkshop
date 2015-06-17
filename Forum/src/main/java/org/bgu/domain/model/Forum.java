@@ -68,6 +68,8 @@ public class Forum {
 
     public int addNewThread(User creator, String subForumName, String threadTitle, String threadBody) {
         SubForum subForum = getSubForum(subForumName);
+        if (subForum == null)
+            return -1;  // sub forum not found
         int newMsgId = subForum.addNewThread(creator, threadTitle, threadBody);
         return newMsgId;
     }

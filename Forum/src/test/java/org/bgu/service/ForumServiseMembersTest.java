@@ -18,6 +18,7 @@ import java.util.Collection;
  */
 public class ForumServiseMembersTest {
     public static final String FORUM_NAME = "sex";
+    public static final String SUB_FORUM_NAME = "moms";
 
     public static ForumService forumService;
     public static UserService userService;
@@ -42,7 +43,7 @@ public class ForumServiseMembersTest {
         mods.add("melki");
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
         Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
-        forum.addNewSubForum("moms", mods );
+        forum.addNewSubForum(SUB_FORUM_NAME, mods );
         Assert.assertEquals(Result.SUCCESS, userService.logIn("hodai", "hodai")._result);
 
     }
@@ -50,7 +51,7 @@ public class ForumServiseMembersTest {
     @Test
     public void addNewThread_correctData_newThreadAdded(){
         try {
-            forumService.addNewThread("ilan's mom", "titel1", "opening message1");
+            forumService.addNewThread(SUB_FORUM_NAME, "titel1", "opening message1");
         } catch (ForumException e) {
             e.printStackTrace();
             Assert.assertTrue("fail to create thread", false);
