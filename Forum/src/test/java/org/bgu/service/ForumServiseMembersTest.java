@@ -52,7 +52,12 @@ public class ForumServiseMembersTest {
 
     @Test
     public void addNewThread_correctData_newThreadAdded() {
+        int threadsCount = forum.getSubForum(SUB_FORUM_NAME).getThreads().size();
         assertEquals(Result.SUCCESS, forumService.addNewThread(SUB_FORUM_NAME, "titel1", "opening message1")._result);
+        assertEquals(Result.SUCCESS, forumService.addNewThread(SUB_FORUM_NAME, "titel2", "opening message2")._result);
+        // duplicate thread data is OK
+        assertEquals(Result.SUCCESS, forumService.addNewThread(SUB_FORUM_NAME, "titel1", "opening message1")._result);
+        assertEquals(threadsCount+3 , forum.getSubForum(SUB_FORUM_NAME).getThreads().size());
     }
 
 }
