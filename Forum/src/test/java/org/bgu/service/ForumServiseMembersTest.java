@@ -19,6 +19,9 @@ import static org.junit.Assert.*;
  */
 public class ForumServiseMembersTest {
     public static final String FORUM_NAME = "sex";
+    public static final String SUB_FORUM_NAME = "protection";
+    public static final int MANAGER_SID = 1;
+    public static final int MEMBER_SID = 2;
 
     public static Forum forum;
 
@@ -35,42 +38,39 @@ public class ForumServiseMembersTest {
         assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
         assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
 
-        // login as admin TODO - replace tests to use regular member
-        assertEquals(Result.SUCCESS, UserService.logIn(1, FORUM_NAME, "mike", "admin")._result);
+        // login as admin TODO - replace tests to use regular member and create sub-forum using facade directly
+        assertEquals(Result.SUCCESS, UserService.logIn(MEMBER_SID, FORUM_NAME, "hodai", "hodai")._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(MANAGER_SID, FORUM_NAME, "mike", "admin")._result);
+        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(MANAGER_SID, SUB_FORUM_NAME, mods)._result);
+
+
     }
 
   /* new Thread tests  */
 
     @Test
     public void addNewThread_correctData_successNewThreadAdded() {
-        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(1, "protection4", mods)._result);
-        assertEquals(Result.SUCCESS, ForumService.addNewThread(FORUM_NAME, "protection4", "mike", "condoms", "how to use them?")._result);
-        assertEquals(Result.SUCCESS, ForumService.removeSubForum(1, "protection4")._result);
+        assertEquals(Result.SUCCESS, ForumService.addNewThread(MEMBER_SID, SUB_FORUM_NAME, "condoms", "how to use them?")._result);
     }
 
     @Test
     public void addNewThread_titleOrBodyMissingByOtherUsers_successNewThreadAdded() {
-        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(1, "protection4", mods)._result);
-        assertEquals(Result.SUCCESS, ForumService.addNewThread(FORUM_NAME, "protection4", "mike", "", "Im King")._result);
-        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM_NAME, "hodai", "hodai")._result);
-        assertEquals(Result.SUCCESS, ForumService.addNewThread(FORUM_NAME, "protection4", "hodai", "important title", "")._result);
-        assertEquals(Result.SUCCESS, ForumService.removeSubForum(1, "protection4")._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
+        assertEquals(Result.SUCCESS, ForumService.addNewThread(MANAGER_SID, SUB_FORUM_NAME, "", "Im King")._result);
+        assertEquals(Result.SUCCESS, ForumService.addNewThread(MEMBER_SID, SUB_FORUM_NAME, "important title", "")._result);
     }
 
     @Test
     public void addNewThread_titleAndBodyMissing_newThreadFailed() {
-        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(1, "protection4", mods)._result);
-        assertEquals(Result.NEW_THREAD_FAIL, ForumService.addNewThread(FORUM_NAME, "protection4", "mike", "", "")._result);
-        assertEquals(Result.SUCCESS, ForumService.removeSubForum(1, "protection4")._result);
+        assertEquals(Result.NEW_THREAD_FAIL, ForumService.addNewThread(MEMBER_SID, SUB_FORUM_NAME, "", "")._result);
+        assertEquals(Result.NEW_THREAD_FAIL, ForumService.addNewThread(MANAGER_SID, SUB_FORUM_NAME, "", "")._result);
     }
 
     @Test
     public void addNewThread_notLoggedInUser_newThreadFailed() {
-        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(1, "protection4", mods)._result);
-        assertEquals(Result.NEW_THREAD_FAIL,
-                ForumService.addNewThread(FORUM_NAME, "protection4", "shakshuka", "bla", "bla bla bla blaaaa")._result);
-        assertEquals(Result.SUCCESS, ForumService.removeSubForum(1, "protection4")._result);
+        assertEquals(Result.NEW_THREAD_FAIL, ForumService.addNewThread(3, SUB_FORUM_NAME, "bla", "blaaaa")._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(MEMBER_SID)._result);
+        assertEquals(Result.NEW_THREAD_FAIL, ForumService.addNewThread(MEMBER_SID, SUB_FORUM_NAME, "bla", "blaaaa")._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(MEMBER_SID, FORUM_NAME, "hodai", "hodai")._result);
     }
 
 

@@ -40,15 +40,17 @@ public class ForumService {
     }
 
     /**
-     * adds a nre thread for some subForum
+     * adds a new thread for some subForum
      *
+     * @param sId
+     * @param subForumName
      * @param threadTitle
      * @param threadBody
-     * @return msgId of the newly thread upon success. exception{} upon fail
+     * @return - msgId of the newly thread upon success. exception{} upon fail
      */
-    public static RetObj<Integer> addNewThread(String forumName, String subForumName, String userName, String threadTitle, String threadBody){
+    public static RetObj<Integer> addNewThread(int sId, String subForumName, String threadTitle, String threadBody){
         //TODO - validate data according to POLICY
-        int newMsgId = ForumFacade.addNewThread(forumName, subForumName, userName, threadTitle, threadBody);
+        int newMsgId = ForumFacade.addNewThread(sId, subForumName, threadTitle, threadBody);
         if (newMsgId < 0)
             return new RetObj<>(Result.NEW_THREAD_FAIL);
         return new RetObj<>(Result.SUCCESS,newMsgId);

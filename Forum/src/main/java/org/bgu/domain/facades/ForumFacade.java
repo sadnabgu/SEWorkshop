@@ -50,14 +50,11 @@ public class ForumFacade {
         return session._forum.addNewSubForum(subForumName, moderators);
     }
 
-    public static int addNewThread(String forumName, String subForumName, String userName, String threadTitle, String threadBody) {
-        Forum forum = getForum(forumName);
-        if (null == forum)
+    public static int addNewThread(int sId, String subForumName, String threadTitle, String threadBody) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
             return -1;
-        Member creator = forum.getMemberByName(userName);
-        if (null == creator)
-            return -1;
-        return forum.addNewThread(subForumName, creator, threadTitle, threadBody);
+        return session._forum.addNewThread(subForumName, session._member, threadTitle, threadBody);
     }
 
     public static int postNewComment(String forumName, String subForumName, String userName, int msgId, String commentTitle, String commentBody) {

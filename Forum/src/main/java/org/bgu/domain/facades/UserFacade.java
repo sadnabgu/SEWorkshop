@@ -15,10 +15,10 @@ public class UserFacade {
     //TODO - change to ORM
     private static Collection<Member> superAdmins = new ArrayList<>();
 
-    /* cache memorry for logged in super admins */
+    /** cache memorry for logged in super admins */
     public static HashMap<String, Member> superAdminsCache = new HashMap<>();
 
-    /** hold all the sessions information */
+    /** hold all the sessions information of activates members */
     private static HashMap<Integer, Session> sessions = new HashMap<>();
 
     /***********SUPER ADMIN HANDLE**************** */
