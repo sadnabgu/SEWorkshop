@@ -58,6 +58,17 @@ public class AdminService {
         return new RetObj<>(Result.SUCCESS);
     }
 
+    public static RetObj<Object> removeForum(String superAdminName, String ForumName, String managerName, String managerPass){
+        if (!UserFacade.isLoggedInSuperAdmin(superAdminName)) {
+            // only logged in admin can create new forum
+            return new RetObj<>(Result.NOT_LOGGEDIN_SYSTEM);
+        }
+        if(!ForumFacade.removeForum(ForumName))
+            return new RetObj<>(Result.FORUM_NOT_EXISTS);
+        return new RetObj<>(Result.SUCCESS);
+    }
+
+
     /**
      * un-initialize the system
      * used only for the testing

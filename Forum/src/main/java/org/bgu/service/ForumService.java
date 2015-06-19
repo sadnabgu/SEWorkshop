@@ -7,6 +7,7 @@ import org.bgu.service.Exceptions.RetObj;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * activate all the forum services (non-users)
@@ -58,6 +59,36 @@ public class ForumService {
     /**
      *
      * @param forumName
+     * @param subForumName
+     * @param userName
+     * @param MsgId
+     * @param commentTitle
+     * @param commentBody
+     * @return
+     */
+    public static RetObj<Integer> postNewComment(String forumName, String subForumName, String userName, int MsgId, String commentTitle, String commentBody){
+        //TODO - validate data according to POLICY
+        int newMsgId = ForumFacade.postNewComment(forumName, subForumName, userName, MsgId, commentTitle, commentBody);
+        if (newMsgId < 0)
+            return new RetObj<>(Result.NEW_COMMENT_FAIL);
+        return new RetObj<>(Result.SUCCESS,newMsgId);
+    }
+
+    public static RetObj<Object> removeMessage(String forumName, String subForumName, String userName, int MsgId){
+        if (!ForumFacade.removeMesage(forumName, subForumName, userName, MsgId))
+            return new RetObj<>(Result.REMOVE_COMMENT_FAILED);
+        return new RetObj<>(Result.SUCCESS);
+    }
+
+    public static RetObj<Object> editMessage(String forumName, String subForumName, String userName, int MsgId, String commentTitle, String commentBody){
+        if (!ForumFacade.editMessage(forumName, subForumName, userName, MsgId, commentTitle, commentBody))
+            return new RetObj<>(Result.EDIT_COMMENT_FAILED);
+        return new RetObj<>(Result.SUCCESS);
+    }
+
+    /**
+     *
+     * @param forumName
      * @param forumManagerName
      * @param subForumName
      * @return
@@ -71,8 +102,6 @@ public class ForumService {
         }
         return new RetObj<>(Result.SUCCESS);
     }
-
-
 
     /**
      * change the properties of this specific forum

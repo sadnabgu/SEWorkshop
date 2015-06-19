@@ -65,7 +65,6 @@ public class AdminServiceTest {
 
         assertEquals(Result.SUCCESS, AdminService.createForum(ADMIN1_NAME, "form1", MANAGER1_NAME, MANAGER1_PASS)._result);
         assertEquals(Result.SUCCESS, AdminService.createForum(ADMIN1_NAME, "form2", MANAGER2_NAME, MANAGER2_PASS)._result);
-        //TODO - test forum creation throw the ForumService
     }
 
     @Test
@@ -81,9 +80,23 @@ public class AdminServiceTest {
         // the error not affect the system (still can create forums)
 
             assertEquals(Result.SUCCESS, AdminService.createForum(ADMIN1_NAME, "newForumName", MANAGER1_NAME, MANAGER1_PASS)._result);
+    }
 
+    @Test
+    public void removeForum_validForumRemoval_successForumRemoval() {
+        loginSystem();
+        assertEquals(Result.SUCCESS, AdminService.createForum(ADMIN1_NAME, "form1", MANAGER1_NAME, MANAGER1_PASS)._result);
+        assertEquals(Result.SUCCESS, AdminService.createForum(ADMIN1_NAME, "form2", MANAGER2_NAME, MANAGER2_PASS)._result);
+        assertEquals(Result.SUCCESS, AdminService.removeForum(ADMIN1_NAME, "form1", MANAGER1_NAME, MANAGER1_PASS)._result);
+        assertEquals(Result.SUCCESS, AdminService.removeForum(ADMIN1_NAME, "form2", MANAGER2_NAME, MANAGER2_PASS)._result);
+    }
 
-        //TODO - test that forum wasn't changed through the ForumService
+    @Test
+    public void removeForum_removalOfUnexistedForum_failedForumRemoval() {
+        loginSystem();
+        assertEquals(Result.FORUM_NOT_EXISTS, AdminService.removeForum(ADMIN1_NAME, "form1", MANAGER1_NAME, MANAGER1_PASS)._result);
+        assertEquals(Result.SUCCESS, AdminService.createForum(ADMIN1_NAME, "form2", MANAGER2_NAME, MANAGER2_PASS)._result);
+        assertEquals(Result.SUCCESS, AdminService.removeForum(ADMIN1_NAME, "form2", MANAGER2_NAME, MANAGER2_PASS)._result);
     }
 
 

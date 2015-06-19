@@ -9,7 +9,7 @@ import java.util.Collection;
 public class SubForum {
     //TODO - maybe make a collection of type "Messages" instead of "Forum-Threads" and eliminate "Forum-Thread" class
     private int subForumId;
-    private Collection<ForumThread> threads;
+    private Collection<Message> threads;
     private Collection<Member> moderates;
     private String subForumName;
     private int threadIdGenerate;
@@ -17,12 +17,12 @@ public class SubForum {
     public SubForum(String subForumName, int subForumId){
         this.subForumName = subForumName;
         this.subForumId = subForumId;
-        this.moderates = new ArrayList<Member>();
-        this.threads = new ArrayList<ForumThread>();
+        this.moderates = new ArrayList<>();
+        this.threads = new ArrayList<>();
         this.threadIdGenerate = 1;
     }
 
-    public Collection<ForumThread> getThreads(){
+    public Collection<Message> getThreads(){
         return this.threads;
     }
 
@@ -30,8 +30,10 @@ public class SubForum {
         return moderates;
     }
 
+    private int msgIdGenerator() {return threadIdGenerate++;}
+
     public boolean addModerator(Member moderator) {
-        if (moderates.contains(moderator) || null == moderator)
+        if (null == moderator || moderates.contains(moderator))
             return false;
         moderates.add(moderator);
         return true;
@@ -53,19 +55,88 @@ public class SubForum {
     }
 
     public int addNewThread(Member creator, String threadTitle, String threadBody) {
+        int newThreadID = msgIdGenerator();
         if (threadBody.isEmpty() && threadTitle.isEmpty()){
             return -1;
         }
         else{
-            int newThreadID = generaThreadId();
-            Message newMessage = new Message(creator, threadTitle, threadBody);
-            ForumThread newThread = new ForumThread(newThreadID, newMessage);
+            Message newThread = new Message(newThreadID, creator, threadTitle, threadBody);
             threads.add(newThread);
-            return newThreadID;
+            return newThread.getMsgId();
         }
     }
 
-    private int generaThreadId() {
-        return threadIdGenerate++;
+    public int postNewComment(Member creator, int msgId, String commentTitle, String commentBody) {
+        int newMsgId = msgIdGenerator();
+        if (commentTitle.isEmpty() && commentBody.isEmpty()){
+            return -1;
+        }
+        else{
+            Message newMsg = new Message(newMsgId, creator, commentTitle, commentBody);
+            boolean flag = false;
+            for (Message t : threads){
+                Message relevantMsg;
+                relevantMsg = t.searchForMsgId(msgId);
+                if (null != relevantMsg) {
+                    relevantMsg.addNewComment(newMsg);
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+                return -1;
+            return newMsg.getMsgId();
+        }
+    }
+
+    public boolean removeMessage(Member remover, int msgId) {
+        for (Message t : threads){
+            if (t.getMsgId() == msgId) {
+                if (t.getCreator().getUserName().equals(remover.getUserName())) {
+                    t.removeAllMsgs();
+                    threads.remove(t);
+                    return true;
+                }
+                return false;
+            }
+            Message relevantMsg;
+            relevantMsg = t.searchForMsgId(msgId);
+            if (null != relevantMsg) {
+                if (relevantMsg.getCreator().getUserName().equals(remover.getUserName())) {
+                    relevantMsg.removeAllMsgs();
+                    t.removeMessage(relevantMsg);
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean editMessage(Member editor, int msgId, String edittedTitle, String edittedBody) {
+        if (edittedBody.isEmpty() && edittedTitle.isEmpty()){
+            return false;
+        }
+        else{
+            for (Message t : threads){
+                if (t.getMsgId() == msgId) {
+                    if (t.getCreator().getUserName().equals(editor.getUserName())) {
+                        t.edit(edittedTitle, edittedBody);
+                        return true;
+                    }
+                    return false;
+                }
+                Message relevantMsg;
+                relevantMsg = t.searchForMsgId(msgId);
+                if (null != relevantMsg) {
+                    if (relevantMsg.getCreator().getUserName().equals(editor.getUserName())) {
+                        t.edit(edittedTitle, edittedBody);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            return false;
+        }
     }
 }

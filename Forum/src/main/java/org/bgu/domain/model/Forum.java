@@ -67,11 +67,60 @@ public class Forum {
         return newMsgId;
     }
 
+    public int postNewComment(String subForumName, Member creator, int msgId, String commentTitle, String commentBody) {
+        SubForum subForum = getSubForumByName(subForumName);
+        if (subForum == null)
+            return -1;  // sub forum not found
+        int newMsgId = subForum.postNewComment(creator, msgId, commentTitle, commentBody);
+        return newMsgId;
+    }
+
+    public boolean editMessage(String subForumName, Member editor, int msgId, String edittedTitle, String edittedBody) {
+        SubForum subForum = getSubForumByName(subForumName);
+
+        if (subForum == null)
+            return false;  // sub forum not found
+       return subForum.editMessage(editor, msgId, edittedTitle, edittedBody);
+    }
+
     public boolean removeSubForum(String subForumName) {
         SubForum subForum = getSubForumByName(subForumName);
         if (null == subForum) return false;
         _subForums.remove(subForum);
         return true;
+    }
+
+    public boolean removeMessage(String subForumName, Member remover, int msgId) {
+        SubForum subForum = getSubForumByName(subForumName);
+        if (subForum == null)
+            return false;  // sub forum not found
+        return subForum.removeMessage(remover, msgId);
+    }
+
+    public ArrayList<String> getAllSubForums() {
+        ArrayList<String> subForumNames = new ArrayList<String>();
+        for (SubForum subForum : _subForums){
+            subForumNames.add(subForum.getSubForumName());
+        }
+        return subForumNames;
+    }
+
+    public SubForum getSubForumByName(String subForumName) {
+        for (Iterator<SubForum> iterator = _subForums.iterator(); iterator.hasNext(); ) {
+            SubForum next =  iterator.next();
+            if (next.getSubForumName().equals(subForumName))
+                return next;
+        }
+        return null;
+    }
+
+    public String getForumName() {
+        return _name;
+    }
+
+    //TODO - maybe remove it?
+    public int getForumId() {
+        return _forumId;
     }
 
     /*****FORUM STRUCTURE MANAGEMENT****  */
@@ -124,6 +173,18 @@ public class Forum {
         return false;
     }
 
+    public Member getMemberByName(String memberName){
+        for (Member m : _members){
+            if (m.getUserName().equals(memberName))
+                return m;
+        }
+        return null;
+    }
+
+    public Collection<Member> getMembers() {
+        return _members;
+    }
+
     /*****FORUM USERS MANAGEMENT****/
 
 
@@ -138,47 +199,5 @@ public class Forum {
 
     public void resetSubForums(){
         _subForums.clear();
-    }
-
-
-
-    /*****************DB OPERATIONS******************/
-    //TODO - change to ORM
-
-    public Member getMemberByName(String memberName){
-        for (Member m : _members){
-            if (m.getUserName().equals(memberName))
-                return m;
-        }
-        return null;
-    }
-
-    public SubForum getSubForumByName(String subForumName) {
-        for (Iterator<SubForum> iterator = _subForums.iterator(); iterator.hasNext(); ) {
-            SubForum next =  iterator.next();
-            if (next.getSubForumName().equals(subForumName))
-                return next;
-        }
-        return null;
-    }
-
-    public int getForumId() {
-        return _forumId;
-    }
-
-    public String getForumName() {
-        return _name;
-    }
-
-    public Collection<Member> getMembers() {
-        return _members;
-    }
-
-    public ArrayList<String> getAllSubForums() {
-        ArrayList<String> subForumNames = new ArrayList<String>();
-        for (SubForum subForum : _subForums){
-            subForumNames.add(subForum.getSubForumName());
-        }
-        return subForumNames;
     }
 }

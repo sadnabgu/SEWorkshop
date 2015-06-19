@@ -53,7 +53,7 @@ public class UserService {
      */
      public static RetObj<Object> registerMember(String ForumName, String userName, String pass) {
          // only guest can register new member
-         if (UserFacade.registerMember(ForumName, userName, pass))
+         if (!UserFacade.registerMember(ForumName, userName, pass))
              return new RetObj<>(Result.USERNAME_EXISTS);
          return new RetObj<>(Result.SUCCESS);
      }
@@ -86,7 +86,7 @@ public class UserService {
      * @param moderatorName
      * @return
      */
-    public RetObj<Object> addModerator(String forumName, String subForumName, String forumManagerName, String moderatorName) {
+    public static RetObj<Object> addModerator(String forumName, String subForumName, String forumManagerName, String moderatorName) {
         if (!UserFacade.isLoggedInMember(forumName, forumManagerName))
             return new RetObj<>(Result.NOT_LOGGED_IN);
         if (!UserFacade.isForumManager(forumName, forumManagerName))
@@ -124,7 +124,7 @@ public class UserService {
      * @param moderatorName
      * @return
      */
-    public RetObj<Object> removeModerator(String forumName, String subForumName, String forumManagerName, String moderatorName) {
+    public static RetObj<Object> removeModerator(String forumName, String subForumName, String forumManagerName, String moderatorName) {
         if (!UserFacade.isLoggedInMember(forumName, forumManagerName))
             return new RetObj<>(Result.NOT_LOGGED_IN);
         if (!UserFacade.isForumManager(forumName, forumManagerName))

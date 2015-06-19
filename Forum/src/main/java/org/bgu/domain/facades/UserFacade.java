@@ -87,19 +87,13 @@ public class UserFacade {
 
     public static boolean validatePassword(String forumName, String userName, String pass){
         Forum forum = ForumFacade.getForum(forumName);
-        if (null == forum) {
-            System.out.println("shit0");
+        if (null == forum)
             return false;
-        }
         Member member = forum.getMemberByName(userName);
-        if (null == member) {
-            System.out.println("shit1");
+        if (null == member)
             return false;
-        }
-        if (!member.login(pass)){
-            System.out.println("shit2");
+        if (!member.login(pass))
             return false;
-        }
         return true;
     }
 
@@ -125,7 +119,7 @@ public class UserFacade {
         Forum forum = ForumFacade.getForum(forumName);
         if (null == forum)
             return false;
-        if (forum.registeredMember(userName, userPassword))
+        if (!forum.registeredMember(userName, userPassword))
             return false;
         return true;
     }
@@ -239,7 +233,7 @@ public class UserFacade {
         if (!member.isFriendOf(friend))
             return false;
         member.remocveFriend(friend);
-        friend.addFriend(member);
+        friend.remocveFriend(member);
         return true;
     }
 

@@ -13,6 +13,7 @@ public enum Result {
     NOT_LOGGEDIN_SYSTEM("not logged in to the system"),
     /* Forum view */
     FORUM_EXISTS("the given forum already exists"),
+    FORUM_NOT_EXISTS("the given forum does not exist"),
     DUPLICATED_SUBFORUM("a sub forum with same name exists"),
     MEMBER_NOT_FORUM_ADMIN("the action is allowed to forum admins only"),
     FORUM_NOT_FOUND("the forum not exist"),
@@ -33,7 +34,10 @@ public enum Result {
     WRONG_USER_NAME_OR_PASS("Wrong username or password"),
     DUPLICATED_USERNAME("already exist user with this username"),
     SUBFORUM_ALREADY_REMOVED("the subforum was already removed from forum"),
-    NEW_THREAD_FAIL("the new thread was failed. please fill title or body");
+    NEW_THREAD_FAIL("adding the new thread failed. please fill title or body"),
+    NEW_COMMENT_FAIL("posting the new comment failed. please fill title or body"),
+    REMOVE_COMMENT_FAILED("removal of the message failed"),
+    EDIT_COMMENT_FAILED("edit of message failed");
     final public String _desc;
 
     Result(String description){

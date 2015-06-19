@@ -3,7 +3,6 @@ package org.bgu.domain.facades;
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
 import org.bgu.domain.model.SubForum;
-import org.bgu.domain.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,6 +59,16 @@ public class ForumFacade {
         return forum.addNewThread(subForumName, creator, threadTitle, threadBody);
     }
 
+    public static int postNewComment(String forumName, String subForumName, String userName, int msgId, String commentTitle, String commentBody) {
+        Forum forum = getForum(forumName);
+        if (null == forum)
+            return -1;
+        Member creator = forum.getMemberByName(userName);
+        if (null == creator)
+            return -1;
+        return forum.postNewComment(subForumName, creator, msgId, commentTitle, commentBody);
+    }
+
     public static boolean removeForum(String forumName) {
         Forum forum = getForum(forumName);
         if(forums.contains(forum)){
@@ -74,6 +83,26 @@ public class ForumFacade {
         if (null == forum)
             return false;
         return (forum.removeSubForum(subForumName));
+    }
+
+    public static boolean editMessage(String forumName, String subForumName, String userName, int msgId, String edittedTitle, String edittedBody) {
+        Forum forum = getForum(forumName);
+        if (null == forum)
+            return false;
+        Member editor = forum.getMemberByName(userName);
+        if (null == editor)
+            return false;
+        return forum.editMessage(subForumName, editor, msgId, edittedTitle, edittedBody);
+    }
+
+    public static boolean removeMesage(String forumName, String subForumName, String userName, int msgId) {
+        Forum forum = getForum(forumName);
+        if (null == forum)
+            return false;
+        Member remover = forum.getMemberByName(userName);
+        if (null == remover)
+            return false;
+        return forum.removeMessage(subForumName, remover, msgId);
     }
 
     public static SubForum getSubForum(String forumName, String subForumName) {
@@ -106,9 +135,7 @@ public class ForumFacade {
         return subForumNames;
     }
 
-
-
-
+    /**** FORUMS MANAGEMENT ****/
 
    /**********************************************************************************************************/
     /*****************FOR TESTING*********************************************************************************/
@@ -125,10 +152,5 @@ public class ForumFacade {
         Forum forum = getForum(forumName);
         forum.resetSubForums();
     }
-
-    /*****************DB OPERATIONS******************/
-    //TODO - change to ORM
-
-
 }
 
