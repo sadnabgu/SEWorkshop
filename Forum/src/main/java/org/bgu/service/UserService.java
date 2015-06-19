@@ -15,6 +15,7 @@ import org.bgu.service.Exceptions.RetObj;
 public class UserService {
     /**
      *
+     * @param sId
      * @param forumName
      * @param userName
      * @param pass
@@ -59,19 +60,18 @@ public class UserService {
 
     /**
      *
-     * @param forumName
-     * @param userName
+     * @param sId
      * @param otherUserName
      * @return
      */
-    public static RetObj<Object> addFriend(String forumName, String userName, String otherUserName) {
-        if (!UserFacade.isLoggedInMember(forumName, userName)){
+    public static RetObj<Object> addFriend(int sId, String otherUserName) {
+        if (!UserFacade.isLoggedInMember(sId)){
             return new RetObj<>(Result.NOT_LOGGED_IN);
         }
-        if (!UserFacade.isRegisteredMember(forumName, otherUserName))
+        if (!UserFacade.isRegisteredMember(sId, otherUserName))
             return new RetObj<>(Result.FRIEND_NOT_EXIST);
 
-        if(!(UserFacade.addFriend(forumName, userName, otherUserName))){
+        if(!(UserFacade.addFriend(sId, otherUserName))){
             return new RetObj<>(Result.ALREADY_FRIENDS);
         }
         return new RetObj<>(Result.SUCCESS);
@@ -79,37 +79,35 @@ public class UserService {
 
     /**
      *
-     * @param forumName
+     * @param sId
      * @param subForumName
-     * @param forumManagerName
      * @param moderatorName
      * @return
      */
-    public static RetObj<Object> addModerator(String forumName, String subForumName, String forumManagerName, String moderatorName) {
-        if (!UserFacade.isLoggedInMember(forumName, forumManagerName))
+    public static RetObj<Object> addModerator(int sId, String subForumName, String moderatorName) {
+        if (!UserFacade.isLoggedInMember(sId))
             return new RetObj<>(Result.NOT_LOGGED_IN);
-        if (!UserFacade.isForumManager(forumName, forumManagerName))
+        if (!UserFacade.isForumManager(sId))
             return new RetObj<>(Result.MEMBER_NOT_FORUM_ADMIN);
-        if (!UserFacade.addModerator(forumName, subForumName, moderatorName))
+        if (!UserFacade.addModerator(sId, subForumName, moderatorName))
             return new RetObj<>(Result.ALREADY_MODERATE);
         return new RetObj<>(Result.SUCCESS);
     }
 
     /**
      *
-     * @param forumName
-     * @param userName
+     * @param sId
      * @param otherUserName
      * @return
      */
-    public static RetObj<Object> unFriend(String forumName, String userName, String otherUserName) {
-        if (!UserFacade.isLoggedInMember(forumName, userName)){
+    public static RetObj<Object> unFriend(int sId, String otherUserName) {
+        if (!UserFacade.isLoggedInMember(sId)){
             return new RetObj<>(Result.NOT_LOGGED_IN);
         }
-        if (!UserFacade.isRegisteredMember(forumName, otherUserName))
+        if (!UserFacade.isRegisteredMember(sId, otherUserName))
             return new RetObj<>(Result.FRIEND_NOT_EXIST);
 
-        if(!(UserFacade.removeFriend(forumName, userName, otherUserName))){
+        if(!(UserFacade.removeFriend(sId, otherUserName))){
             return new RetObj<>(Result.NOT_FRIENDS);
         }
         return new RetObj<>(Result.SUCCESS);
@@ -117,18 +115,17 @@ public class UserService {
 
     /**
      *
-     * @param forumName
+     * @param sId
      * @param subForumName
-     * @param forumManagerName
      * @param moderatorName
      * @return
      */
-    public static RetObj<Object> removeModerator(String forumName, String subForumName, String forumManagerName, String moderatorName) {
-        if (!UserFacade.isLoggedInMember(forumName, forumManagerName))
+    public static RetObj<Object> removeModerator(int sId, String subForumName, String moderatorName) {
+        if (!UserFacade.isLoggedInMember(sId))
             return new RetObj<>(Result.NOT_LOGGED_IN);
-        if (!UserFacade.isForumManager(forumName, forumManagerName))
+        if (!UserFacade.isForumManager(sId))
             return new RetObj<>(Result.MEMBER_NOT_FORUM_ADMIN);
-        if (!UserFacade.removeModerator(forumName, subForumName, moderatorName))
+        if (!UserFacade.removeModerator(sId, subForumName, moderatorName))
             return new RetObj<>(Result.NOT_MODERATOR);
         return new RetObj<>(Result.SUCCESS);
     }

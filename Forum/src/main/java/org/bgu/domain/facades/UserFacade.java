@@ -134,35 +134,37 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean isLoggedInMember(String forumName, String userName){
-        Forum forum = ForumFacade.getForum(forumName);
-        if (null == forum)
+    public static boolean isLoggedInMember(int sId){
+        if(!sessions.containsKey(sId))
             return false;
-        if (!forum.isLoggedInMember(userName))
-            return false;
-        return true;
-    }
-
-    public static boolean isRegisteredMember(String forumName, String userName){
-        Forum forum = ForumFacade.getForum(forumName);
-        if (null == forum)
-            return false;
-        if (!forum.isRegisteredMember(userName))
+        Session session = sessions.get(sId);
+        // TODO - replace signature to get Member Object rather than name
+        if (!session._forum.isLoggedInMember(session._member.getUserName()))
             return false;
         return true;
     }
 
-    public static boolean addFriend(String forumName, String userName, String otherUserName) {
-        if (userName.equals(otherUserName))
+    public static boolean isRegisteredMember(int sId, String userName){
+        Session session = sessions.get(sId);
+        if (!session._forum.isRegisteredMember(userName))
             return false;
-        Member user = getMember(forumName, userName);
-        Member otherUser = getMember(forumName, otherUserName);
-        if (null == user || null == otherUser)
+        return true;
+    }
+
+    public static boolean addFriend(int sId, String otherUserName) {
+        Session session = sessions.get(sId);
+
+        if (session._member.getUserName().equals(otherUserName))
             return false;
-        if (user.isFriendOf(otherUser))
+
+        // TODO - replace the signature to get Forum Object rather than mane
+        Member otherUser = getMember(session._forum.getForumName(), otherUserName);
+        if (null == otherUser)
             return false;
-        user.addFriend(otherUser);
-        otherUser.addFriend(user);
+        if (session._member.isFriendOf(otherUser))
+            return false;
+        session._member.addFriend(otherUser);
+        otherUser.addFriend(session._member);
         return true;
     }
 
@@ -170,8 +172,7 @@ public class UserFacade {
         Forum forum = ForumFacade.getForum(forumName);
         if (forum == null)
             return null;
-        Member member = forum.getMemberByName(userName);
-        return member;
+        return forum.getMemberByName(userName);
     }
 
     public static Result addMember(String forumName, String userName, String pass) {
@@ -196,21 +197,22 @@ public class UserFacade {
         return Result.SUCCESS;
     }
 
-    public static boolean isForumManager(String forumName, String forumManagerName) {
-        Forum forum = ForumFacade.getForum(forumName);
-        if (null == forum)
+    public static boolean isForumManager(int sId) {
+        Session session = sessions.get(sId);
+        if (null == session)
             return false;
-        return forum.isForumManager(forumManagerName);
+        // TODO - refactor signature of isForumManager??
+        return session._forum.isForumManager(session._member.getUserName());
     }
 
-    public static boolean addModerator(String forumName, String subForumName, String moderatorName){
-        Forum forum = ForumFacade.getForum(forumName);
-        if (null == forum)
+    public static boolean addModerator(int sId, String subForumName, String moderatorName){
+        Session session = sessions.get(sId);
+        if (null == session)
             return false;
-        SubForum subForum = forum.getSubForumByName(subForumName);
+        SubForum subForum = session._forum.getSubForumByName(subForumName);
         if (null == subForum)
             return false;
-        Member moderator = forum.getMemberByName(moderatorName);
+        Member moderator = session._forum.getMemberByName(moderatorName);
         if (null == moderator)
             return false;
         if (!subForum.addModerator(moderator))
@@ -218,14 +220,14 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean removeModerator(String forumName, String subForumName, String moderatorName){
-        Forum forum = ForumFacade.getForum(forumName);
-        if (null == forum)
+    public static boolean removeModerator(int sId, String subForumName, String moderatorName){
+        Session session = sessions.get(sId);
+        if (null == session)
             return false;
-        SubForum subForum = forum.getSubForumByName(subForumName);
+        SubForum subForum = session._forum.getSubForumByName(subForumName);
         if (null == subForum)
             return false;
-        Member moderator = forum.getMemberByName(moderatorName);
+        Member moderator = session._forum.getMemberByName(moderatorName);
         if (null == moderator)
             return false;
         if (!subForum.removeModerator(moderator))
@@ -233,18 +235,23 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean removeFriend(String forumName, String userName, String friendUserName) {
-        if (userName.equals(friendUserName))
+    public static boolean removeFriend(int sId, String friendUserName) {
+        Session session = sessions.get(sId);
+        if (null == session)
             return false;
-        Member member = getMember(forumName, userName);
-        Member friend = getMember(forumName, friendUserName);
-        if (null == member || null == friendUserName)
+
+        Member friend = getMember(session._forum.getForumName(), friendUserName);
+        if (null == friend)
             return false;
-        if (!member.isFriendOf(friend))
+        if (!session._member.isFriendOf(friend))
             return false;
-        member.remocveFriend(friend);
-        friend.remocveFriend(member);
+        session._member.remocveFriend(friend);
+        friend.remocveFriend(session._member);
         return true;
+    }
+
+    protected static Session getSession(int sId) {
+        return sessions.get(sId);
     }
 
                     /*****************FOR TESTING******************/
@@ -265,6 +272,8 @@ public class UserFacade {
     public static void reset() {
         sessions.clear();
     }
+
+
 
 
     /*****************DB OPERATIONS******************/

@@ -15,25 +15,25 @@ import java.util.Objects;
  * Created by hodai on 4/18/15.
  */
 public class ForumService {
+
     /**
      *
-     * @param forumName
-     * @param forumManagerName
+     * @param sId
      * @param subForumName
      * @param moderators
-     * @return id of subForum, or exception{Result.MODERATOR_NOT_MEMBER, Result.MEMBER_NOT_FORUM_ADMIN, Result.DUPLICATED_SUBFORUM, Result.NO_MODERATORS_WERE_GIVEN, Result.SUBFORUM_MODERATOR_NOT_MEMBER;} upon failure
+     * @return
      */
-    public static RetObj<Object> addNewSubForum(String forumName, String forumManagerName, String subForumName, Collection<String> moderators){
+    public static RetObj<Object> addNewSubForum(int sId, String subForumName, Collection<String> moderators){
         //TODO - validate data according to POLICY
-        if (!(UserFacade.isForumManager(forumName, forumManagerName)))
+        if (!(UserFacade.isForumManager(sId)))
             return new RetObj<>(Result.UNAUTHORIZED_OPERATION);
-        if (null != ForumFacade.getSubForum(forumName, subForumName)) {
+        if (null != ForumFacade.getSubForum(sId, subForumName)) {
             return new RetObj<>(Result.DUPLICATED_SUBFORUM);
         }
         if (moderators.isEmpty()) {
             return new RetObj<>(Result.NO_MODERATORS_WERE_GIVEN);
         }
-        if (ForumFacade.createSubForum(forumName, subForumName, moderators) < 0) {
+        if (ForumFacade.createSubForum(sId, subForumName, moderators) < 0) {
             return new RetObj<>(Result.SUBFORUM_MODERATOR_NOT_MEMBER);
         }
         return new RetObj<>(Result.SUCCESS);
@@ -86,16 +86,15 @@ public class ForumService {
 
     /**
      *
-     * @param forumName
-     * @param forumManagerName
+     * @param sId
      * @param subForumName
      * @return
      */
-    public static RetObj<Object> removeSubForum(String forumName, String forumManagerName, String subForumName){
+    public static RetObj<Object> removeSubForum(int sId, String subForumName){
         //TODO - validate data according to POLICY
-        if (!UserFacade.isForumManager(forumName, forumManagerName))
+        if (!UserFacade.isForumManager(sId))
             return new RetObj<>(Result.UNAUTHORIZED_OPERATION);
-        if (!ForumFacade.removeSubForum(forumName, subForumName)) {
+        if (!ForumFacade.removeSubForum(sId, subForumName)) {
             return new RetObj<>(Result.SUBFORUM_ALREADY_REMOVED);
         }
         return new RetObj<>(Result.SUCCESS);

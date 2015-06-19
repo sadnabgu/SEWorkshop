@@ -2,6 +2,7 @@ package org.bgu.domain.facades;
 
 import org.bgu.domain.model.Forum;
 import org.bgu.domain.model.Member;
+import org.bgu.domain.model.Session;
 import org.bgu.domain.model.SubForum;
 
 import java.util.ArrayList;
@@ -42,11 +43,11 @@ public class ForumFacade {
         return forumIdGenerator++;
     }
 
-    public static int createSubForum(String forumName, String subForumName, Collection<String> moderators){
-        Forum forum = getForum(forumName);
-        if (null == forum)
+    public static int createSubForum(int sId, String subForumName, Collection<String> moderators){
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
             return -1;
-        return forum.addNewSubForum(subForumName, moderators);
+        return session._forum.addNewSubForum(subForumName, moderators);
     }
 
     public static int addNewThread(String forumName, String subForumName, String userName, String threadTitle, String threadBody) {
@@ -78,11 +79,11 @@ public class ForumFacade {
         return false;
     }
 
-    public static boolean removeSubForum(String forumName, String subForumName) {
-        Forum forum = getForum(forumName);
-        if (null == forum)
+    public static boolean removeSubForum(int sId, String subForumName) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
             return false;
-        return (forum.removeSubForum(subForumName));
+        return (session._forum.removeSubForum(subForumName));
     }
 
     public static boolean editMessage(String forumName, String subForumName, String userName, int msgId, String edittedTitle, String edittedBody) {
@@ -105,9 +106,11 @@ public class ForumFacade {
         return forum.removeMessage(subForumName, remover, msgId);
     }
 
-    public static SubForum getSubForum(String forumName, String subForumName) {
-        Forum forum = getForum(forumName);
-        return forum.getSubForumByName(subForumName);
+    public static SubForum getSubForum(int sId, String subForumName) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
+            return null;
+        return session._forum.getSubForumByName(subForumName);
     }
 
     public static Forum getForum(String forumName) {
@@ -120,7 +123,7 @@ public class ForumFacade {
     }
 
     public static ArrayList<String> getAllForums(){
-        ArrayList<String> forumNames = new ArrayList<String>();
+        ArrayList<String> forumNames = new ArrayList<>();
         for (Forum forum : forums){
             forumNames.add(forum.getForumName());
         }
@@ -131,8 +134,7 @@ public class ForumFacade {
         Forum forum = getForum(forumName);
         if (null == forum)
             return null;
-        ArrayList<String> subForumNames = forum.getAllSubForums();
-        return subForumNames;
+        return forum.getAllSubForums();
     }
 
     /**** FORUMS MANAGEMENT ****/
