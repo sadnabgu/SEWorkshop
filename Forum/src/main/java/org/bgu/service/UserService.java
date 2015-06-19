@@ -13,57 +13,32 @@ import org.bgu.service.Exceptions.RetObj;
  * Created by hodai on 4/18/15.
  */
 public class UserService {
-    private final String _forumName;
-    private User user;
-
     /**
-     * construct user service per client (connection)
-     * initial state the client identify as Guest
      *
-     * @param forumName - the forum we want to login to
+     * @param forumName
+     * @param userName
+     * @param pass
+     * @return
      */
-    public UserService(String forumName) {
-        _forumName = forumName;
-        user = UserFacade.createGuest();
-    }
-
-    /**
-     * login user, change user from guest to relevant member
-     *
-     * @param userName - user name
-     * @param pass     - user password
-     * @return Result.SUCCESS upon success
-     */
-    public RetObj<Object> logIn(String userName, String pass) {
+    public static RetObj<Object> logIn(String forumName, String userName, String pass) {
         // only Guest can loggin
-        if (isLogedin()) {
+        if (!(UserFacade.validatePassword(forumName, userName, pass)))
+            return new RetObj<>(Result.WRONG_USER_NAME_OR_PASS);
+        if (!(UserFacade.logInMember(forumName, userName)))
             return new RetObj<>(Result.ALREADY_LOGDIN);
-        }
         // identify user
-        user = UserFacade.loginMember(_forumName, userName, pass);
-        if (user == null) {
-            user = UserFacade.createGuest();
-            return new RetObj<>(Result.WRONG_USER_PASS);
-        }
         return new RetObj<>(Result.SUCCESS);
     }
 
     /**
-     * logout the user from system (chang his type to Guest)
-     * <p/>
-     * TODO - wadafak am I doing here ? :|
      *
-     * @return - Result.SUCCESS upon success,
-     *           or Result.FAIL if user is not login.
+     * @param forumName
+     * @param userName
+     * @return
      */
-    public RetObj<Object> logOut() {
-        // guest can't logout
-        if (!isLogedin())
-            return new RetObj<>(Result.FAIL);
-
-        UserFacade.memberLogOut(user);
-        user = UserFacade.createGuest();
-
+    public static RetObj<Object> logOut(String forumName, String userName) {
+        if (!UserFacade.logOut(forumName, userName))
+            return new RetObj<>(Result.NOT_LOGGED_IN);
         return new RetObj<>(Result.SUCCESS);
     }
 
@@ -76,109 +51,87 @@ public class UserService {
      * @param pass - the new user password
      * @return Result.SUCCESS if sucsses
      */
-     public RetObj<Object> registerMember(String userName, String pass) {
-         Result result;
+     public static RetObj<Object> registerMember(String ForumName, String userName, String pass) {
          // only guest can register new member
-         if (isLogedin()) {
-             return new RetObj<>(Result.ALREADY_LOGDIN);
-         }
-         // TODO - validate permisions??
-         result = UserFacade.addMember(_forumName, userName, pass);
-
-         if (result != Result.SUCCESS)
-             return new RetObj<>(result);
-
-         // try to login
-         return logIn(userName, pass);
+         if (UserFacade.registerMember(ForumName, userName, pass))
+             return new RetObj<>(Result.USERNAME_EXISTS);
+         return new RetObj<>(Result.SUCCESS);
      }
 
-    // TODO - make it private or protected
-    public User getUser() {
-        return user;
-    }
-
     /**
-     * return true if user is loged in
      *
-     * @return true if user is loged in
+     * @param forumName
+     * @param userName
+     * @param otherUserName
+     * @return
      */
-    public boolean isLogedin() {
-        return (user.getMember() != null);
-    }
-
-    public RetObj<Object> addFriend(String otherUserName) {
-        if(!isLogedin()) {
+    public static RetObj<Object> addFriend(String forumName, String userName, String otherUserName) {
+        if (!UserFacade.isLoggedInMember(forumName, userName)){
             return new RetObj<>(Result.NOT_LOGGED_IN);
         }
-        Member friend = UserFacade.getUser(_forumName, otherUserName).getMember();
-        if (friend == null){
+        if (!UserFacade.isRegisteredMember(forumName, otherUserName))
             return new RetObj<>(Result.FRIEND_NOT_EXIST);
-        }
-        if(!(UserFacade.addFriend(user.getMember(), friend))){
+
+        if(!(UserFacade.addFriend(forumName, userName, otherUserName))){
             return new RetObj<>(Result.ALREADY_FRIENDS);
         }
         return new RetObj<>(Result.SUCCESS);
     }
 
-    public RetObj<Object> removeFriend(String otherUserName) {
-        if (!isLogedin()) {
+    /**
+     *
+     * @param forumName
+     * @param subForumName
+     * @param forumManagerName
+     * @param moderatorName
+     * @return
+     */
+    public RetObj<Object> addModerator(String forumName, String subForumName, String forumManagerName, String moderatorName) {
+        if (!UserFacade.isLoggedInMember(forumName, forumManagerName))
+            return new RetObj<>(Result.NOT_LOGGED_IN);
+        if (!UserFacade.isForumManager(forumName, forumManagerName))
+            return new RetObj<>(Result.MEMBER_NOT_FORUM_ADMIN);
+        if (!UserFacade.addModerator(forumName, subForumName, moderatorName))
+            return new RetObj<>(Result.ALREADY_MODERATE);
+        return new RetObj<>(Result.SUCCESS);
+    }
+
+    /**
+     *
+     * @param forumName
+     * @param userName
+     * @param otherUserName
+     * @return
+     */
+    public static RetObj<Object> unFriend(String forumName, String userName, String otherUserName) {
+        if (!UserFacade.isLoggedInMember(forumName, userName)){
             return new RetObj<>(Result.NOT_LOGGED_IN);
         }
-        Member friend = UserFacade.getUser(_forumName, otherUserName).getMember();
-        if (friend == null) {
+        if (!UserFacade.isRegisteredMember(forumName, otherUserName))
             return new RetObj<>(Result.FRIEND_NOT_EXIST);
-        }
-        if (!(UserFacade.removeFriend(user.getMember(), friend))) {
+
+        if(!(UserFacade.removeFriend(forumName, userName, otherUserName))){
             return new RetObj<>(Result.NOT_FRIENDS);
         }
         return new RetObj<>(Result.SUCCESS);
     }
 
-    public RetObj<Object> addModerator(String subForumName, String otherUserName) {
-        if (!isLogedin()) {
-            return new RetObj<>(Result.NOT_LOGGED_IN);
-        }
-        if (!ForumFacade.isManager(_forumName, user.getMember())) {
-            return new RetObj<>(Result.MEMBER_NOT_FORUM_ADMIN);
-        }
-        if (ForumFacade.getForum(_forumName).getSubForum(subForumName) == null) {
-            return new RetObj<>(Result.FORUM_NOT_FOUND);
-        }
-        Member moderate = UserFacade.getUser(_forumName, otherUserName).getMember();
-        if (moderate == null) {
-            return new RetObj<>(Result.MEMBER_NOT_FOUND);
-        }
-        if (!(ForumFacade.addModerate(_forumName, subForumName, moderate))) {
-            return new RetObj<>(Result.ALREADY_MODERATE);
-        }
-        return new RetObj<>(Result.SUCCESS);
-    }
-
-    public RetObj<Object> removeModerator(String subForumName, String otherUserName) {
-        if (!isLogedin()) {
-            return new RetObj<>(Result.NOT_LOGGED_IN);
-        }
-        if (!ForumFacade.isManager(_forumName, user.getMember())) {
-            return new RetObj<>(Result.MEMBER_NOT_FORUM_ADMIN);
-        }
-        if (ForumFacade.getForum(_forumName).getSubForum(subForumName) == null) {
-            return new RetObj<>(Result.FORUM_NOT_FOUND);
-        }
-        Member moderate = UserFacade.getUser(_forumName, otherUserName).getMember();
-        if (moderate == null) {
-            return new RetObj<>(Result.MEMBER_NOT_FOUND);
-        }
-        if (!(ForumFacade.removeModerate(_forumName, subForumName, moderate))) {
-            return new RetObj<>(Result.NOT_A_MODERATE);
-        }
-        return new RetObj<>(Result.SUCCESS);
-    }
-
     /**
-     * @return - the user as Member object
-     * TODO - internal - make it private or protected
+     *
+     * @param forumName
+     * @param subForumName
+     * @param forumManagerName
+     * @param moderatorName
+     * @return
      */
-    public Member getUserAsMember() {
-        return user.getMember();
+    public RetObj<Object> removeModerator(String forumName, String subForumName, String forumManagerName, String moderatorName) {
+        if (!UserFacade.isLoggedInMember(forumName, forumManagerName))
+            return new RetObj<>(Result.NOT_LOGGED_IN);
+        if (!UserFacade.isForumManager(forumName, forumManagerName))
+            return new RetObj<>(Result.MEMBER_NOT_FORUM_ADMIN);
+        if (!UserFacade.removeModerator(forumName, subForumName, moderatorName))
+            return new RetObj<>(Result.NOT_MODERATOR);
+        return new RetObj<>(Result.SUCCESS);
     }
+
 }

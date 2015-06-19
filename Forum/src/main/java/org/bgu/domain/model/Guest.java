@@ -12,13 +12,4 @@ public class Guest extends User{
         return false;
     }
 
-    @Override
-    public void logOut() {
-        // do nothing
-    }
-
-    @Override
-    public Member getMember() {
-        return null;
-    }
 }

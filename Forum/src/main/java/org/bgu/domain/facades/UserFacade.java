@@ -3,77 +3,171 @@ package org.bgu.domain.facades;
 import org.bgu.domain.model.*;
 import org.bgu.service.Exceptions.Result;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Created by gur on 20/04/2015.
  */
 public class UserFacade {
-    //TODO - need to decide ho we manage te users collections, as starting have only one collection
 
+    private static boolean systemInitialized = false;
+
+    //TODO - change to ORM
     private static Collection<Member> superAdmins = new ArrayList<>();
+
+    /* cache memorry for logged in super admins */
+    public static HashMap<String, Member> superAdminsCache = new HashMap<>();
+
+
+    /***********SUPER ADMIN HANDLE**************** */
+
+    /* notice - just add new superadmin to database, no auto-login */
+    public static boolean addSuperAdmin(String superAdminName, String superAdminPass) {
+        Member newSuperAdmin;
+        //TODO - change to ORM
+        if (!systemInitialized){
+            //the system yet to be initialized
+            systemInitialized = true;
+            newSuperAdmin = new Member(superAdminName, superAdminPass);
+            superAdmins.add(newSuperAdmin);
+            //TODO - decide if after first initialization the super admin (the first one anyway) will be automaticly "logged-in"
+            //superAdminsCache.put(superAdminName ,newSuperAdmin);
+            return true;
+        }
+        else if (null == getSuperAdmin(superAdminName))
+            return false;
+        Member admin = new Member(superAdminName, superAdminPass);
+        superAdmins.add(admin);
+        return true;
+    }
+
+    public static boolean isInitializedSystem(){
+        if (!systemInitialized)
+            return false;
+        return true;
+    }
+
+    public static boolean isLoggedInSuperAdmin(String superAdminName){
+        if (!superAdminsCache.containsKey(superAdminName))
+            return false;
+        return true;
+    }
+
+    public static boolean validateNamePassSuperAdmin(String superAdminName, String superAdminPass){
+        Member member = getSuperAdmin(superAdminName);
+        if (member == null || !member.login(superAdminPass))
+            return false;
+        return true;
+    }
+
+    public static boolean loginSuperAdmin(String superAdminName, String superAdminPass) {
+        if (superAdminsCache.containsKey(superAdminName))
+            return false;
+        Member superAdmin = getSuperAdmin(superAdminName);
+        superAdminsCache.put(superAdminName, superAdmin);
+        return true;
+    }
+
+    private static Member getSuperAdmin(String superAdminName) {
+        for (Member m : superAdmins){
+            if (m.getUserName().equals(superAdminName))
+                return m;
+        }
+        return null;
+    }
+
+    /***********SUPER ADMIN HANDLE**************** */
 
     public static User createGuest() {
         //TODO - ??
         return new Guest();
     }
 
-    public static User loginMember(String forumName, String userName, String pass) {
-        User user = getUser(forumName, userName);
-        if(user==null){
-            return null;
+    /***********FORUM USERS HANDLE**************** */
+
+    public static boolean validatePassword(String forumName, String userName, String pass){
+        Forum forum = ForumFacade.getForum(forumName);
+        if (null == forum) {
+            System.out.println("shit0");
+            return false;
         }
-        if(user.login(pass)){
-            return user;
-        } else {
-            // wrong user password or already connected
-            return null;
+        Member member = forum.getMemberByName(userName);
+        if (null == member) {
+            System.out.println("shit1");
+            return false;
         }
+        if (!member.login(pass)){
+            System.out.println("shit2");
+            return false;
+        }
+        return true;
     }
 
-    public static User getUser(String forumName, String userName){
+    public static boolean logInMember(String forumName, String userName) {
+        Forum forum  = ForumFacade.getForum(forumName);
+        if (null == forum)
+            return false;
+        if (!forum.logInUser(userName))
+            return false;
+        return true;
+    }
+
+    public static boolean logOut(String forumName, String userName) {
+        Forum forum  = ForumFacade.getForum(forumName);
+        if (null == forum)
+            return false;
+        if (!forum.logOut(userName))
+            return false;
+        return true;
+    }
+
+    public static boolean registerMember(String forumName, String userName, String userPassword){
+        Forum forum = ForumFacade.getForum(forumName);
+        if (null == forum)
+            return false;
+        if (forum.registeredMember(userName, userPassword))
+            return false;
+        return true;
+    }
+
+    public static boolean isLoggedInMember(String forumName, String userName){
+        Forum forum = ForumFacade.getForum(forumName);
+        if (null == forum)
+            return false;
+        if (!forum.isLoggedInMember(userName))
+            return false;
+        return true;
+    }
+
+    public static boolean isRegisteredMember(String forumName, String userName){
+        Forum forum = ForumFacade.getForum(forumName);
+        if (null == forum)
+            return false;
+        if (!forum.isRegisteredMember(userName))
+            return false;
+        return true;
+    }
+
+    public static boolean addFriend(String forumName, String userName, String otherUserName) {
+        if (userName.equals(otherUserName))
+            return false;
+        Member user = getMember(forumName, userName);
+        Member otherUser = getMember(forumName, otherUserName);
+        if (null == user || null == otherUser)
+            return false;
+        if (user.isFriendOf(otherUser))
+            return false;
+        user.addFriend(otherUser);
+        otherUser.addFriend(user);
+        return true;
+    }
+
+    public static Member getMember(String forumName, String userName){
         Forum forum = ForumFacade.getForum(forumName);
         if (forum == null)
             return null;
-        Collection<Member> members = forum.getMembers();
-
-        for (Iterator<Member> memberIterator = members.iterator(); memberIterator.hasNext(); ) {
-            User next =  memberIterator.next();
-            if(next.getUserName().equals(userName)){
-                return next;
-            }
-        }
-        // not found
-        return null;
-    }
-
-    public static void memberLogOut(User user) {
-        user.logOut();
-    }
-
-    public static Member createSuperAdmin(String adminName, String adminPass) {
-        Member admin = new Member(adminName, adminPass); //TODO - should be a member or specific admin class??
-
-        superAdmins.add(admin);
-        return admin;
-    }
-
-    public static Member loginSuperAdmin(String adminName, String adminPass) {
-        for (Iterator<Member> iterator = superAdmins.iterator(); iterator.hasNext(); ) {
-            Member next =  iterator.next();
-            if(next.getUserName().equals(adminName)){
-                if(next.login(adminPass)){
-                    return next;
-                } else {
-                    // wrong user password or already connected
-                    return null;
-                }
-            }
-        }
-        // user not found
-        return null;
+        Member member = forum.getMemberByName(userName);
+        return member;
     }
 
     public static Result addMember(String forumName, String userName, String pass) {
@@ -98,8 +192,55 @@ public class UserFacade {
         return Result.SUCCESS;
     }
 
-    public static boolean isForumManager(Forum forum, Member member) {
-        return forum.isForumManager(member);
+    public static boolean isForumManager(String forumName, String forumManagerName) {
+        Forum forum = ForumFacade.getForum(forumName);
+        if (null == forum)
+            return false;
+        return forum.isForumManager(forumManagerName);
+    }
+
+    public static boolean addModerator(String forumName, String subForumName, String moderatorName){
+        Forum forum = ForumFacade.getForum(forumName);
+        if (null == forum)
+            return false;
+        SubForum subForum = forum.getSubForumByName(subForumName);
+        if (null == subForum)
+            return false;
+        Member moderator = forum.getMemberByName(moderatorName);
+        if (null == moderator)
+            return false;
+        if (!subForum.addModerator(moderator))
+            return false;
+        return true;
+    }
+
+    public static boolean removeModerator(String forumName, String subForumName, String moderatorName){
+        Forum forum = ForumFacade.getForum(forumName);
+        if (null == forum)
+            return false;
+        SubForum subForum = forum.getSubForumByName(subForumName);
+        if (null == subForum)
+            return false;
+        Member moderator = forum.getMemberByName(moderatorName);
+        if (null == moderator)
+            return false;
+        if (!subForum.removeModerator(moderator))
+            return false;
+        return true;
+    }
+
+    public static boolean removeFriend(String forumName, String userName, String friendUserName) {
+        if (userName.equals(friendUserName))
+            return false;
+        Member member = getMember(forumName, userName);
+        Member friend = getMember(forumName, friendUserName);
+        if (null == member || null == friendUserName)
+            return false;
+        if (!member.isFriendOf(friend))
+            return false;
+        member.remocveFriend(friend);
+        friend.addFriend(member);
+        return true;
     }
 
                     /*****************FOR TESTING******************/
@@ -107,28 +248,19 @@ public class UserFacade {
 
     public static void resetSuperAdmins() {
         // TODO - users.clear();
+        systemInitialized = false;
         superAdmins.clear();
+        superAdminsCache.clear();
     }
-    public static void resetForumMembers(Forum forum) {
+    public static void resetForumMembers(String forumName) {
         // TODO - users.clear();
+        Forum forum = ForumFacade.getForum(forumName);
         forum.resetMembers();
     }
 
-    public static boolean addFriend(Member user, Member friend) {
-        if(user.isFriendOf(friend)){
-            return false;
-        }
-        user.addFriend(friend);
-        friend.addFriend(user);
-        return true;
-    }
 
-    public static boolean removeFriend(Member user, Member friend) {
-        if(!(user.isFriendOf(friend))){
-            return false;
-        }
-        user.removeFriend(friend);
-        friend.removeFriend(user);
-        return true;
-    }
+    /*****************DB OPERATIONS******************/
+    //TODO - change to ORM
+
+
 }

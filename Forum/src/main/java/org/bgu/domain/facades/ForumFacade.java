@@ -13,16 +13,21 @@ import java.util.Iterator;
  * Created by gur on 20/04/2015.
  */
 public class ForumFacade {
-    /** collection of all the Forums in the system */
+    //TODO - change to ORM
     private static Collection<Forum> forums = new ArrayList<>();
+
+    //TODO - build a cache memory between pair<forumName, userName> to User Object. Now each forum has its own "cache" memory of logged in users
+
     private static int forumIdGenerator = 1;
 
-    public static int createForum(String forumName, String managerName, String managerPass) {
+    /**** FORUMS MANAGEMENT ****/
+
+    public static boolean createForum(String forumName, String managerName, String managerPass) {
         // check that the forum didn't exist already
         for (Iterator<Forum> iterator = forums.iterator(); iterator.hasNext(); ) {
             Forum next =  iterator.next();
             if (next.getForumName().equals(forumName)){
-                return -1;
+                return false;
             }
         }
 
@@ -31,19 +36,49 @@ public class ForumFacade {
         Forum forum = new Forum(forumId, forumName, manager);
 
         forums.add(forum);
-        return forum.getForumId();
+        return true;
     }
 
     private static int generateForumId() {
         return forumIdGenerator++;
     }
 
-    public static int createSubForum(Forum forum, String subForumName, Collection<String> moderators){
+    public static int createSubForum(String forumName, String subForumName, Collection<String> moderators){
+        Forum forum = getForum(forumName);
+        if (null == forum)
+            return -1;
         return forum.addNewSubForum(subForumName, moderators);
     }
 
-    public static SubForum getSubForum(Forum forum, String subForumName) {
-        return forum.getSubForum(subForumName);
+    public static int addNewThread(String forumName, String subForumName, String userName, String threadTitle, String threadBody) {
+        Forum forum = getForum(forumName);
+        if (null == forum)
+            return -1;
+        Member creator = forum.getMemberByName(userName);
+        if (null == creator)
+            return -1;
+        return forum.addNewThread(subForumName, creator, threadTitle, threadBody);
+    }
+
+    public static boolean removeForum(String forumName) {
+        Forum forum = getForum(forumName);
+        if(forums.contains(forum)){
+            forums.remove(forum);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean removeSubForum(String forumName, String subForumName) {
+        Forum forum = getForum(forumName);
+        if (null == forum)
+            return false;
+        return (forum.removeSubForum(subForumName));
+    }
+
+    public static SubForum getSubForum(String forumName, String subForumName) {
+        Forum forum = getForum(forumName);
+        return forum.getSubForumByName(subForumName);
     }
 
     public static Forum getForum(String forumName) {
@@ -63,39 +98,18 @@ public class ForumFacade {
         return forumNames;
     }
 
-    public static ArrayList<String> getAllSubForums(Forum forum){
+    public static ArrayList<String> getAllSubForums(String forumName){
+        Forum forum = getForum(forumName);
+        if (null == forum)
+            return null;
         ArrayList<String> subForumNames = forum.getAllSubForums();
         return subForumNames;
     }
 
 
-    /**
-     * remove the forum
-     * @param forum - the forum object
-     * @return - false if forum not found
-     */
-    public static boolean removeForum(Forum forum) {
-        if(forums.contains(forum)){
-            forums.remove(forum);
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean removeSubForum(Forum forum, String subForumName) {
-        return (forum.removeSubForum(subForumName));
-    }
 
 
-    public static boolean addModerate(String forumName, String subForumName, Member moderate) {
-        Forum forum = getForum(forumName);
-        return forum.getSubForum(subForumName).addModerate(moderate);
-    }
 
-    public static boolean removeModerate(String forumName, String subForumName, Member moderate) {
-        Forum forum = getForum(forumName);
-        return forum.getSubForum(subForumName).removeModerate(moderate);
-    }
    /**********************************************************************************************************/
     /*****************FOR TESTING*********************************************************************************/
 
@@ -107,19 +121,14 @@ public class ForumFacade {
         forums.clear();
     }
 
-    public static void resetForum(Forum forum){
+    public static void resetForum(String forumName){
+        Forum forum = getForum(forumName);
         forum.resetSubForums();
     }
 
-    public static boolean isManager(String forumName, Member member) {
-        if(member==null){
-            return false;
-        }
-        return getForum(forumName).isManager(member);
-    }
+    /*****************DB OPERATIONS******************/
+    //TODO - change to ORM
 
-    public static int addNewThread(Forum forum, User creator, String subForumName, String threadTitle, String threadBody) {
-        return forum.addNewThread(creator, subForumName, threadTitle, threadBody);
-    }
+
 }
 

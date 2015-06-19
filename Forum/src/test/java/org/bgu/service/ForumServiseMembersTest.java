@@ -19,44 +19,25 @@ import static org.junit.Assert.*;
  */
 public class ForumServiseMembersTest {
     public static final String FORUM_NAME = "sex";
-    public static final String SUB_FORUM_NAME = "moms";
 
-    public static ForumService forumService;
-    public static UserService userService;
-    public static int forumId;
     public static Forum forum;
 
     public static Collection<String> mods;
-    public static Collection<String> mods2;
 
     @BeforeClass
     public static void initialSystem() {
-        ForumFacade.resetForums();
-        forumId = ForumFacade.createForum("sex", "mike", "admin");
-        forum = ForumFacade.getForum("sex");
-        userService = new UserService(FORUM_NAME);
-        try {
-            forumService = new ForumService(FORUM_NAME, userService);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        ForumFacade.createForum(FORUM_NAME, "mike", "admin");
+        forum = ForumFacade.getForum(FORUM_NAME);
         mods = new ArrayList<>();
+        mods.add("hodai");
         mods.add("melki");
-        Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
-        Assert.assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
-        forum.addNewSubForum(SUB_FORUM_NAME, mods);
-        assertEquals(Result.SUCCESS, userService.logIn("hodai", "hodai")._result);
-
+        assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
+        assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
     }
 
-    @Test
-    public void addNewThread_correctData_newThreadAdded() {
-        int threadsCount = forum.getSubForum(SUB_FORUM_NAME).getThreads().size();
-        assertEquals(Result.SUCCESS, forumService.addNewThread(SUB_FORUM_NAME, "titel1", "opening message1")._result);
-        assertEquals(Result.SUCCESS, forumService.addNewThread(SUB_FORUM_NAME, "titel2", "opening message2")._result);
-        // duplicate thread data is OK
-        assertEquals(Result.SUCCESS, forumService.addNewThread(SUB_FORUM_NAME, "titel1", "opening message1")._result);
-        assertEquals(threadsCount+3 , forum.getSubForum(SUB_FORUM_NAME).getThreads().size());
-    }
+     /* new Thread tests  */
+
+
 
 }

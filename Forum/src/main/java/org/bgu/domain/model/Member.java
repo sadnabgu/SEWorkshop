@@ -5,8 +5,7 @@ import java.util.Collection;
 
 public class Member extends User{
     private String name;
-    private String pass;
-    private boolean logedIn; //TODO - it's really nessesary???
+    public String pass;
 
     Collection<Member> friends;
 
@@ -27,26 +26,9 @@ public class Member extends User{
 
     @Override
     public boolean login(String pass) {
-        /*
-        if(logedIn)
-            return false; // TODO - hidden assumption, no paralel connections to the same user
-            */
-        if(this.pass.equals(pass)){
-            logedIn = true;
+        if(this.pass.equals(pass))
             return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public void logOut() {
-        logedIn = false;
-    }
-
-    @Override
-    public Member getMember() {
-        return this;
+       return false;
     }
 
     public boolean isFriendOf(Member friend) {
@@ -57,7 +39,7 @@ public class Member extends User{
         friends.add(friend);
     }
 
-    public void removeFriend(Member friend) {
+    public void remocveFriend(Member friend) {
         friends.remove(friend);
     }
 }

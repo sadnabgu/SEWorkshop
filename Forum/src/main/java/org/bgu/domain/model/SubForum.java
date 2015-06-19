@@ -30,10 +30,10 @@ public class SubForum {
         return moderates;
     }
 
-    public boolean addModerate(Member moderate) {
-        if (moderates.contains(moderate) || null == moderate)
+    public boolean addModerator(Member moderator) {
+        if (moderates.contains(moderator) || null == moderator)
             return false;
-        moderates.add(moderate);
+        moderates.add(moderator);
         return true;
     }
 
@@ -45,18 +45,14 @@ public class SubForum {
         return subForumId;
     }
 
-    public boolean isModerator(Member moderate){
-        return moderates.contains(moderate);
-    }
-
-    public boolean removeModerate(Member moderate) {
+    public boolean removeModerator(Member moderate) {
         if (!(moderates.contains(moderate)) || null == moderate)
             return false;
         moderates.remove(moderate);
         return true;
     }
 
-    public int addNewThread(User creator, String threadTitle, String threadBody) {
+    public int addNewThread(Member creator, String threadTitle, String threadBody) {
         if (threadBody.isEmpty() && threadTitle.isEmpty()){
             return -1;
         }
