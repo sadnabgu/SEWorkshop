@@ -20,11 +20,11 @@ public class UserService {
      * @param pass
      * @return
      */
-    public static RetObj<Object> logIn(String forumName, String userName, String pass) {
+    public static RetObj<Object> logIn(int sId, String forumName, String userName, String pass) {
         // only Guest can loggin
         if (!(UserFacade.validatePassword(forumName, userName, pass)))
             return new RetObj<>(Result.WRONG_USER_NAME_OR_PASS);
-        if (!(UserFacade.logInMember(forumName, userName)))
+        if (!(UserFacade.logInMember(sId, forumName, userName)))
             return new RetObj<>(Result.ALREADY_LOGDIN);
         // identify user
         return new RetObj<>(Result.SUCCESS);
@@ -32,12 +32,11 @@ public class UserService {
 
     /**
      *
-     * @param forumName
-     * @param userName
+     * @param sId
      * @return
      */
-    public static RetObj<Object> logOut(String forumName, String userName) {
-        if (!UserFacade.logOut(forumName, userName))
+    public static RetObj<Object> logOut(int sId) {
+        if (!UserFacade.logOut(sId))
             return new RetObj<>(Result.NOT_LOGGED_IN);
         return new RetObj<>(Result.SUCCESS);
     }

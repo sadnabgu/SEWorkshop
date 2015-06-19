@@ -136,12 +136,12 @@ public class Forum {
     }
 
     //disallow to login twice for already loggedin member
-    public boolean logInUser(String memberName){
+    public Member logInUser(String memberName){
         if (_loggedInMembers.containsKey(memberName))
-            return false;
+            return null;
         Member member = getMemberByName(memberName);
         _loggedInMembers.put(memberName, member);
-        return true;
+        return member;
     }
 
     public boolean logOut(String memberName){

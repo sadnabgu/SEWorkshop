@@ -18,6 +18,8 @@ public class UserFacade {
     /* cache memorry for logged in super admins */
     public static HashMap<String, Member> superAdminsCache = new HashMap<>();
 
+    /** hold all the sessions information */
+    private static HashMap<Integer, Session> sessions = new HashMap<>();
 
     /***********SUPER ADMIN HANDLE**************** */
 
@@ -76,7 +78,7 @@ public class UserFacade {
         return null;
     }
 
-    /***********SUPER ADMIN HANDLE**************** */
+    /*********** SUPER ADMIN HANDLE **************** */
 
     public static User createGuest() {
         //TODO - ??
@@ -97,21 +99,29 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean logInMember(String forumName, String userName) {
+    public static boolean logInMember(int sId, String forumName, String userName) {
+        if (sessions.containsKey(sId))
+            return false;
         Forum forum  = ForumFacade.getForum(forumName);
         if (null == forum)
             return false;
-        if (!forum.logInUser(userName))
+        Member member = forum.logInUser(userName);
+        if(null == member)
             return false;
+
+        // login success - add the session information
+        sessions.put(sId, new Session(sId, member, forum));
         return true;
     }
 
-    public static boolean logOut(String forumName, String userName) {
-        Forum forum  = ForumFacade.getForum(forumName);
-        if (null == forum)
+    public static boolean logOut(int sId) {
+        if(!sessions.containsKey(sId))
             return false;
-        if (!forum.logOut(userName))
+        Session session = sessions.get(sId);
+        if (!session._forum.logOut(session._member.getUserName()))
             return false;
+
+        sessions.remove(sId);
         return true;
     }
 
@@ -250,6 +260,10 @@ public class UserFacade {
         // TODO - users.clear();
         Forum forum = ForumFacade.getForum(forumName);
         forum.resetMembers();
+    }
+
+    public static void reset() {
+        sessions.clear();
     }
 
 

@@ -76,5 +76,6 @@ public class AdminService {
     public static void resetSystem() {
         UserFacade.resetSuperAdmins();
         ForumFacade.resetForums();
+        UserFacade.reset();
     }
 }

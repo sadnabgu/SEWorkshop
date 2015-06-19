@@ -12,8 +12,6 @@ import java.util.Objects;
 /**
  * activate all the forum services (non-users)
  * <p>
- * !!! one object per connection !!!
- * <p>
  * Created by hodai on 4/18/15.
  */
 public class ForumService {

@@ -32,14 +32,15 @@ public class UserServiceTest {
     @BeforeClass
     public static void initialSystem() {
         ForumFacade.resetForums();
+        UserFacade.reset();
         assertTrue(ForumFacade.createForum(FORUM1_NAME, ADMIN, ADMIN_PASS));
         assertEquals(Result.SUCCESS, UserFacade.addMember(FORUM1_NAME, MEMBER1, MEMBER1_PASS));
         assertEquals(Result.SUCCESS, UserFacade.addMember(FORUM1_NAME, MEMBER2, MEMBER2_PASS));
         Collection<String> mods = new ArrayList<>();
         mods.add(MEMBER1);
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, ADMIN, ADMIN_PASS)._result);
-        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(FORUM1_NAME, ADMIN, SUB_FORUM1_NAME, mods)._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, ADMIN)._result);
+
+        // add initial sub-forum
+        ForumFacade.getForum(FORUM1_NAME).addNewSubForum(SUB_FORUM1_NAME, mods);
     }
 
     //TODO - think about a real "guest" like test
@@ -49,8 +50,8 @@ public class UserServiceTest {
         // verify we are loggin now as Guest (pre condition)
         //assertTrue(userService.getUser().getClass() == Guest.class);
         assertEquals(Result.SUCCESS, UserService.registerMember(FORUM1_NAME, "newMember1", "pass1")._result);
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, "newMember1", "pass1")._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, "newMember1")._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, "newMember1", "pass1")._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
     }
 
 
@@ -62,14 +63,14 @@ public class UserServiceTest {
     @Test
     public void registerNewMember_memberRegistration_fail() {
         // register while member is loggedin
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
         assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM1_NAME, MEMBER1, "pass1")._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, MEMBER1)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
         // register member with already used userName
         assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
         assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM1_NAME, MEMBER1, "newPass")._result);
 
-        assertEquals(Result.WRONG_USER_NAME_OR_PASS, UserService.logIn(FORUM1_NAME, MEMBER1, "wrongpass1")._result);
+        assertEquals(Result.WRONG_USER_NAME_OR_PASS, UserService.logIn(2, FORUM1_NAME, MEMBER1, "wrongpass1")._result);
         assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM1_NAME, MEMBER2, MEMBER2_PASS)._result);
         assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM1_NAME, MEMBER2, "other_password")._result);
     }
@@ -77,78 +78,80 @@ public class UserServiceTest {
 
     @Test
     public void addAndRemoveFriend_login_usersAreFriends() {
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
         assertEquals(Result.SUCCESS, UserService.addFriend(FORUM1_NAME, MEMBER1, MEMBER2)._result);
         // Verify member1 is friend of member2
         assertTrue(UserFacade.getMember(FORUM1_NAME, MEMBER1).isFriendOf(UserFacade.getMember(FORUM1_NAME, MEMBER2)));
         // Verify member1 is friend of member2
         assertTrue(UserFacade.getMember(FORUM1_NAME, MEMBER2).isFriendOf(UserFacade.getMember(FORUM1_NAME, MEMBER1)));
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, MEMBER2, MEMBER2_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(3, FORUM1_NAME, MEMBER2, MEMBER2_PASS)._result);
         assertEquals(Result.SUCCESS, UserService.unFriend(FORUM1_NAME, MEMBER2, MEMBER1)._result);
         // Verify member1 is not friend of member2 any more ;-(
         assertFalse(UserFacade.getMember(FORUM1_NAME, MEMBER1).isFriendOf(UserFacade.getMember(FORUM1_NAME, MEMBER2)));
         // Verify member2 is not friend of member1 any more ;-(
         assertFalse(UserFacade.getMember(FORUM1_NAME, MEMBER2).isFriendOf(UserFacade.getMember(FORUM1_NAME, MEMBER1)));
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, MEMBER1)._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, MEMBER2)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(3)._result);
     }
 
     @Test
     public void addAndRemoveFriend_alreadyFriends_fail() {
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
+        // TODO - login only once per user with different sId
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
         assertEquals(Result.SUCCESS, UserService.addFriend(FORUM1_NAME, MEMBER1, MEMBER2)._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, MEMBER1)._result);
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, MEMBER2, MEMBER2_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, MEMBER2, MEMBER2_PASS)._result);
         assertEquals(Result.ALREADY_FRIENDS, UserService.addFriend(FORUM1_NAME, MEMBER2, MEMBER1)._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, MEMBER2)._result);
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
         assertEquals(Result.ALREADY_FRIENDS, UserService.addFriend(FORUM1_NAME, MEMBER1, MEMBER2)._result);
         assertEquals(Result.SUCCESS, UserService.unFriend(FORUM1_NAME, MEMBER1, MEMBER2)._result);
         // Verify member1 is not friend of member2 any more ;-(
         assertFalse(UserFacade.getMember(FORUM1_NAME, MEMBER1).isFriendOf(UserFacade.getMember(FORUM1_NAME, MEMBER2)));
         // Verify member2 is not friend of member1 any more ;-(
         assertFalse(UserFacade.getMember(FORUM1_NAME, MEMBER2).isFriendOf(UserFacade.getMember(FORUM1_NAME, MEMBER1)));
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, MEMBER1)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
     }
 
     @Test
     public void removeFriends_notFriends_fail() {
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
         assertEquals(Result.NOT_FRIENDS, UserService.unFriend(FORUM1_NAME, MEMBER1, MEMBER2)._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, MEMBER1)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
     }
 
     @Test
     public void addAndRemoveFriends_friendWasntRegisteredToForum_fail() {
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
         assertEquals(Result.FRIEND_NOT_EXIST, UserService.addFriend(FORUM1_NAME, MEMBER1, "GHOST")._result);
         assertEquals(Result.FRIEND_NOT_EXIST, UserService.unFriend(FORUM1_NAME, MEMBER1, "GHOST")._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, MEMBER1)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
     }
 
     @Test
     public void addAndRemoveModerate_login_userIsModerate() {
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, ADMIN, ADMIN_PASS)._result);
+        // TODO - move to Admin test???
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, ADMIN, ADMIN_PASS)._result);
         assertEquals(Result.SUCCESS, UserService.addModerator(FORUM1_NAME, SUB_FORUM1_NAME, ADMIN, MEMBER2)._result);
         assertEquals(Result.SUCCESS, UserService.removeModerator(FORUM1_NAME, SUB_FORUM1_NAME, ADMIN, MEMBER2)._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, ADMIN)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
     }
 
     @Test
     public void addAndRemoveModerate_alreadyModerate_fail() {
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, ADMIN, ADMIN_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, ADMIN, ADMIN_PASS)._result);
         assertEquals(Result.ALREADY_MODERATE, UserService.addModerator(FORUM1_NAME, SUB_FORUM1_NAME, ADMIN, MEMBER1)._result);
         assertEquals(Result.SUCCESS, UserService.addModerator(FORUM1_NAME, SUB_FORUM1_NAME, ADMIN, MEMBER2)._result);
         assertEquals(Result.ALREADY_MODERATE, UserService.addModerator(FORUM1_NAME, SUB_FORUM1_NAME, ADMIN, MEMBER2)._result);
         assertEquals(Result.SUCCESS, UserService.removeModerator(FORUM1_NAME, SUB_FORUM1_NAME, ADMIN, MEMBER2)._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, ADMIN)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
     }
 
     @Test
     public void addAndRemoveModerate_notForumAdminModeratorAssignment_fail() {
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, MEMBER1, MEMBER1_PASS)._result);
         assertEquals(Result.MEMBER_NOT_FORUM_ADMIN, UserService.addModerator(FORUM1_NAME, SUB_FORUM1_NAME, MEMBER1, MEMBER2)._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, MEMBER1)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
     }
 
     @Test
@@ -158,9 +161,9 @@ public class UserServiceTest {
 
     @Test
     public void removeModerator_notAModerator_fail() {
-        assertEquals(Result.SUCCESS, UserService.logIn(FORUM1_NAME, ADMIN, ADMIN_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM1_NAME, ADMIN, ADMIN_PASS)._result);
         assertEquals(Result.NOT_MODERATOR, UserService.removeModerator(FORUM1_NAME, SUB_FORUM1_NAME, ADMIN, MEMBER2)._result);
-        assertEquals(Result.SUCCESS, UserService.logOut(FORUM1_NAME, ADMIN)._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
     }
 
 

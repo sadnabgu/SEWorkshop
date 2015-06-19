@@ -13,7 +13,7 @@ import java.util.Set;
 
 
 /*
- * Represents a tweeter model + controller
+ * Represents a forum ... TODO
  * singleton
  */
 public class ForumProtocol {

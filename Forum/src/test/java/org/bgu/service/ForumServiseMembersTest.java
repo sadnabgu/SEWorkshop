@@ -8,7 +8,7 @@ import org.bgu.service.Exceptions.Result;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.ArrayList;/**/
 import java.util.Collection;
 
 import static org.junit.Assert.*;
@@ -26,7 +26,7 @@ public class ForumServiseMembersTest {
 
     @BeforeClass
     public static void initialSystem() {
-
+        AdminService.resetSystem();
         ForumFacade.createForum(FORUM_NAME, "mike", "admin");
         forum = ForumFacade.getForum(FORUM_NAME);
         mods = new ArrayList<>();
@@ -34,9 +34,43 @@ public class ForumServiseMembersTest {
         mods.add("melki");
         assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
         assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
+
+        // login as admin TODO - replace tests to use regular member
+        assertEquals(Result.SUCCESS, UserService.logIn(1, FORUM_NAME, "mike", "admin")._result);
     }
 
-     /* new Thread tests  */
+  /* new Thread tests  */
+
+    @Test
+    public void addNewThread_correctData_successNewThreadAdded() {
+        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(FORUM_NAME, "mike", "protection4", mods)._result);
+        assertEquals(Result.SUCCESS, ForumService.addNewThread(FORUM_NAME, "protection4", "mike", "condoms", "how to use them?")._result);
+        assertEquals(Result.SUCCESS, ForumService.removeSubForum(FORUM_NAME, "mike", "protection4")._result);
+    }
+
+    @Test
+    public void addNewThread_titleOrBodyMissingByOtherUsers_successNewThreadAdded() {
+        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(FORUM_NAME, "mike", "protection4", mods)._result);
+        assertEquals(Result.SUCCESS, ForumService.addNewThread(FORUM_NAME, "protection4", "mike", "", "Im King")._result);
+        assertEquals(Result.SUCCESS, UserService.logIn(2, FORUM_NAME, "hodai", "hodai")._result);
+        assertEquals(Result.SUCCESS, ForumService.addNewThread(FORUM_NAME, "protection4", "hodai", "important title", "")._result);
+        assertEquals(Result.SUCCESS, ForumService.removeSubForum(FORUM_NAME, "mike", "protection4")._result);
+        assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
+    }
+
+    @Test
+    public void addNewThread_titleAndBodyMissing_newThreadFailed() {
+        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(FORUM_NAME, "mike", "protection4", mods)._result);
+        assertEquals(Result.NEW_THREAD_FAIL, ForumService.addNewThread(FORUM_NAME, "protection4", "mike", "", "")._result);
+        assertEquals(Result.SUCCESS, ForumService.removeSubForum(FORUM_NAME, "mike", "protection4")._result);
+    }
+
+    @Test
+    public void addNewThread_notLoggedInUser_newThreadFailed() {
+        assertEquals(Result.SUCCESS, ForumService.addNewSubForum(FORUM_NAME, "mike", "protection4", mods)._result);
+        assertEquals(Result.NEW_THREAD_FAIL, ForumService.addNewThread(FORUM_NAME, "protection4", "shakshuka", "bla", "bla bla bla blaaaa")._result);
+        assertEquals(Result.SUCCESS, ForumService.removeSubForum(FORUM_NAME, "mike", "protection4")._result);
+    }
 
 
 
