@@ -57,14 +57,11 @@ public class ForumFacade {
         return session._forum.addNewThread(subForumName, session._member, threadTitle, threadBody);
     }
 
-    public static int postNewComment(String forumName, String subForumName, String userName, int msgId, String commentTitle, String commentBody) {
-        Forum forum = getForum(forumName);
-        if (null == forum)
+    public static int postNewComment(int sId, String subForumName, int msgId, String commentTitle, String commentBody) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
             return -1;
-        Member creator = forum.getMemberByName(userName);
-        if (null == creator)
-            return -1;
-        return forum.postNewComment(subForumName, creator, msgId, commentTitle, commentBody);
+        return session._forum.postNewComment(subForumName, session._member, msgId, commentTitle, commentBody);
     }
 
     public static boolean removeForum(String forumName) {
@@ -83,24 +80,18 @@ public class ForumFacade {
         return (session._forum.removeSubForum(subForumName));
     }
 
-    public static boolean editMessage(String forumName, String subForumName, String userName, int msgId, String edittedTitle, String edittedBody) {
-        Forum forum = getForum(forumName);
-        if (null == forum)
+    public static boolean editMessage(int sId, String subForumName, int msgId, String edittedTitle, String edittedBody) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
             return false;
-        Member editor = forum.getMemberByName(userName);
-        if (null == editor)
-            return false;
-        return forum.editMessage(subForumName, editor, msgId, edittedTitle, edittedBody);
+        return session._forum.editMessage(subForumName, session._member, msgId, edittedTitle, edittedBody);
     }
 
-    public static boolean removeMesage(String forumName, String subForumName, String userName, int msgId) {
-        Forum forum = getForum(forumName);
-        if (null == forum)
+    public static boolean removeMesage(int sId, String subForumName, int msgId) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
             return false;
-        Member remover = forum.getMemberByName(userName);
-        if (null == remover)
-            return false;
-        return forum.removeMessage(subForumName, remover, msgId);
+        return session._forum.removeMessage(subForumName, session._member, msgId);
     }
 
     public static SubForum getSubForum(int sId, String subForumName) {

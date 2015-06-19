@@ -58,30 +58,29 @@ public class ForumService {
 
     /**
      *
-     * @param forumName
+     * @param sId
      * @param subForumName
-     * @param userName
      * @param MsgId
      * @param commentTitle
      * @param commentBody
      * @return
      */
-    public static RetObj<Integer> postNewComment(String forumName, String subForumName, String userName, int MsgId, String commentTitle, String commentBody){
+    public static RetObj<Integer> postNewComment(int sId, String subForumName, int MsgId, String commentTitle, String commentBody){
         //TODO - validate data according to POLICY
-        int newMsgId = ForumFacade.postNewComment(forumName, subForumName, userName, MsgId, commentTitle, commentBody);
+        int newMsgId = ForumFacade.postNewComment(sId, subForumName, MsgId, commentTitle, commentBody);
         if (newMsgId < 0)
             return new RetObj<>(Result.NEW_COMMENT_FAIL);
         return new RetObj<>(Result.SUCCESS,newMsgId);
     }
 
-    public static RetObj<Object> removeMessage(String forumName, String subForumName, String userName, int MsgId){
-        if (!ForumFacade.removeMesage(forumName, subForumName, userName, MsgId))
+    public static RetObj<Object> removeMessage(int sId, String subForumName, int MsgId){
+        if (!ForumFacade.removeMesage(sId, subForumName, MsgId))
             return new RetObj<>(Result.REMOVE_COMMENT_FAILED);
         return new RetObj<>(Result.SUCCESS);
     }
 
-    public static RetObj<Object> editMessage(String forumName, String subForumName, String userName, int MsgId, String commentTitle, String commentBody){
-        if (!ForumFacade.editMessage(forumName, subForumName, userName, MsgId, commentTitle, commentBody))
+    public static RetObj<Object> editMessage(int sId, String subForumName, int MsgId, String commentTitle, String commentBody){
+        if (!ForumFacade.editMessage(sId, subForumName, MsgId, commentTitle, commentBody))
             return new RetObj<>(Result.EDIT_COMMENT_FAILED);
         return new RetObj<>(Result.SUCCESS);
     }
