@@ -26,6 +26,7 @@ public class ForumServiceAdminTest {
 
     @BeforeClass
     public static void initialSystem() {
+        UserFacade.reset();
         ForumFacade.createForum(FORUM_NAME, "mike", "admin");
         forum = ForumFacade.getForum(FORUM_NAME);
         mods = new ArrayList<>();
