@@ -65,9 +65,9 @@ public class UserService {
      * @param pass - the new user password
      * @return Result.SUCCESS if sucsses
      */
-     public static RetObj<Object> registerMember(String ForumName, String userName, String pass) {
+     public static RetObj<Object> registerMember(UUID sId, String userName, String pass) {
          // only guest can register new member
-         if (!UserFacade.registerMember(ForumName, userName, pass))
+         if (!UserFacade.registerMember(sId, userName, pass))
              return new RetObj<>(Result.USERNAME_EXISTS);
          return new RetObj<>(Result.SUCCESS);
      }

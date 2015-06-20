@@ -144,13 +144,13 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean registerMember(String forumName, String userName, String userPassword){
-        Forum forum = ForumFacade.getForum(forumName);
-        if (null == forum)
+    public static boolean registerMember(UUID sId, String userName, String userPassword){
+        if(!sessions.containsKey(sId))
             return false;
-        if (!forum.registeredMember(userName, userPassword))
+        Session session = sessions.get(sId);
+        if(session._forum == null)
             return false;
-        return true;
+        return session._forum.registeredMember(userName, userPassword);
     }
 
     public static boolean isLoggedInMember(UUID sId){

@@ -28,6 +28,7 @@ public class UserServiceTest extends abstractTest{
     public static final String SUB_FORUM1_NAME = "ilansMother";
     private static UUID member1Sid;
     private static UUID member2Sid;
+    private static UUID guestSid;
 
     /** utills */
     private static void loginMember1(){
@@ -36,6 +37,13 @@ public class UserServiceTest extends abstractTest{
     private static void loginMember2(){
         member2Sid = login(FORUM_NAME, MEMBER2, MEMBER2_PASS);
     }
+
+    private static void loginGuest(){
+        RetObj<UUID> retObj = UserService.logInGuest(FORUM_NAME);
+        assertEquals(Result.SUCCESS, retObj._result);
+        guestSid = retObj._value;
+    }
+
 
     @BeforeClass
     public static void initialSystem() {
@@ -57,30 +65,30 @@ public class UserServiceTest extends abstractTest{
     @Test
     public void registerNewMember_memberRegistrationandLogin_newMemberRegistred() {
         // verify we are loggin now as Guest (pre condition)
-        //assertTrue(userService.getUser().getClass() == Guest.class);
-        assertEquals(Result.SUCCESS, UserService.registerMember(FORUM_NAME, "newMember1", "pass1")._result);
+        loginGuest();
+        assertEquals(Result.SUCCESS, UserService.registerMember(guestSid, "newMember1", "pass1")._result);
         UUID sId = login(FORUM_NAME, "newMember1", "pass1");
         assertEquals(Result.SUCCESS, UserService.logOut(sId)._result);
     }
 
     @Test
     public void loginMember_registerDifferentUserNamesSamePassword_newMemberRegistered() {
-        assertEquals(Result.SUCCESS, UserService.registerMember(FORUM_NAME, "realyNewUserName", MEMBER1_PASS)._result);
+        assertEquals(Result.SUCCESS, UserService.registerMember(guestSid, "realyNewUserName", MEMBER1_PASS)._result);
     }
 
     @Test
     public void registerNewMember_memberRegistration_fail() {
-        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM_NAME, MEMBER1, "pass1")._result);
+        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(guestSid, MEMBER1, "pass1")._result);
         assertEquals(Result.SUCCESS, UserService.logOut(member1Sid)._result);
         // register member with already used userName
-        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM_NAME, MEMBER1, MEMBER1_PASS)._result);
-        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM_NAME, MEMBER1, "newPass")._result);
+        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(guestSid, MEMBER1, MEMBER1_PASS)._result);
+        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(guestSid, MEMBER1, "newPass")._result);
 
         RetObj<UUID> retObj = UserService.logInGuest(FORUM_NAME);
         assertEquals(Result.SUCCESS, retObj._result);
         assertEquals(Result.WRONG_USER_NAME_OR_PASS, UserService.logInMember(retObj._value, MEMBER1, "wrongpass1")._result);
-        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM_NAME, MEMBER2, MEMBER2_PASS)._result);
-        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM_NAME, MEMBER2, "other_password")._result);
+        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(guestSid, MEMBER2, MEMBER2_PASS)._result);
+        assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(guestSid, MEMBER2, "other_password")._result);
         loginMember1();
     }
 
