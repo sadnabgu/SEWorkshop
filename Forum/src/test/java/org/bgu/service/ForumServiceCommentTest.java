@@ -38,17 +38,10 @@ public class ForumServiceCommentTest extends abstractTest{
         assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "kerzman", "kerzman"));
 
         // login as admin TODO - replace tests to use regular member and create sub-forum using facade directly
-        RetObj<UUID> retObj = UserService.logIn(FORUM_NAME, "hodai", "hodai");
-        assertEquals(Result.SUCCESS, retObj._result);
-        memberSid = retObj._value;
-        retObj = UserService.logIn(FORUM_NAME, "mike", "admin");
-        assertEquals(Result.SUCCESS, retObj._result);
-        managerSid = retObj._value;
-        retObj = UserService.logIn(FORUM_NAME, "kerzman", "kerzman");
-        assertEquals(Result.SUCCESS, retObj._result);
-        goldMemberSid = retObj._value;
         loginModerate();
         loginAdmin();
+        loginGoldMember();
+        loginMember();
 
         assertEquals(Result.SUCCESS, ForumService.addNewSubForum(managerSid, SUB_FORUM_NAME, mods)._result);
         assertEquals(Result.SUCCESS, ForumService.addNewThread(managerSid, SUB_FORUM_NAME, TREAD_TITLE1, THREAD_MSG1)._result);
