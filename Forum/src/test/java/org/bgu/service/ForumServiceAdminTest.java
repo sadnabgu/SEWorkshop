@@ -18,38 +18,21 @@ import static org.junit.Assert.*;
  * admin unit test
  * Created by hodai on 4/28/15.
  */
-public class ForumServiceAdminTest {
-    private static final String FORUM_NAME = "sex";
-    private static UUID managerSid;
-    private static UUID moderateSid;
+public class ForumServiceAdminTest extends abstractTest{
     private static Forum forum;
 
     private static Collection<String> mods;
     private static Collection<String> mods2;
 
-    /** utills */
-    private static void loginAdmin(){
-        RetObj<UUID> retObj = UserService.logIn(FORUM_NAME, "mike", "admin");
-        assertEquals(Result.SUCCESS, retObj._result);
-        managerSid = retObj._value;
-    }
-    private static void loginModerate(){
-        RetObj<UUID> retObj = UserService.logIn(FORUM_NAME, "hodai", "hodai");
-        assertEquals(Result.SUCCESS, retObj._result);
-        moderateSid = retObj._value;
-    }
-
 
     @BeforeClass
     public static void initialSystem() {
         UserFacade.resetSystem();
-        ForumFacade.createForum(FORUM_NAME, "mike", "admin");
+        ForumFacade.createForum(FORUM_NAME, MANAGER1_NAME, MANAGER1_PASS);
         forum = ForumFacade.getForum(FORUM_NAME);
         mods = new ArrayList<>();
         mods.add("hodai");
-        mods.add("melki");
-        assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
-        assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
+        assertEquals(Result.SUCCESS, UserFacade.addMember(FORUM_NAME, "hodai", "hodai"));
 
         loginAdmin();
         loginModerate();

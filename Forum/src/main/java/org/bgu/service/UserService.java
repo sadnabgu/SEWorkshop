@@ -16,24 +16,33 @@ import java.util.UUID;
  * Created by hodai on 4/18/15.
  */
 public class UserService {
+
+    public static RetObj<UUID> logInGuest(String forumName) {
+        UUID sId = UserFacade.addGuestSession(forumName);
+
+        if (null == sId)
+            return new RetObj<>(Result.FORUM_NOT_EXISTS);
+        // identify user
+        return new RetObj<>(Result.SUCCESS, sId);
+    }
+
     /**
      *
-     * @param forumName
+     * @param sId
      * @param userName
      * @param pass
      * @return
      */
-    public static RetObj<UUID> logIn(String forumName, String userName, String pass) {
+    public static RetObj<Void> logInMember(UUID sId, String userName, String pass) {
+
         // only Guest can loggin
-        if (!(UserFacade.validatePassword(forumName, userName, pass)))
+        if (!(UserFacade.validatePassword(sId, userName, pass)))
             return new RetObj<>(Result.WRONG_USER_NAME_OR_PASS);
 
-        UUID sId = UUID.randomUUID();
-
-        if (!(UserFacade.logInMember(sId, forumName, userName)))
+        if (!(UserFacade.logInMember(sId, userName)))
             return new RetObj<>(Result.ALREADY_LOGDIN);
         // identify user
-        return new RetObj<>(Result.SUCCESS, sId);
+        return new RetObj<>(Result.SUCCESS);
     }
 
     /**

@@ -62,19 +62,6 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean loginSuperAdmin(UUID sId, String superAdminName) {
-        if(sessions.containsKey(sId))
-            return false;
-
-        Member superAdmin = getSuperAdmin(superAdminName);
-        if (null == superAdmin) {
-            // not suppose to happen
-            return false;
-        }
-        sessions.put(sId, new Session(sId, superAdmin, null));
-        return true;
-    }
-
     private static Member getSuperAdmin(String superAdminName) {
         for (Member m : superAdmins){
             if (m.getUserName().equals(superAdminName))
@@ -92,30 +79,57 @@ public class UserFacade {
 
     /***********FORUM USERS HANDLE**************** */
 
-    public static boolean validatePassword(String forumName, String userName, String pass){
-        Forum forum = ForumFacade.getForum(forumName);
-        if (null == forum)
+    public static boolean validatePassword(UUID sId, String userName, String pass){
+        if(!sessions.containsKey(sId))
             return false;
-        Member member = forum.getMemberByName(userName);
+        Session session = sessions.get(sId);
+
+        if (null == session._forum)
+            return false;
+
+        Member member = session._forum.getMemberByName(userName);
         if (null == member)
             return false;
-        if (!member.login(pass))
-            return false;
-        return true;
+
+        return member.login(pass);
     }
 
-    public static boolean logInMember(UUID sId, String forumName, String userName) {
-        if (sessions.containsKey(sId))
-            return false;
+    public static UUID addSuperAdminSession(String adminName) {
+        Member admin = getSuperAdmin(adminName);
+        if(admin == null)
+            return null;
+        UUID sId = UUID.randomUUID();
+        // login success - add the session information
+        sessions.put(sId, new Session(sId, admin, null));
+        return sId;
+    }
+
+    public static UUID addGuestSession(String forumName) {
         Forum forum  = ForumFacade.getForum(forumName);
         if (null == forum)
-            return false;
-        Member member = forum.logInUser(userName);
-        if(null == member)
-            return false;
+            return null;
 
+        UUID sId = UUID.randomUUID();
         // login success - add the session information
-        sessions.put(sId, new Session(sId, member, forum));
+        sessions.put(sId, new Session(sId, null, forum));
+        return sId;
+    }
+
+    public static boolean logInMember(UUID sId, String userName) {
+        if(!sessions.containsKey(sId))
+            return false;
+        Session session = sessions.get(sId);
+
+        if (null == session._forum)
+            return false;
+        if(null != session._member)
+            return false;
+        Member member = session._forum.logInUser(userName);
+
+        // login success - update the session information
+        session.terminateSession();
+        sessions.remove(sId);
+        sessions.put(sId, new Session(sId, member, session._forum));
         return true;
     }
 
