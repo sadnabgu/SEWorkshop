@@ -6,5 +6,9 @@
 */target
 *.class
 target
+
 Forum/src/META-INF/*
 Forum/web/*
+
+StompTest/StompTest/obj
+StompTest/StompTest/bin
