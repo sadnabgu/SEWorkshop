@@ -39,7 +39,7 @@ public class Member extends User{
         friends.add(friend);
     }
 
-    public void remocveFriend(Member friend) {
+    public void removeFriend(Member friend) {
         friends.remove(friend);
     }
 }

@@ -30,26 +30,26 @@ public class AdminService {
      * @param adminPass - registered(initialized) admin password
      * @return true upon success. exception of Result.FAIL upon failure.
      */
-    public static RetObj<Object> loginSystem(String adminName,String adminPass){
+    public static RetObj<Object> loginSystem(int sId, String adminName,String adminPass){
         if (!UserFacade.isInitializedSystem())
             return new RetObj<>(Result.UNINITIALIZED_SYSTEM);
         if (!UserFacade.validateNamePassSuperAdmin(adminName, adminPass))
             return new RetObj<>(Result.WRONG_USER_NAME_OR_PASS);
-        if (!UserFacade.loginSuperAdmin(adminName, adminPass))
+        if (!UserFacade.loginSuperAdmin(sId, adminName))
             return new RetObj<>(Result.FAIL);
         return new RetObj<>(Result.SUCCESS);
     }
 
     /**
      *
-     * @param superAdminName
+     * @param sId
      * @param ForumName
      * @param managerName
      * @param managerPass
-     * @return true upon success, Exception {Result.FORUM_EXISTS, Result.NOT_LOGGEDIN_SYSTEM} upon failure
+     * @return
      */
-    public static RetObj<Object> createForum(String superAdminName, String ForumName, String managerName, String managerPass){
-        if (!UserFacade.isLoggedInSuperAdmin(superAdminName)) {
+    public static RetObj<Object> createForum(int sId, String ForumName, String managerName, String managerPass){
+        if (!UserFacade.isLoggedInSuperAdmin(sId)) {
             // only logged in admin can create new forum
             return new RetObj<>(Result.NOT_LOGGEDIN_SYSTEM);
         }
@@ -58,8 +58,8 @@ public class AdminService {
         return new RetObj<>(Result.SUCCESS);
     }
 
-    public static RetObj<Object> removeForum(String superAdminName, String ForumName, String managerName, String managerPass){
-        if (!UserFacade.isLoggedInSuperAdmin(superAdminName)) {
+    public static RetObj<Object> removeForum(int sId, String ForumName){
+        if (!UserFacade.isLoggedInSuperAdmin(sId)) {
             // only logged in admin can create new forum
             return new RetObj<>(Result.NOT_LOGGEDIN_SYSTEM);
         }
