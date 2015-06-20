@@ -15,9 +15,6 @@ public class UserFacade {
     //TODO - change to ORM
     private static Collection<Member> superAdmins = new ArrayList<>();
 
-    /** cache memorry for logged in super admins */
-    public static HashMap<String, Member> superAdminsCache = new HashMap<>();
-
     /** hold all the sessions information of activates members */
     private static HashMap<Integer, Session> sessions = new HashMap<>();
 
@@ -49,8 +46,11 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean isLoggedInSuperAdmin(String superAdminName){
-        if (!superAdminsCache.containsKey(superAdminName))
+    public static boolean isLoggedInSuperAdmin(int sId){
+        if (!sessions.containsKey(sId))
+            return false;
+        Session session = sessions.get(sId);
+        if(!superAdmins.contains(session._member))
             return false;
         return true;
     }
@@ -62,11 +62,16 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean loginSuperAdmin(String superAdminName) {
-        if (superAdminsCache.containsKey(superAdminName))
+    public static boolean loginSuperAdmin(int sId, String superAdminName) {
+        if(sessions.containsKey(sId))
             return false;
+
         Member superAdmin = getSuperAdmin(superAdminName);
-        superAdminsCache.put(superAdminName, superAdmin);
+        if (null == superAdmin) {
+            // not suppose to happen
+            return false;
+        }
+        sessions.put(sId, new Session(sId, superAdmin, null));
         return true;
     }
 
@@ -245,8 +250,8 @@ public class UserFacade {
             return false;
         if (!session._member.isFriendOf(friend))
             return false;
-        session._member.remocveFriend(friend);
-        friend.remocveFriend(session._member);
+        session._member.removeFriend(friend);
+        friend.removeFriend(session._member);
         return true;
     }
 
@@ -261,7 +266,7 @@ public class UserFacade {
         // TODO - users.clear();
         systemInitialized = false;
         superAdmins.clear();
-        superAdminsCache.clear();
+        //TODO sessions.clear();
     }
     public static void resetForumMembers(String forumName) {
         // TODO - users.clear();

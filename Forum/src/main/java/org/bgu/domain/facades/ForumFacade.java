@@ -87,7 +87,7 @@ public class ForumFacade {
         return session._forum.editMessage(subForumName, session._member, msgId, edittedTitle, edittedBody);
     }
 
-    public static boolean removeMesage(int sId, String subForumName, int msgId) {
+    public static boolean removeMessage(int sId, String subForumName, int msgId) {
         Session session = UserFacade.getSession(sId);
         if (null == session)
             return false;

@@ -7,7 +7,6 @@ import org.bgu.service.Exceptions.RetObj;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * activate all the forum services (non-users)
@@ -81,7 +80,7 @@ public class ForumService {
      * @return
      */
     public static RetObj<Object> removeMessage(int sId, String subForumName, int MsgId){
-        if (!ForumFacade.removeMesage(sId, subForumName, MsgId))
+        if (!ForumFacade.removeMessage(sId, subForumName, MsgId))
             return new RetObj<>(Result.REMOVE_COMMENT_FAILED);
         return new RetObj<>(Result.SUCCESS);
     }
