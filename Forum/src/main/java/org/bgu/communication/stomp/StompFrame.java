@@ -62,6 +62,9 @@ public abstract class StompFrame implements Message<StompFrame> {
 	 * adds headers
 	 */
 	public void addHeaders(HashMap<String, String> headers){
+        if (headers == null){
+            return;
+        }
 		Iterator<Entry<String, String>> iterator = headers.entrySet().iterator();
 		while (iterator.hasNext()){
 			Entry<String, String> header = iterator.next();
@@ -94,4 +97,8 @@ public abstract class StompFrame implements Message<StompFrame> {
 		
 		return builder.toString();
 	}
+
+    public HashMap<String, String> getHeaders() {
+        return _headers;
+    }
 }

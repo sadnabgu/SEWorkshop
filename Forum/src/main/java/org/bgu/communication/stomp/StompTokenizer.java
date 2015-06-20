@@ -1,11 +1,10 @@
 package org.bgu.communication.stomp;
  
+import org.bgu.communication.stomp.admin.InitSystem;
+import org.bgu.communication.stomp.admin.LoginAdmin;
 import org.bgu.communication.tokenizer.MessageTokenizer;
 
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CharacterCodingException;
+import java.nio.charset.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.HashMap;
@@ -32,7 +31,7 @@ public class StompTokenizer implements MessageTokenizer<StompFrame> {
    }
  
    public StompTokenizer() {
-	   this(Charset.defaultCharset());
+	   this(StandardCharsets.UTF_8);
    }
 
 /**
@@ -113,19 +112,29 @@ public class StompTokenizer implements MessageTokenizer<StompFrame> {
    }
    
    private StompFrame buildStompFrame(String command, HashMap<String, String> headers, String content){
-	   switch (command){
-	   case StompConnect.COMMAND_NAME:
-		   return buildStompConnect(headers, content);
-	   case StompDisconnect.COMMAND_NAME:
-		   return buildStompDisconnect(headers, content);
-	   case StompSend.COMMAND_NAME:
-		   return buildStompSend(headers, content);
-	   case StompSubscribe.COMMAND_NAME:
-		   return buildStompSubscribe(headers, content);
-	   case StompUnsubscribe.COMMAND_NAME:
-		   return buildStompUnsubscribe(headers, content);
+	   switch (command.toLowerCase()){
+           case "login":
+               return new LoginRequest(command, headers, content);
+           case "get_forums":
+               return new GetForumsRequest(command);
+           case "enter_forum":
+               return new EnterForumRequest(command, headers, content);
+           case "init_system":
+               return new InitSystem(command, headers, content);
+           case "login_admin":
+               return new LoginAdmin(command, headers, content);
+//	   case StompConnect.COMMAND_NAME:
+//		   return buildStompConnect(headers, content);
+//	   case StompDisconnect.COMMAND_NAME:
+//		   return buildStompDisconnect(headers, content);
+//	   case StompSend.COMMAND_NAME:
+//		   return buildStompSend(headers, content);
+//	   case StompSubscribe.COMMAND_NAME:
+//		   return buildStompSubscribe(headers, content);
+//	   case StompUnsubscribe.COMMAND_NAME:
+//		   return buildStompUnsubscribe(headers, content);
 	   default:
-		   return null;
+            return new GeneralStompFrame(command, headers, content);
 	   }
    }
    
