@@ -35,8 +35,8 @@ public class AdminService {
             return new RetObj<>(Result.UNINITIALIZED_SYSTEM);
         if (!UserFacade.validateNamePassSuperAdmin(adminName, adminPass))
             return new RetObj<>(Result.WRONG_USER_NAME_OR_PASS);
-        if (!UserFacade.loginSuperAdmin(adminName, adminPass))
-            return new RetObj<>(Result.FAIL);
+        if (!UserFacade.loginSuperAdmin(adminName))
+            return new RetObj<>(Result.ALREADY_LOGDIN);
         return new RetObj<>(Result.SUCCESS);
     }
 

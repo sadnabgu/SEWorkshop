@@ -29,7 +29,7 @@ public enum Result {
     ALREADY_MODERATE("the user is already a moderate"),
     NOT_MODERATOR("not a moderator"),
 
-    ALREADY_LOGDIN("user already loged in, please logout first"),
+    ALREADY_LOGDIN("already loged in, please logout first"),
     USERNAME_EXISTS("user name or password exists"),
     WRONG_USER_NAME_OR_PASS("Wrong username or password"),
     DUPLICATED_USERNAME("already exist user with this username"),

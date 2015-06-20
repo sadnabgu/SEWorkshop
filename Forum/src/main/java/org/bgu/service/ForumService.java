@@ -73,12 +73,28 @@ public class ForumService {
         return new RetObj<>(Result.SUCCESS,newMsgId);
     }
 
+    /**
+     *
+     * @param sId
+     * @param subForumName
+     * @param MsgId
+     * @return
+     */
     public static RetObj<Object> removeMessage(int sId, String subForumName, int MsgId){
         if (!ForumFacade.removeMesage(sId, subForumName, MsgId))
             return new RetObj<>(Result.REMOVE_COMMENT_FAILED);
         return new RetObj<>(Result.SUCCESS);
     }
 
+    /**
+     *
+     * @param sId
+     * @param subForumName
+     * @param MsgId
+     * @param commentTitle
+     * @param commentBody
+     * @return
+     */
     public static RetObj<Object> editMessage(int sId, String subForumName, int MsgId, String commentTitle, String commentBody){
         if (!ForumFacade.editMessage(sId, subForumName, MsgId, commentTitle, commentBody))
             return new RetObj<>(Result.EDIT_COMMENT_FAILED);

@@ -52,7 +52,6 @@ public class UserServiceTest {
         assertEquals(Result.SUCCESS, UserService.logOut(2)._result);
     }
 
-
     @Test
     public void loginMember_registerDifferentUserNamesSamePassword_newMemberRegistered() {
         assertEquals(Result.SUCCESS, UserService.registerMember(FORUM1_NAME, "realyNewUserName", MODERATOR1_PASS)._result);
@@ -72,7 +71,6 @@ public class UserServiceTest {
         assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM1_NAME, MEMBER2, MEMBER2_PASS)._result);
         assertEquals(Result.USERNAME_EXISTS, UserService.registerMember(FORUM1_NAME, MEMBER2, "other_password")._result);
     }
-
 
     @Test
     public void addAndRemoveFriend_login_usersAreFriends() {

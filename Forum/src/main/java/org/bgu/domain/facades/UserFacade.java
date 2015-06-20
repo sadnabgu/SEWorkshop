@@ -62,7 +62,7 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean loginSuperAdmin(String superAdminName, String superAdminPass) {
+    public static boolean loginSuperAdmin(String superAdminName) {
         if (superAdminsCache.containsKey(superAdminName))
             return false;
         Member superAdmin = getSuperAdmin(superAdminName);
@@ -78,7 +78,7 @@ public class UserFacade {
         return null;
     }
 
-    /*********** SUPER ADMIN HANDLE **************** */
+    /***********SUPER ADMIN HANDLE**************** */
 
     public static User createGuest() {
         //TODO - ??
@@ -157,7 +157,7 @@ public class UserFacade {
         if (session._member.getUserName().equals(otherUserName))
             return false;
 
-        // TODO - replace the signature to get Forum Object rather than mane
+        // TODO - replace the signature to get Forum Object rather than name
         Member otherUser = getMember(session._forum.getForumName(), otherUserName);
         if (null == otherUser)
             return false;
@@ -272,12 +272,4 @@ public class UserFacade {
     public static void reset() {
         sessions.clear();
     }
-
-
-
-
-    /*****************DB OPERATIONS******************/
-    //TODO - change to ORM
-
-
 }
