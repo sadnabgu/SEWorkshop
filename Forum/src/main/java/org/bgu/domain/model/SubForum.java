@@ -62,6 +62,7 @@ public class SubForum {
         else{
             Message newThread = new Message(newThreadID, creator, threadTitle, threadBody);
             threads.add(newThread);
+            creator.updateNumberOfMessage();
             return newThread.getMsgId();
         }
     }
@@ -85,6 +86,7 @@ public class SubForum {
             }
             if (!flag)
                 return -1;
+            creator.updateNumberOfMessage();
             return newMsg.getMsgId();
         }
     }
@@ -92,7 +94,7 @@ public class SubForum {
     public boolean removeMessage(Member remover, int msgId) {
         for (Message t : threads){
             if (t.getMsgId() == msgId) {
-                if (t.getCreator().getUserName().equals(remover.getUserName())) {
+                if ((t.getCreator().getUserName().equals(remover.getUserName())) || remover.getType()==MemberTypes.GOLD) {
                     t.removeAllMsgs();
                     threads.remove(t);
                     return true;
@@ -120,7 +122,7 @@ public class SubForum {
         else{
             for (Message t : threads){
                 if (t.getMsgId() == msgId) {
-                    if (t.getCreator().getUserName().equals(editor.getUserName())) {
+                    if ((t.getCreator().getUserName().equals(editor.getUserName())) || editor.getType()==MemberTypes.GOLD) {
                         t.edit(edittedTitle, edittedBody);
                         return true;
                     }
