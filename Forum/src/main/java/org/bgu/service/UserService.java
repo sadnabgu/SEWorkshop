@@ -17,6 +17,11 @@ import java.util.UUID;
  */
 public class UserService {
 
+    public static RetObj<Boolean> isInitializedSystem(){
+        boolean ans = UserFacade.isInitializedSystem();
+        return new RetObj<>(Result.SUCCESS, ans);
+    }
+
     public static RetObj<UUID> logInGuest(String forumName) {
         UUID sId = UserFacade.addGuestSession(forumName);
 

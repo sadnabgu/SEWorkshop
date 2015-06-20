@@ -12,6 +12,11 @@ public class Forum {
     private int _forumId;
     private static Collection<SubForum> _subForums;
     private String _name;
+    //if the forum was not configured yet with a policy
+    private boolean _isConfigured;
+    private ForumSecurityPolicy _forumSecurityPolicy;
+    private ForumPermitionPolicy _forumPermitionPolicy;
+    private ForumPostingPolicy _forumPostingPolicy;
 
     //TODO - change to ORM
     /** collection of all the members and moderates and managers of this forum */
@@ -34,6 +39,7 @@ public class Forum {
         _managers.add(manager);
         _members.add(manager);
         _subForumIdGenerate = 1;
+        _isConfigured = false;
     }
 
     private int generateSubForumId(){
@@ -41,6 +47,22 @@ public class Forum {
     }
 
     /*****FORUM STRUCTURE MANAGEMENT****  */
+
+    public boolean isConfigured(){
+        return _isConfigured;
+    }
+
+    /*public setSecurityPolicy(int passWordMinLength, boolean isQuestionEnforce, int daysForPasswordValidity){
+        _forumSecurityPolicy = new ForumSecurityPolicy(passWordMinLength, isQuestionEnforce, daysForPasswordValidity);
+    }
+
+    public setPermitionPolicy(ArrayList<Permition> permitions){
+        _forumPermitionPolicy = new ForumPermitionPolicy(permitions);
+    }
+
+    public setPostingPolicy(ArrayList<String> forbiddenWords){
+        _forumPostingPolicy = new ForumPostingPolicy(forbiddenWords);
+    }*/
 
     public int addNewSubForum(String subForumName, Collection<String> moderators) {
         for (String s : moderators) {

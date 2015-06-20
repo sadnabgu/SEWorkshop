@@ -1,0 +1,16 @@
+package org.bgu.domain.model;
+
+/**
+ * Created by Michael on 6/20/2015.
+ */
+public enum ForumUserAction {
+    // ADD_NEW_SUPER_ADMIN, //TODO - ADD SUPPORT OF ADDING A NEW SUPER ADMIN ONLY FOR GOLD MEMBERS...
+    ADD_NEW_SUB_FORUM,
+    REMOVE_SUB_FORUM,
+    ADD_NEW_THREAD,
+    POST_NEW_COMMENT,
+    REMOVE_MESSAGE,
+    ADD_NEW_MODERATOR,
+    REMOVE_MODERATOR,
+    SUBMIT_NEW_COMPLAINT;
+}

@@ -8,3 +8,9 @@ c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\bin\Debug
 c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\StompTest.exe
 c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\StompTest.pdb
 c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\StompTest.FormAcceptance.resources
+C:\Users\Michael\IdeaProjects\SEWorkshop\StompTest\StompTest\bin\Debug\StompTest.exe.config
+C:\Users\Michael\IdeaProjects\SEWorkshop\StompTest\StompTest\obj\Debug\StompTest.csprojResolveAssemblyReference.cache
+C:\Users\Michael\IdeaProjects\SEWorkshop\StompTest\StompTest\obj\Debug\StompTest.FormAcceptance.resources
+C:\Users\Michael\IdeaProjects\SEWorkshop\StompTest\StompTest\obj\Debug\St1ompTest.Form1.resources
+C:\Users\Michael\IdeaProjects\SEWorkshop\StompTest\StompTest\obj\Debug\StompTest.Properties.Resources.resources
+C:\Users\Michael\IdeaProjects\SEWorkshop\StompTest\StompTest\obj\Debug\StompTest.csproj.GenerateResource.Cache
