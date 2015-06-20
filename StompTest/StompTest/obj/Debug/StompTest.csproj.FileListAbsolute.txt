@@ -1,0 +1,11 @@
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\bin\Debug\StompTest.exe.config
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\StompTest.csprojResolveAssemblyReference.cache
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\St1ompTest.Form1.resources
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\StompTest.Properties.Resources.resources
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\StompTest.csproj.GenerateResource.Cache
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\bin\Debug\StompTest.exe
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\bin\Debug\StompTest.pdb
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\StompTest.exe
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\StompTest.pdb
+c:\users\gur\documents\visual studio 2015\Projects\StompTest\StompTest\obj\Debug\StompTest.FormAcceptance.resources
+C:\Users\gur\Documents\GitHub\SEWorkshop\StompTest\StompTest\bin\Debug\StompTest.exe.config
