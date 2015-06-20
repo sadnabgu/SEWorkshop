@@ -30,7 +30,7 @@ public class LoginMember extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         UserService.logInMember(UUID.fromString(sid), username, password);
-        return new GeneralStompFrame(getCommand(), getHeaders(), sid);
+        return new GeneralStompFrame(getCommand(), getHeaders(), String.format("user %s logged in", username));
     }
 }
 
