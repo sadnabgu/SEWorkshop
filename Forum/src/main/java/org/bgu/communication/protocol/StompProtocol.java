@@ -10,12 +10,11 @@ import org.bgu.communication.stomp.*;
  */
 public class StompProtocol implements AsyncServerProtocol<StompFrame>{
 	public StompProtocol() {
-		_model = ForumProtocol.instance();
+		_model = null;
 		_output = null;
 	}
 	
 	protected ForumProtocol _model;
-	private String _relatedUser;
 	private boolean _shouldClose = false;
 	private IStompOutput _output;
 	private boolean _isEnd = false; 
@@ -30,15 +29,8 @@ public class StompProtocol implements AsyncServerProtocol<StompFrame>{
 	/*
 	 * sends a frame to the output
 	 */
-	public synchronized void SendMessage(StompMessageFrame frame){
+	public synchronized void SendMessage(StompFrame frame){
 		_output.write(frame);
-	}
-	
-	/*
-	 * gets the user that is binded to the protocol
-	 */
-	public String getUser(){
-		return _relatedUser;
 	}
 	
 	/**
@@ -58,7 +50,6 @@ public class StompProtocol implements AsyncServerProtocol<StompFrame>{
 	public void connectionTerminated() {
 		_isEnd = true;
 		_shouldClose = true;
-		_model.performTermination(_relatedUser);
 	}
 
 	/*
@@ -72,42 +63,5 @@ public class StompProtocol implements AsyncServerProtocol<StompFrame>{
 		// AND NOT ONLY ONE GENERIC TYPE OF MESSAGE
 		System.out.println("Handling frame: "+msg.getCommand());
 		return ((StompClientFrame)msg).acceptProcess(this);
-	}
-	
-	/*
-	 * handles connect frame
-	 */
-	public StompFrame processMessage(StompConnect msg){
-		_relatedUser = msg.getLogin();
-		return _model.PerformLogin(msg, this);
-	}
-	
-	/*
-	 * handles disconnect frame
-	 */
-	public StompFrame processMessage(StompDisconnect msg){
-		return _model.performLogout(msg, this);
-	}
-	
-	/*
-	 * handles subscribe frame
-	 */
-	public StompFrame processMessage(StompSubscribe msg){
-		return _model.performFollow(msg);
-	}
-	
-	/*
-	 * handles send frame
-	 */
-	public StompFrame processMessage(StompSend msg){
-		_model.performSend(msg, this);
-		return null;
-	}
-	
-	/*
-	 * handles unsubscribe frame
-	 */
-	public StompFrame processMessage(StompUnsubscribe msg){
-		return _model.performUnFollow(msg, this.getUser());
 	}
 }

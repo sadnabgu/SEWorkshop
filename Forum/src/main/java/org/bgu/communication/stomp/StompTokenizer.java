@@ -1,11 +1,14 @@
 package org.bgu.communication.stomp;
  
+import org.bgu.communication.stomp.admin.CreateForum;
+import org.bgu.communication.stomp.admin.InitSystem;
+import org.bgu.communication.stomp.admin.LoginAdmin;
+import org.bgu.communication.stomp.admin.RemoveForum;
+import org.bgu.communication.stomp.forum.*;
+import org.bgu.communication.stomp.user.*;
 import org.bgu.communication.tokenizer.MessageTokenizer;
 
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CharacterCodingException;
+import java.nio.charset.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.HashMap;
@@ -32,7 +35,7 @@ public class StompTokenizer implements MessageTokenizer<StompFrame> {
    }
  
    public StompTokenizer() {
-	   this(Charset.defaultCharset());
+	   this(StandardCharsets.UTF_8);
    }
 
 /**
@@ -113,75 +116,29 @@ public class StompTokenizer implements MessageTokenizer<StompFrame> {
    }
    
    private StompFrame buildStompFrame(String command, HashMap<String, String> headers, String content){
-	   switch (command){
-	   case StompConnect.COMMAND_NAME:
-		   return buildStompConnect(headers, content);
-	   case StompDisconnect.COMMAND_NAME:
-		   return buildStompDisconnect(headers, content);
-	   case StompSend.COMMAND_NAME:
-		   return buildStompSend(headers, content);
-	   case StompSubscribe.COMMAND_NAME:
-		   return buildStompSubscribe(headers, content);
-	   case StompUnsubscribe.COMMAND_NAME:
-		   return buildStompUnsubscribe(headers, content);
+
+	   switch (command.toLowerCase()){
+           case "login_member": return new LoginMember(command, headers, content);
+           case "get_forums": return new GetForumsRequest(command);
+           case "init_system": return new InitSystem(command, headers, content);
+           case "login_admin": return new LoginAdmin(command, headers, content);
+           case "create_forum": return new CreateForum(command, headers, content);
+           case "login_guest": return new LoginGuest(command, headers, content);
+           case "remove_forum": return new RemoveForum(command, headers, content);
+           case "add_new_sub_forum": return new CreateSubForum(command, headers, content);
+           case "remove_sub_forum": return new RemoveSubForum(command, headers, content);
+           case "add_new_thread": return new AddNewThread(command, headers, content);
+           case "remove_message": return new RemoveMessage(command, headers, content);
+           case "post_comment": return new PostNewMessage(command, headers, content);
+           case "edit_message": return new EditMessage(command, headers, content);
+           case "add_moderator": return new AddModerator(command, headers, content);
+           case "add_friend": return new AddFriend(command, headers, content);
+           case "remove_friend": return new RemoveFriend(command, headers, content);
+           case "register": return new Register(command, headers, content);
+
 	   default:
-		   return null;
+            return new GeneralStompFrame(command, headers, content);
 	   }
-   }
-   
-   private StompConnect buildStompConnect(HashMap<String, String> headers, String content){
-	   String version = takeHeader(headers, "accept-version");
-	   String host = takeHeader(headers, "host");
-	   String user = takeHeader(headers, "login");
-	   String password = takeHeader(headers, "passcode");
-	   
-	   StompConnect frame = new StompConnect(version, host, user, password);
-	   frame.addHeaders(headers);
-	   
-	   return frame;
-   }
-   
-   private StompDisconnect buildStompDisconnect(HashMap<String, String> headers, String content){
-	   String receipt = takeHeader(headers, "reciept");
-	   
-	   StompDisconnect frame = new StompDisconnect(receipt);
-	   frame.addHeaders(headers);
-	   
-	   return frame;
-   }
-   
-   private StompSend buildStompSend(HashMap<String, String> headers, String content){
-	   String destination = takeHeader(headers, "destination");
-	   
-	   StompSend frame = new StompSend(destination, content);
-	   frame.addHeaders(headers);
-	   
-	   return frame;
-   }
-   
-   private StompSubscribe buildStompSubscribe(HashMap<String, String> headers, String content){
-	   String destination = takeHeader(headers, "destination");
-	   String id = takeHeader(headers, "id");
-	   
-	   StompSubscribe frame = new StompSubscribe(destination, id);
-	   frame.addHeaders(headers);
-	   
-	   return frame;
-   }
-   
-   private StompUnsubscribe buildStompUnsubscribe(HashMap<String, String> headers, String content){
-	   String id = takeHeader(headers, "id");
-	   
-	   StompUnsubscribe frame = new StompUnsubscribe(id);
-	   frame.addHeaders(headers);
-	   
-	   return frame;
-   }
-   
-   private String takeHeader(HashMap<String, String> headers, String key){
-	   String value = headers.get(key);
-	   headers.remove(key);
-	   return value;
    }
 }
 

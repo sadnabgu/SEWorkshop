@@ -30,4 +30,7 @@ public class Session {
     }
 
 
+    public void terminateSession() {
+        // TODO
+    }
 }

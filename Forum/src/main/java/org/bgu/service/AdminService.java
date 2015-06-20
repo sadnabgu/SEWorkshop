@@ -32,14 +32,15 @@ public class AdminService {
      * @param adminPass - registered(initialized) admin password
      * @return true upon success. exception of Result.FAIL upon failure.
      */
-    public static RetObj<Object> loginSystem(UUID sId, String adminName,String adminPass){
+    public static RetObj<UUID> loginSystem(String adminName, String adminPass){
         if (!UserFacade.isInitializedSystem())
             return new RetObj<>(Result.UNINITIALIZED_SYSTEM);
         if (!UserFacade.validateNamePassSuperAdmin(adminName, adminPass))
             return new RetObj<>(Result.WRONG_USER_NAME_OR_PASS);
-        if (!UserFacade.loginSuperAdmin(sId, adminName))
-            return new RetObj<>(Result.ALREADY_LOGDIN);
-        return new RetObj<>(Result.SUCCESS);
+        UUID sId = UserFacade.addSuperAdminSession(adminName);
+        if (sId == null)
+            return new RetObj<>(Result.WRONG_USER_NAME_OR_PASS);
+        return new RetObj<>(Result.SUCCESS, sId);
     }
 
     /**
