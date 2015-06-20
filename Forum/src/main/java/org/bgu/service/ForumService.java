@@ -7,6 +7,7 @@ import org.bgu.service.Exceptions.RetObj;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  * activate all the forum services (non-users)
@@ -22,7 +23,7 @@ public class ForumService {
      * @param moderators
      * @return
      */
-    public static RetObj<Object> addNewSubForum(int sId, String subForumName, Collection<String> moderators){
+    public static RetObj<Object> addNewSubForum(UUID sId, String subForumName, Collection<String> moderators){
         //TODO - validate data according to POLICY
         if (!(UserFacade.isForumManager(sId)))
             return new RetObj<>(Result.UNAUTHORIZED_OPERATION);
@@ -47,7 +48,7 @@ public class ForumService {
      * @param threadBody
      * @return - msgId of the newly thread upon success. exception{} upon fail
      */
-    public static RetObj<Integer> addNewThread(int sId, String subForumName, String threadTitle, String threadBody){
+    public static RetObj<Integer> addNewThread(UUID sId, String subForumName, String threadTitle, String threadBody){
         //TODO - validate data according to POLICY
         int newMsgId = ForumFacade.addNewThread(sId, subForumName, threadTitle, threadBody);
         if (newMsgId < 0)
@@ -64,7 +65,7 @@ public class ForumService {
      * @param commentBody
      * @return
      */
-    public static RetObj<Integer> postNewComment(int sId, String subForumName, int MsgId, String commentTitle, String commentBody){
+    public static RetObj<Integer> postNewComment(UUID sId, String subForumName, int MsgId, String commentTitle, String commentBody){
         //TODO - validate data according to POLICY
         int newMsgId = ForumFacade.postNewComment(sId, subForumName, MsgId, commentTitle, commentBody);
         if (newMsgId < 0)
@@ -79,7 +80,7 @@ public class ForumService {
      * @param MsgId
      * @return
      */
-    public static RetObj<Object> removeMessage(int sId, String subForumName, int MsgId){
+    public static RetObj<Object> removeMessage(UUID sId, String subForumName, int MsgId){
         if (!ForumFacade.removeMessage(sId, subForumName, MsgId))
             return new RetObj<>(Result.REMOVE_COMMENT_FAILED);
         return new RetObj<>(Result.SUCCESS);
@@ -94,7 +95,7 @@ public class ForumService {
      * @param commentBody
      * @return
      */
-    public static RetObj<Object> editMessage(int sId, String subForumName, int MsgId, String commentTitle, String commentBody){
+    public static RetObj<Object> editMessage(UUID sId, String subForumName, int MsgId, String commentTitle, String commentBody){
         if (!ForumFacade.editMessage(sId, subForumName, MsgId, commentTitle, commentBody))
             return new RetObj<>(Result.EDIT_COMMENT_FAILED);
         return new RetObj<>(Result.SUCCESS);
@@ -106,7 +107,7 @@ public class ForumService {
      * @param subForumName
      * @return
      */
-    public static RetObj<Object> removeSubForum(int sId, String subForumName){
+    public static RetObj<Object> removeSubForum(UUID sId, String subForumName){
         //TODO - validate data according to POLICY
         if (!UserFacade.isForumManager(sId))
             return new RetObj<>(Result.UNAUTHORIZED_OPERATION);
@@ -126,18 +127,6 @@ public class ForumService {
     public static boolean setProperties() {
         //TODO - implement
         return false;
-    }
-
-    /***************************************************/
-    /*****************FOR TESTING***********************/
-
-    /**
-     * un-initialize the system
-     * used only for the testing
-     */
-    public static void resetForum(String forumName) {
-        UserFacade.resetForumMembers(forumName);
-        ForumFacade.resetForum(forumName);
     }
 
     public static ArrayList<String> getAllForums() {

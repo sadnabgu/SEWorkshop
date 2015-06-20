@@ -1,8 +1,11 @@
 package org.bgu.service;
+import org.bgu.domain.facades.UserFacade;
 import org.bgu.service.Exceptions.Result;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +15,7 @@ import static org.junit.Assert.*;
 public class AdminServiceTest {
     public static final String ADMIN1_NAME = "admin1";
     public static final String ADMIN1_PASS = "pass1";
-    public static final int ADMIN1_SID = 1;
+    public static final UUID ADMIN1_SID = null;
 
     public static final String MANAGER1_NAME = "manager1";
     public static final String MANAGER1_PASS = "pass1";
@@ -21,7 +24,7 @@ public class AdminServiceTest {
 
     @BeforeClass
     public static void initialSystem() {
-        AdminService.resetSystem();
+        UserFacade.resetSystem();
         assertEquals(Result.SUCCESS, AdminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS)._result);
     }
 
@@ -37,7 +40,7 @@ public class AdminServiceTest {
 
     @Test
     public void initializeSystem_initialSequence_pass() {
-        AdminService.resetSystem();
+        UserFacade.resetSystem();
         assertEquals(Result.SUCCESS, AdminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS)._result);
         logoutSystem();
         assertEquals(Result.SUCCESS, AdminService.loginSystem(ADMIN1_SID, ADMIN1_NAME, ADMIN1_PASS)._result);
@@ -45,7 +48,7 @@ public class AdminServiceTest {
 
     @Test
     public void initializeSystem_initialSequence_fail() {
-        AdminService.resetSystem();
+        UserFacade.resetSystem();
 
         assertEquals(Result.UNINITIALIZED_SYSTEM, AdminService.loginSystem(ADMIN1_SID, ADMIN1_NAME, ADMIN1_PASS)._result);
         assertEquals(Result.SUCCESS, AdminService.initializeSystem(ADMIN1_NAME, ADMIN1_PASS)._result);

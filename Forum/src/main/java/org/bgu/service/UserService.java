@@ -7,6 +7,9 @@ import org.bgu.domain.model.User;
 import org.bgu.service.Exceptions.Result;
 import org.bgu.service.Exceptions.RetObj;
 
+import java.util.Date;
+import java.util.UUID;
+
 /**
  * interface for the user management functionality
  * <p/>
@@ -15,20 +18,22 @@ import org.bgu.service.Exceptions.RetObj;
 public class UserService {
     /**
      *
-     * @param sId
      * @param forumName
      * @param userName
      * @param pass
      * @return
      */
-    public static RetObj<Object> logIn(int sId, String forumName, String userName, String pass) {
+    public static RetObj<UUID> logIn(String forumName, String userName, String pass) {
         // only Guest can loggin
         if (!(UserFacade.validatePassword(forumName, userName, pass)))
             return new RetObj<>(Result.WRONG_USER_NAME_OR_PASS);
+
+        UUID sId = UUID.randomUUID();
+
         if (!(UserFacade.logInMember(sId, forumName, userName)))
             return new RetObj<>(Result.ALREADY_LOGDIN);
         // identify user
-        return new RetObj<>(Result.SUCCESS);
+        return new RetObj<>(Result.SUCCESS, sId);
     }
 
     /**
@@ -36,7 +41,7 @@ public class UserService {
      * @param sId
      * @return
      */
-    public static RetObj<Object> logOut(int sId) {
+    public static RetObj<Object> logOut(UUID sId) {
         if (!UserFacade.logOut(sId))
             return new RetObj<>(Result.NOT_LOGGED_IN);
         return new RetObj<>(Result.SUCCESS);
@@ -64,7 +69,7 @@ public class UserService {
      * @param otherUserName
      * @return
      */
-    public static RetObj<Object> addFriend(int sId, String otherUserName) {
+    public static RetObj<Object> addFriend(UUID sId, String otherUserName) {
         if (!UserFacade.isLoggedInMember(sId)){
             return new RetObj<>(Result.NOT_LOGGED_IN);
         }
@@ -84,7 +89,7 @@ public class UserService {
      * @param moderatorName
      * @return
      */
-    public static RetObj<Object> addModerator(int sId, String subForumName, String moderatorName) {
+    public static RetObj<Object> addModerator(UUID sId, String subForumName, String moderatorName) {
         if (!UserFacade.isLoggedInMember(sId))
             return new RetObj<>(Result.NOT_LOGGED_IN);
         if (!UserFacade.isForumManager(sId))
@@ -100,7 +105,7 @@ public class UserService {
      * @param otherUserName
      * @return
      */
-    public static RetObj<Object> unFriend(int sId, String otherUserName) {
+    public static RetObj<Object> unFriend(UUID sId, String otherUserName) {
         if (!UserFacade.isLoggedInMember(sId)){
             return new RetObj<>(Result.NOT_LOGGED_IN);
         }
@@ -120,7 +125,7 @@ public class UserService {
      * @param moderatorName
      * @return
      */
-    public static RetObj<Object> removeModerator(int sId, String subForumName, String moderatorName) {
+    public static RetObj<Object> removeModerator(UUID sId, String subForumName, String moderatorName) {
         if (!UserFacade.isLoggedInMember(sId))
             return new RetObj<>(Result.NOT_LOGGED_IN);
         if (!UserFacade.isForumManager(sId))

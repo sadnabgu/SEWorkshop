@@ -5,6 +5,8 @@ import org.bgu.domain.facades.UserFacade;
 import org.bgu.service.Exceptions.Result;
 import org.bgu.service.Exceptions.RetObj;
 
+import java.util.UUID;
+
 /**
  * one object per admin connection/session
  *
@@ -30,7 +32,7 @@ public class AdminService {
      * @param adminPass - registered(initialized) admin password
      * @return true upon success. exception of Result.FAIL upon failure.
      */
-    public static RetObj<Object> loginSystem(int sId, String adminName,String adminPass){
+    public static RetObj<Object> loginSystem(UUID sId, String adminName,String adminPass){
         if (!UserFacade.isInitializedSystem())
             return new RetObj<>(Result.UNINITIALIZED_SYSTEM);
         if (!UserFacade.validateNamePassSuperAdmin(adminName, adminPass))
@@ -48,7 +50,7 @@ public class AdminService {
      * @param managerPass
      * @return
      */
-    public static RetObj<Object> createForum(int sId, String ForumName, String managerName, String managerPass){
+    public static RetObj<Object> createForum(UUID sId, String ForumName, String managerName, String managerPass){
         if (!UserFacade.isLoggedInSuperAdmin(sId)) {
             // only logged in admin can create new forum
             return new RetObj<>(Result.NOT_LOGGEDIN_SYSTEM);
@@ -58,7 +60,7 @@ public class AdminService {
         return new RetObj<>(Result.SUCCESS);
     }
 
-    public static RetObj<Object> removeForum(int sId, String ForumName){
+    public static RetObj<Object> removeForum(UUID sId, String ForumName){
         if (!UserFacade.isLoggedInSuperAdmin(sId)) {
             // only logged in admin can create new forum
             return new RetObj<>(Result.NOT_LOGGEDIN_SYSTEM);
@@ -68,14 +70,4 @@ public class AdminService {
         return new RetObj<>(Result.SUCCESS);
     }
 
-
-    /**
-     * un-initialize the system
-     * used only for the testing
-     */
-    public static void resetSystem() {
-        UserFacade.resetSuperAdmins();
-        ForumFacade.resetForums();
-        UserFacade.reset();
-    }
 }

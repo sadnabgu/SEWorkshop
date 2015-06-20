@@ -16,7 +16,7 @@ public class UserFacade {
     private static Collection<Member> superAdmins = new ArrayList<>();
 
     /** hold all the sessions information of activates members */
-    private static HashMap<Integer, Session> sessions = new HashMap<>();
+    private static HashMap<UUID, Session> sessions = new HashMap<>();
 
     /***********SUPER ADMIN HANDLE**************** */
 
@@ -46,7 +46,7 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean isLoggedInSuperAdmin(int sId){
+    public static boolean isLoggedInSuperAdmin(UUID sId){
         if (!sessions.containsKey(sId))
             return false;
         Session session = sessions.get(sId);
@@ -62,7 +62,7 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean loginSuperAdmin(int sId, String superAdminName) {
+    public static boolean loginSuperAdmin(UUID sId, String superAdminName) {
         if(sessions.containsKey(sId))
             return false;
 
@@ -104,7 +104,7 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean logInMember(int sId, String forumName, String userName) {
+    public static boolean logInMember(UUID sId, String forumName, String userName) {
         if (sessions.containsKey(sId))
             return false;
         Forum forum  = ForumFacade.getForum(forumName);
@@ -119,7 +119,7 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean logOut(int sId) {
+    public static boolean logOut(UUID sId) {
         if(!sessions.containsKey(sId))
             return false;
         Session session = sessions.get(sId);
@@ -139,7 +139,7 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean isLoggedInMember(int sId){
+    public static boolean isLoggedInMember(UUID sId){
         if(!sessions.containsKey(sId))
             return false;
         Session session = sessions.get(sId);
@@ -149,14 +149,14 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean isRegisteredMember(int sId, String userName){
+    public static boolean isRegisteredMember(UUID sId, String userName){
         Session session = sessions.get(sId);
         if (!session._forum.isRegisteredMember(userName))
             return false;
         return true;
     }
 
-    public static boolean addFriend(int sId, String otherUserName) {
+    public static boolean addFriend(UUID sId, String otherUserName) {
         Session session = sessions.get(sId);
 
         if (session._member.getUserName().equals(otherUserName))
@@ -202,7 +202,7 @@ public class UserFacade {
         return Result.SUCCESS;
     }
 
-    public static boolean isForumManager(int sId) {
+    public static boolean isForumManager(UUID sId) {
         Session session = sessions.get(sId);
         if (null == session)
             return false;
@@ -210,7 +210,7 @@ public class UserFacade {
         return session._forum.isForumManager(session._member.getUserName());
     }
 
-    public static boolean addModerator(int sId, String subForumName, String moderatorName){
+    public static boolean addModerator(UUID sId, String subForumName, String moderatorName){
         Session session = sessions.get(sId);
         if (null == session)
             return false;
@@ -225,7 +225,7 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean removeModerator(int sId, String subForumName, String moderatorName){
+    public static boolean removeModerator(UUID sId, String subForumName, String moderatorName){
         Session session = sessions.get(sId);
         if (null == session)
             return false;
@@ -240,7 +240,7 @@ public class UserFacade {
         return true;
     }
 
-    public static boolean removeFriend(int sId, String friendUserName) {
+    public static boolean removeFriend(UUID sId, String friendUserName) {
         Session session = sessions.get(sId);
         if (null == session)
             return false;
@@ -255,7 +255,7 @@ public class UserFacade {
         return true;
     }
 
-    protected static Session getSession(int sId) {
+    protected static Session getSession(UUID sId) {
         return sessions.get(sId);
     }
 
@@ -268,13 +268,14 @@ public class UserFacade {
         superAdmins.clear();
         //TODO sessions.clear();
     }
-    public static void resetForumMembers(String forumName) {
-        // TODO - users.clear();
-        Forum forum = ForumFacade.getForum(forumName);
-        forum.resetMembers();
-    }
 
-    public static void reset() {
+    /**
+     * un-initialize the system
+     * used only for the testing
+     */
+    public static void resetSystem() {
+        UserFacade.resetSuperAdmins();
+        ForumFacade.resetForums();
         sessions.clear();
     }
 }

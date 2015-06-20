@@ -8,6 +8,7 @@ import org.bgu.domain.model.SubForum;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.UUID;
 
 /**
  * Created by gur on 20/04/2015.
@@ -43,21 +44,21 @@ public class ForumFacade {
         return forumIdGenerator++;
     }
 
-    public static int createSubForum(int sId, String subForumName, Collection<String> moderators){
+    public static int createSubForum(UUID sId, String subForumName, Collection<String> moderators){
         Session session = UserFacade.getSession(sId);
         if (null == session)
             return -1;
         return session._forum.addNewSubForum(subForumName, moderators);
     }
 
-    public static int addNewThread(int sId, String subForumName, String threadTitle, String threadBody) {
+    public static int addNewThread(UUID sId, String subForumName, String threadTitle, String threadBody) {
         Session session = UserFacade.getSession(sId);
         if (null == session)
             return -1;
         return session._forum.addNewThread(subForumName, session._member, threadTitle, threadBody);
     }
 
-    public static int postNewComment(int sId, String subForumName, int msgId, String commentTitle, String commentBody) {
+    public static int postNewComment(UUID sId, String subForumName, int msgId, String commentTitle, String commentBody) {
         Session session = UserFacade.getSession(sId);
         if (null == session)
             return -1;
@@ -73,28 +74,28 @@ public class ForumFacade {
         return false;
     }
 
-    public static boolean removeSubForum(int sId, String subForumName) {
+    public static boolean removeSubForum(UUID sId, String subForumName) {
         Session session = UserFacade.getSession(sId);
         if (null == session)
             return false;
         return (session._forum.removeSubForum(subForumName));
     }
 
-    public static boolean editMessage(int sId, String subForumName, int msgId, String edittedTitle, String edittedBody) {
+    public static boolean editMessage(UUID sId, String subForumName, int msgId, String edittedTitle, String edittedBody) {
         Session session = UserFacade.getSession(sId);
         if (null == session)
             return false;
         return session._forum.editMessage(subForumName, session._member, msgId, edittedTitle, edittedBody);
     }
 
-    public static boolean removeMessage(int sId, String subForumName, int msgId) {
+    public static boolean removeMessage(UUID sId, String subForumName, int msgId) {
         Session session = UserFacade.getSession(sId);
         if (null == session)
             return false;
         return session._forum.removeMessage(subForumName, session._member, msgId);
     }
 
-    public static SubForum getSubForum(int sId, String subForumName) {
+    public static SubForum getSubForum(UUID sId, String subForumName) {
         Session session = UserFacade.getSession(sId);
         if (null == session)
             return null;
