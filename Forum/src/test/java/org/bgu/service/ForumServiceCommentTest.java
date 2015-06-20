@@ -35,10 +35,13 @@ public class ForumServiceCommentTest extends abstractTest{
         mods.add("hodai");
         assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "hodai", "hodai"));
         assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "melki", "melki"));
+        assertEquals(Result.SUCCESS, UserFacade.addMember(forum.getForumName(), "kerzman", "kerzman"));
 
         // login as admin TODO - replace tests to use regular member and create sub-forum using facade directly
         loginModerate();
         loginAdmin();
+        loginGoldMember();
+        loginMember();
 
         assertEquals(Result.SUCCESS, ForumService.addNewSubForum(managerSid, SUB_FORUM_NAME, mods)._result);
         assertEquals(Result.SUCCESS, ForumService.addNewThread(managerSid, SUB_FORUM_NAME, TREAD_TITLE1, THREAD_MSG1)._result);
@@ -51,7 +54,91 @@ public class ForumServiceCommentTest extends abstractTest{
         /* comments tests */
 
     @Test
-    public void addNewComment_correctData_successNewThreadAdded() {
-        assertEquals(Result.SUCCESS, ForumService.addNewThread(moderateSid, SUB_FORUM_NAME, "condoms", "how to use them?")._result);
+    public void addNewThread_correctData_successNewThreadAdded() {
+        assertEquals(Result.SUCCESS, ForumService.addNewThread(goldMemberSid, SUB_FORUM_NAME, "condoms", "how to use them?")._result);
+    }
+
+    @Test
+    public void deleteThread_ByCreator_successThreadRemoved(){
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(goldMemberSid, SUB_FORUM_NAME, "condoms", "how to use them?");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.SUCCESS, ForumService.removeMessage(goldMemberSid, SUB_FORUM_NAME, returnedMessageObj._value)._result);
+    }
+
+    @Test
+    public void deleteThread_ByOther_fail(){
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(goldMemberSid, SUB_FORUM_NAME, "condoms", "how to use them?");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.REMOVE_COMMENT_FAILED, ForumService.removeMessage(memberSid, SUB_FORUM_NAME, returnedMessageObj._value)._result);
+    }
+
+    @Test
+    public void deleteThread_ByGoldMember_successThreadRemoved(){
+        for(int i = 0; i<8; i++){
+            addNewThread_correctData_successNewThreadAdded();
+        }
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(memberSid, SUB_FORUM_NAME, "condoms - results", "i know how to use them!");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.SUCCESS, ForumService.removeMessage(goldMemberSid,SUB_FORUM_NAME,returnedMessageObj._value)._result);
+    }
+
+    @Test
+    public void editThread_ByCreator_successThreadEdited(){
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(goldMemberSid, SUB_FORUM_NAME, "condoms", "how to use them?");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.SUCCESS, ForumService.editMessage(goldMemberSid, SUB_FORUM_NAME, returnedMessageObj._value, "condoms", "how to wear them?")._result);
+    }
+
+    @Test
+    public void editThread_ByOther_fail(){
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(goldMemberSid, SUB_FORUM_NAME, "condoms", "how to use them?");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.EDIT_COMMENT_FAILED, ForumService.editMessage(memberSid, SUB_FORUM_NAME, returnedMessageObj._value, "condoms - results", "i don't know how to use them!")._result);
+    }
+
+    @Test
+    public void editThread_ByGoldMember_successThreadEdited(){
+        for(int i = 0; i<8; i++){
+            addNewThread_correctData_successNewThreadAdded();
+        }
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(memberSid, SUB_FORUM_NAME, "condoms - results", "i know how to use them!");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.SUCCESS, ForumService.editMessage(goldMemberSid, SUB_FORUM_NAME, returnedMessageObj._value, "condoms - results", "i don't know how to use them!")._result);
+    }
+
+    @Test
+         public void editThread_ByGoldMemberWithNoData_fail(){
+        for(int i = 0; i<8; i++){
+            addNewThread_correctData_successNewThreadAdded();
+        }
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(memberSid, SUB_FORUM_NAME, "condoms - results", "i know how to use them!");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.EDIT_COMMENT_FAILED, ForumService.editMessage(goldMemberSid, SUB_FORUM_NAME, returnedMessageObj._value, "", "")._result);
+    }
+
+    @Test
+    public void editThread_ByCreatorWithNoData_fail(){
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(goldMemberSid, SUB_FORUM_NAME, "condoms", "how to use them?");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.EDIT_COMMENT_FAILED, ForumService.editMessage(goldMemberSid, SUB_FORUM_NAME, returnedMessageObj._value, "", "")._result);
+    }
+
+    @Test
+    public void editThread_ByGoldMemberWithOnlyTitleOrBody_fail(){
+        for(int i = 0; i<8; i++){
+            addNewThread_correctData_successNewThreadAdded();
+        }
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(memberSid, SUB_FORUM_NAME, "condoms - results", "i know how to use them!");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.SUCCESS, ForumService.editMessage(goldMemberSid, SUB_FORUM_NAME, returnedMessageObj._value, "condoms - results", "")._result);
+        assertEquals(Result.SUCCESS, ForumService.editMessage(goldMemberSid, SUB_FORUM_NAME, returnedMessageObj._value, "", "i know how to use them!")._result);
+    }
+
+    @Test
+    public void editThread_ByCreatorWithOnlyTitleOrBody_fail(){
+        RetObj<Integer> returnedMessageObj = ForumService.addNewThread(goldMemberSid, SUB_FORUM_NAME, "condoms", "how to use them?");
+        assertEquals(Result.SUCCESS, returnedMessageObj._result);
+        assertEquals(Result.SUCCESS, ForumService.editMessage(goldMemberSid, SUB_FORUM_NAME, returnedMessageObj._value, "condoms - results", "")._result);
+        assertEquals(Result.SUCCESS, ForumService.editMessage(goldMemberSid, SUB_FORUM_NAME, returnedMessageObj._value, "", "i know how to use them!")._result);
     }
 }

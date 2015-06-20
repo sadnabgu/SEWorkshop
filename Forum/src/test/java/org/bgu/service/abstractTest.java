@@ -20,11 +20,17 @@ public abstract class abstractTest {
     public static final String MANAGER1_PASS = "pass1";
     public static final String MANAGER2_NAME = "manager2";
     public static final String MANAGER2_PASS = "pass2";
+    public static final String MEMBER_NAME = "member";
+    public static final String MEMEBER_PASS = "memberpass";
+    public static final String GOLD_NAME = "kerzman";
+    public static final String GOLD_PASS = "kerzman";
 
     public static final String FORUM_NAME = "sex";
+    public static UUID memberSid;
     public static UUID managerSid;
     public static UUID moderateSid;
     public static UUID superAdminSid;
+    public static UUID goldMemberSid;
 
 
     /** utills */
@@ -45,6 +51,12 @@ public abstract class abstractTest {
 
     protected static void loginAdmin(){
         managerSid = login(FORUM_NAME, MANAGER1_NAME, MANAGER1_PASS);
+    }
+    protected static void loginGoldMember(){
+        goldMemberSid = login(FORUM_NAME, GOLD_NAME, GOLD_PASS);
+    }
+    protected static void loginMember(){
+        memberSid = login(FORUM_NAME, "melki", "melki");
     }
     protected static void loginModerate(){
         moderateSid = login(FORUM_NAME, "hodai", "hodai");
