@@ -1,5 +1,7 @@
 package org.bgu.domain.model;
 
+import org.bgu.domain.model.notification.Subject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,7 +10,7 @@ import java.util.Iterator;
 /**
  * Created by gur on 20/04/2015.
  */
-public class Forum {
+public class Forum extends Subject{
     private int _forumId;
     private static Collection<SubForum> _subForums;
     private String _name;

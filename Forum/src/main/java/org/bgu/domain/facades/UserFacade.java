@@ -195,7 +195,7 @@ public class UserFacade {
     }
 
     public static Result addMember(String forumName, String userName, String pass) {
-        // TODO refactor
+        // TODO refactor - join with register member
         Forum forum = ForumFacade.getForum(forumName);
         if (forum == null)
             return Result.FORUM_NOT_FOUND;
