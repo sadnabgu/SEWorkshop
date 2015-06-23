@@ -38,7 +38,9 @@ public enum Result {
     NEW_COMMENT_FAIL("posting the new comment failed. please fill title or body"),
     REMOVE_COMMENT_FAILED("removal of the message failed"),
     EDIT_COMMENT_FAILED("edit of message failed"),
-    NAME_OR_PASS_MISSING("userName or password are null");
+    NAME_OR_PASS_MISSING("userName or password are null"),
+    SUBFORUM_NOT_FOUND("the given sub forum didn't found");
+
     final public String _desc;
 
     Result(String description){

@@ -2,6 +2,7 @@ package org.bgu.service;
 
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
+import org.bgu.domain.model.Message;
 import org.bgu.service.Exceptions.Result;
 import org.bgu.service.Exceptions.RetObj;
 
@@ -118,6 +119,49 @@ public class ForumService {
     }
 
     /**
+     * @return - array of all the forums names as strings
+     */
+    public static RetObj<ArrayList<String>> getAllForums() {
+        ArrayList<String> forums = ForumFacade.getAllForums();
+        if (null == forums){
+            return new RetObj<>(Result.FAIL);
+        } else {
+            return new RetObj<>(Result.SUCCESS, forums);
+        }
+    }
+
+    /**
+     * @param sId - session Id
+     * @return - array of all the sub forums in the session forum
+     *           forum must be defined for the given 'sId'.
+     */
+    public static RetObj<ArrayList<String>> getAllSubForums(UUID sId) {
+        ArrayList<String> subForums = ForumFacade.getAllSubForums(sId);
+        if (null == subForums){
+            return new RetObj<>(Result.FAIL);
+        } else {
+            return new RetObj<>(Result.SUCCESS, subForums);
+        }
+    }
+
+    public static RetObj<Collection<ServiceMessage>> getAllThreads(UUID sId, String subForumName) {
+        if (!ForumFacade.getAllSubForums(sId).contains(subForumName)){
+            return new RetObj<>(Result.SUBFORUM_NOT_FOUND);
+        }
+        Collection<Message> threads = ForumFacade.getAllThreads(sId, subForumName);
+        if (null == threads){
+            return new RetObj<>(Result.FAIL);
+        } else {
+            Collection<ServiceMessage> serviceMessages = new ArrayList<>();
+            for(Message message : threads){
+                serviceMessages.add(new ServiceMessage(message));
+            }
+            return new RetObj<>(Result.SUCCESS, serviceMessages);
+        }
+    }
+
+
+    /**
      * change the properties of this specific forum
      * <p>
      * TODO - need to implement
@@ -127,13 +171,5 @@ public class ForumService {
     public static boolean setProperties() {
         //TODO - implement
         return false;
-    }
-
-    public static ArrayList<String> getAllForums() {
-        return ForumFacade.getAllForums();
-    }
-
-    public static ArrayList<String> getAllSubForums(String forumName) {
-        return ForumFacade.getAllSubForums(forumName);
     }
 }

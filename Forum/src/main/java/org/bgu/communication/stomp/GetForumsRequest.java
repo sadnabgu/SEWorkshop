@@ -1,8 +1,11 @@
 package org.bgu.communication.stomp;
 
 import org.bgu.communication.protocol.StompProtocol;
+import org.bgu.service.Exceptions.Result;
+import org.bgu.service.Exceptions.RetObj;
 import org.bgu.service.ForumService;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -13,8 +16,15 @@ public class GetForumsRequest extends StompClientFrame{
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        Collection<String> forums =ForumService.getAllForums();
+        RetObj<ArrayList<String>> retObj =ForumService.getAllForums();
+        if (retObj._result != Result.SUCCESS){
+            //TODO - send fail
+            GeneralStompFrame gfs = new GeneralStompFrame(getCommand(), null, "fail");
+            gfs.addHeader("error", retObj._result.toString());
+            return gfs;
+        }
 
+        ArrayList<String> forums = retObj._value;
         StringBuilder forumString = new StringBuilder();
         for (String current: forums){
             forumString.append(current + "\n");
