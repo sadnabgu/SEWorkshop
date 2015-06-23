@@ -1,4 +1,4 @@
-package org.bgu.service;
+package org.bgu.service.ServiceObjects;
 
 import org.bgu.domain.model.Message;
 

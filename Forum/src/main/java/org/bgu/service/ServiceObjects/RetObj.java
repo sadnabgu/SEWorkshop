@@ -1,4 +1,4 @@
-package org.bgu.service.Exceptions;
+package org.bgu.service.ServiceObjects;
 
 /**
  * Created by hodai on 6/16/15.

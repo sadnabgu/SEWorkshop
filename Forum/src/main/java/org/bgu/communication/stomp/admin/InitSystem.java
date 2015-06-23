@@ -5,8 +5,7 @@ import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.LoginRequest;
 import org.bgu.communication.stomp.StompFrame;
 import org.bgu.service.AdminService;
-import org.bgu.service.Exceptions.ForumException;
-import org.bgu.service.Exceptions.RetObj;
+import org.bgu.service.ServiceObjects.RetObj;
 
 import java.util.HashMap;
 

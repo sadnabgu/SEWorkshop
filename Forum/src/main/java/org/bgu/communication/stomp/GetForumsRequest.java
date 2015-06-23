@@ -1,13 +1,11 @@
 package org.bgu.communication.stomp;
 
 import org.bgu.communication.protocol.StompProtocol;
-import org.bgu.service.Exceptions.Result;
-import org.bgu.service.Exceptions.RetObj;
+import org.bgu.service.ServiceObjects.Result;
+import org.bgu.service.ServiceObjects.RetObj;
 import org.bgu.service.ForumService;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 public class GetForumsRequest extends StompClientFrame{
     public GetForumsRequest(String command) {

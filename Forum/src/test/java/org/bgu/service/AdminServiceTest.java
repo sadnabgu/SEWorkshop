@@ -1,11 +1,9 @@
 package org.bgu.service;
 import org.bgu.domain.facades.UserFacade;
-import org.bgu.service.Exceptions.Result;
+import org.bgu.service.ServiceObjects.Result;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 

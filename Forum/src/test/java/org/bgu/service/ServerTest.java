@@ -1,7 +1,7 @@
 package org.bgu.service;
 
 import org.bgu.communication.server.Server;
-import org.bgu.service.Exceptions.ForumException;
+import org.bgu.service.ServiceObjects.ForumException;
 import org.junit.Ignore;
 import org.junit.Test;
 

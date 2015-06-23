@@ -1,13 +1,9 @@
 package org.bgu.service;
 
-import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
-import org.bgu.domain.model.Member;
-import org.bgu.domain.model.User;
-import org.bgu.service.Exceptions.Result;
-import org.bgu.service.Exceptions.RetObj;
+import org.bgu.service.ServiceObjects.Result;
+import org.bgu.service.ServiceObjects.RetObj;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
