@@ -145,6 +145,12 @@ public class ForumService {
         }
     }
 
+    /**
+     * return all the sub-forum ('subForumName') threads as collection of ServiceMessages
+     * @param sId - session id
+     * @param subForumName - the name of the sub-forum
+     * @return all the sub-forum ('subForumName') threads as collection of ServiceMessages
+     */
     public static RetObj<Collection<ServiceMessage>> getAllThreads(UUID sId, String subForumName) {
         if (!ForumFacade.getAllSubForums(sId).contains(subForumName)){
             return new RetObj<>(Result.SUBFORUM_NOT_FOUND);
@@ -161,6 +167,15 @@ public class ForumService {
         }
     }
 
+    /**
+     * return all the messages (as ServiceMessages) that are comment of the message (messageId)
+     * message id can be a thread opening message or a comment to another message.
+     *
+     * @param sId - session id
+     * @param subForum - the name of the sub-forum
+     * @param messageId - the id of the source message
+     * @return collection of 'ServiceMessages' contain all the comments
+     */
     public static RetObj<Collection<ServiceMessage>> getAllComments(UUID sId, String subForum, int messageId){
         Collection<Message> messages = ForumFacade.getAllComments(sId, subForum, messageId);
         Collection<ServiceMessage> serviceMessages = new ArrayList<>();
@@ -174,6 +189,21 @@ public class ForumService {
         }
     }
 
+    /**
+     * return the content of an message as 'ServiceMessage'
+     * @param sId - session id
+     * @param subForum - the sub-forum
+     * @param messageId - the wanted message id
+     * @return - return the content of the message 'messageId' as 'ServiceMessage'
+     */
+    public static RetObj<ServiceMessage> getMessage(UUID sId, String subForum, int messageId){
+        Message message = ForumFacade.getMessage(sId, subForum, messageId);
+        if (null == message){
+            return new RetObj<>(Result.FAIL);
+        } else {
+            return new RetObj<>(Result.SUCCESS, new ServiceMessage(message));
+        }
+    }
 
     /**
      * change the properties of this specific forum

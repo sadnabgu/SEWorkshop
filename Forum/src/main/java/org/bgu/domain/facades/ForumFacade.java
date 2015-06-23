@@ -154,6 +154,20 @@ public class ForumFacade {
 
     }
 
+    public static Message getMessage(UUID sId, String subForumName, int msgId) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
+            return null;
+        Forum forum = session._forum;
+        if (null == forum)
+            return null;
+        SubForum subForum = forum.getSubForumByName(subForumName);
+        if (null == subForum)
+            return null;
+        return subForum.getMessage(msgId);
+
+    }
+
 
     /*************************************************/
     /*****************FOR TESTING*********************/
@@ -170,6 +184,5 @@ public class ForumFacade {
         Forum forum = getForum(forumName);
         forum.resetSubForums();
     }
-
 }
 

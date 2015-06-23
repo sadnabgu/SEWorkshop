@@ -67,27 +67,30 @@ public class SubForum {
         }
     }
 
+    /**
+     * add new comment for the given message
+     * @param creator - the creator of this comment
+     * @param msgId - message id
+     * @param commentTitle - title
+     * @param commentBody - comment body
+     * @return - the mew comment id,
+     *           or -1 of ilegal inputs,
+     *           or -2 if message 'nsgId' not found
+     */
     public int postNewComment(Member creator, int msgId, String commentTitle, String commentBody) {
         int newMsgId = msgIdGenerator();
         if (commentTitle.isEmpty() && commentBody.isEmpty()){
             return -1;
-        }
-        else{
+        } else {
             Message newMsg = new Message(newMsgId, creator, commentTitle, commentBody);
-            boolean flag = false;
-            for (Message t : threads){
-                Message relevantMsg;
-                relevantMsg = t.searchForMsgId(msgId);
-                if (null != relevantMsg) {
-                    relevantMsg.addNewComment(newMsg);
-                    flag = true;
-                    break;
-                }
+            Message relevantMsg = getMessage(msgId);
+            if (null != relevantMsg) {
+                relevantMsg.addNewComment(newMsg);
+                creator.updateNumberOfMessage();
+                return newMsg.getMsgId();
+            } else {
+                return -2;
             }
-            if (!flag)
-                return -1;
-            creator.updateNumberOfMessage();
-            return newMsg.getMsgId();
         }
     }
 
@@ -119,41 +122,39 @@ public class SubForum {
         if (edittedBody.isEmpty() && edittedTitle.isEmpty()){
             return false;
         }
-        else{
-            for (Message t : threads){
-                if (t.getMsgId() == msgId) {
-                    if ((t.getCreator().getUserName().equals(editor.getUserName())) || editor.getType()==MemberTypes.GOLD) {
-                        t.edit(edittedTitle, edittedBody);
-                        return true;
-                    }
-                    return false;
+        else {
+            Message msg = getMessage(msgId);
+            if (null != msg) {
+                if ((msg.getCreator().getUserName().equals(editor.getUserName())) || editor.getType() == MemberTypes.GOLD) {
+                    msg.edit(edittedTitle, edittedBody);
+                    return true;
                 }
-                Message relevantMsg;
-                relevantMsg = t.searchForMsgId(msgId);
-                if (null != relevantMsg) {
-                    if (relevantMsg.getCreator().getUserName().equals(editor.getUserName())) {
-                        t.edit(edittedTitle, edittedBody);
-                        return true;
-                    }
-                    return false;
-                }
+                return false;
+            } else {
+                return false;
             }
-            return false;
         }
     }
 
     public Collection<Message> getComments(int msgId) {
+        Message msg = getMessage(msgId);
+        if (null != msg){
+            return msg.getComments();
+        }
+        return null;
+    }
+
+    public Message getMessage(int msgId) {
         for (Message t : threads){
             if (t.getMsgId() == msgId) {
-                return t.getComments();
+                return t;
             }
             Message relevantMsg;
             relevantMsg = t.searchForMsgId(msgId);
             if (null != relevantMsg) {
-                return relevantMsg.getComments();
+                return relevantMsg;
             }
         }
         return null;
-
     }
 }
