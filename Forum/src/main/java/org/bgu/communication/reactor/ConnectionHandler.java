@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 /**
  * Handles messages from clients
  */
-public class ConnectionHandler<T> implements IStompOutput {
+public class ConnectionHandler<T extends StompFrame> implements IStompOutput {
     private static final int BUFFER_SIZE = 1024;
     private static final Logger logger = Logger.getLogger("edu.spl.reactor");
     
@@ -56,7 +56,7 @@ public class ConnectionHandler<T> implements IStompOutput {
         _task = new ProtocolTask<T>(_protocol, _tokenizer, this);
     }
  
-    public static <T> ConnectionHandler<T> create(SocketChannel sChannel, ReactorData<T> data, SelectionKey key) {
+    public static <T extends StompFrame> ConnectionHandler<T> create(SocketChannel sChannel, ReactorData<T> data, SelectionKey key) {
         ConnectionHandler<T> handler = new ConnectionHandler<T>(sChannel, data, key);
         ((StompProtocol)handler._protocol).init(handler);
         handler.initialize();

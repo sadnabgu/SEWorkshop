@@ -1,6 +1,7 @@
 package org.bgu.communication.reactor;
  
 import org.bgu.communication.protocol.ServerProtocol;
+import org.bgu.communication.stomp.StompFrame;
 import org.bgu.communication.tokenizer.MessageTokenizer;
 
 import java.nio.ByteBuffer;
@@ -11,7 +12,7 @@ import java.nio.charset.CharacterCodingException;
  * possibly returning a reply. This class is implemented as an executor task.
  * 
  */
-public class ProtocolTask<T> implements Runnable {
+public class ProtocolTask<T extends StompFrame> implements Runnable {
  
     private final ServerProtocol<T> _protocol;
     private final MessageTokenizer<T> _tokenizer;
@@ -29,6 +30,7 @@ public class ProtocolTask<T> implements Runnable {
       // go over all complete messages and process them.
       while (_tokenizer.hasMessage()) {
          T msg = _tokenizer.nextMessage();
+         msg.setContext(this);
          T response = this._protocol.processMessage(msg);
          if (response != null) {
             try {
@@ -38,6 +40,8 @@ public class ProtocolTask<T> implements Runnable {
          }
       }
     }
+
+    public ConnectionHandler<T> getConnectionHandler(){ return _handler; }
  
     public void addBytes(ByteBuffer b) {
         _tokenizer.addBytes(b);
