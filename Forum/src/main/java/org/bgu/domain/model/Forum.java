@@ -1,5 +1,7 @@
 package org.bgu.domain.model;
 
+import org.bgu.domain.model.notification.NotificationStrategy;
+import org.bgu.domain.model.notification.NotificationType;
 import org.bgu.domain.model.notification.Subject;
 
 import java.util.ArrayList;
@@ -19,17 +21,16 @@ public class Forum extends Subject{
     private ForumSecurityPolicy _forumSecurityPolicy;
     private ForumPermitionPolicy _forumPermitionPolicy;
     private ForumPostingPolicy _forumPostingPolicy;
-
     //TODO - change to ORM
     /** collection of all the members and moderates and managers of this forum */
     private Collection<Member> _members;
     /** Collection of all the managers of this forum (sub-set of _members) */
     private Collection<Member> _managers;
-
     /* cache memorry for logged in members */
     private  HashMap<String, Member> _loggedInMembers = new HashMap<>();
-
     private int _subForumIdGenerate;
+
+    private NotificationType _notification;
 
 
     public Forum(int forumId, String forumName, Member manager){
@@ -83,6 +84,7 @@ public class Forum extends Subject{
     }
 
     public int addNewThread(String subForumName, Member creator, String threadTitle, String threadBody) {
+        //TODO - add notifications
         SubForum subForum = getSubForumByName(subForumName);
 
         if (subForum == null)
@@ -92,6 +94,7 @@ public class Forum extends Subject{
     }
 
     public int postNewComment(String subForumName, Member creator, int msgId, String commentTitle, String commentBody) {
+        //TODO - add notification
         SubForum subForum = getSubForumByName(subForumName);
         if (subForum == null)
             return -1;  // sub forum not found
@@ -165,6 +168,8 @@ public class Forum extends Subject{
             return null;
         Member member = getMemberByName(memberName);
         _loggedInMembers.put(memberName, member);
+        _notification = NotificationType.LOG_IN_FORUM;
+        notifyObserver();
         return member;
     }
 
@@ -209,6 +214,28 @@ public class Forum extends Subject{
         return _members;
     }
 
+    public Collection<Member> getLoggedInMembers(){
+        return _loggedInMembers.values();
+    }
+
+    @Override
+    public void notifyObserver() {
+        for (NotificationStrategy ns : _Observers){
+            ns.update(this);
+        }
+    }
+
+    @Override
+    public Collection<Member> getContext() {
+        return getMembers();
+    }
+
+    @Override
+    public NotificationType getNotificationType() {
+
+        return _notification;
+    }
+
     /*****FORUM USERS MANAGEMENT****/
 
 
@@ -224,4 +251,6 @@ public class Forum extends Subject{
     public void resetSubForums(){
         _subForums.clear();
     }
+
+
 }

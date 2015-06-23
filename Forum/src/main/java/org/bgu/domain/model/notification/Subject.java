@@ -1,5 +1,8 @@
 package org.bgu.domain.model.notification;
 
+import org.bgu.domain.model.Member;
+
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -7,25 +10,22 @@ import java.util.Collection;
  */
 public abstract class Subject {
 
-    protected Collection<Observer> _Observers;
-    protected NotificationStrategy _strategy;
+    protected Collection<NotificationStrategy> _Observers = new ArrayList<>();
 
-    public void registerObserver(Observer observer){
-        _Observers.add(observer);
-    }
-
-    public boolean unRegisterObserver(Observer observer){
-        // TODO - maybe remove observers by their data equality
-        if (_Observers.contains(observer)){
-            return false;
-        } else {
-            _Observers.remove(observer);
-            return true;
+    public void attach(NotificationStrategy notifier){
+        if (!_Observers.contains(notifier)) {
+            _Observers.add(notifier);
         }
     }
 
-    public void notify(NotificationType type){
-        _strategy.notify(this, type);
+    public void detach(NotificationStrategy notifier){
+        if (_Observers.contains(notifier) )_Observers.remove(notifier);
     }
+
+    public abstract void notifyObserver();
+
+    public abstract Collection<Member> getContext();
+
+    public abstract NotificationType getNotificationType();
 
 }

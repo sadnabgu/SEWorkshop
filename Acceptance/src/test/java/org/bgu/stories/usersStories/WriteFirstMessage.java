@@ -1,9 +1,6 @@
 package org.bgu.stories.usersStories;
 
-import org.bgu.MemberCredentials;
-import org.bgu.MemberDriver;
-import org.bgu.MessageDriver;
-import org.bgu.SubForumTestDriver;
+import org.bgu.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -47,9 +44,6 @@ public class WriteFirstMessage extends TestBase {
     *
      */
     public void WriteFirstMessageWithValidDataByMember_UserIsSignedUp_MessageIsPublished(){
-        SubForumTestDriver subForum = forumTestDriver.createNewSubForum();
-        MessageDriver message = new MessageDriver(subForum, "hello ppl");
-
 
 
     }

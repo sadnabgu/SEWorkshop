@@ -76,14 +76,13 @@ public class UserFacade {
         return null;
     }
 
-    /***********SUPER ADMIN HANDLE**************** */
-
-    public static User createGuest() {
-        //TODO - ??
-        return new Guest();
+    public static Collection<Session> getAllSessions(){
+        Collection<Session> opennedSessions = new ArrayList<>();
+        for (Session s : sessions.values()){
+            opennedSessions.add(s);
+        }
+        return opennedSessions;
     }
-
-    /***********FORUM USERS HANDLE**************** */
 
     public static boolean validatePassword(UUID sId, String userName, String pass){
         if(!sessions.containsKey(sId))

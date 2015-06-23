@@ -1,8 +1,12 @@
 package org.bgu.communication.stomp;
 
 import org.bgu.communication.reactor.ProtocolTask;
+import org.bgu.domain.model.Session;
+import org.bgu.domain.model.notification.NotificationType;
 
+import java.awt.*;
 import java.util.Hashtable;
+import java.util.UUID;
 
 /**
  * Created by gur on 22/06/2015.
@@ -32,5 +36,10 @@ public class Sessions {
 
     public void remove(String id){
         sessions.remove(id);
+    }
+
+    public void setNotificationPush(NotificationType type, UUID Sid){
+        //TODO - buid protocol frame for notifying the client on session sid that type notification has occured
+        System.out.println("notifying....");
     }
 }

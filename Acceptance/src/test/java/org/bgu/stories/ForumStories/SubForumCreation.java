@@ -1,84 +1,57 @@
 package org.bgu.stories.ForumStories;
 
-import org.bgu.domain.facades.ForumFacade;
-import org.bgu.domain.model.Forum;
-import org.bgu.domain.model.Member;
-import org.bgu.domain.model.SubForum;
-import org.junit.Ignore;
+import org.bgu.ForumCreatedTestBase;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Sharon Kerzman on 24/04/2015.
  */
-public class SubForumCreation {
+public class SubForumCreation extends ForumCreatedTestBase {
+
     @Test
-    /*
-    *Test purpose: Sub Forum is in created after giving correct data
-    *
-    * Steps:
-    * 1. insert correct data
-    * 2. verify: sub forum is created
-    *
-    * TODO - work with Junit !!!
-    *
-     */
-    public void createSubForumWithCorrectData_ForumCreation_NewSubForumIsCreated(){
-        System.out.print("testing 'createForumWithCorrectData_SystemInitialized_NewForumInWaitingState' \n");
-        // Setup system to initial state
-        // ForumFacade forumFacade = new ForumFacade();
-
-        // Forum creation
-        int forumID = 1234;
-        String forumName = "Tapuz";
-        Forum forumCreated = ForumFacade.createForum(forumID, forumName, "admin", "pass");
-
-        // Member creation
-        String memberName = "Milky";
-        String memberPass = "ParrotOnTheShoulder";
-        Member member = new Member(memberName, memberPass);
-
-        // Simulate Super-Admin clicks Create Sub Forum button
-        String subName = "Cars";
-
-        // Insert valid data
-        boolean flag = forumCreated.addNewSubForum(subName, member);
-
-        // verify : Query system so it has a new Sub forum is created
-        SubForum subForumReturned = forumCreated.getSubForum(subName);
-        if (flag &&
-                subForumReturned != null &&
-                subName.equals(subForumReturned.getName())
-            ){
-            System.out.print("Passed! :) \n");
-        }else {
-            System.out.print("Failed! :( \n");
-        }
-
-        // Clear forum data
-        ForumFacade.resetForums();
-
-
+    public void createNewSubForum_byAdmin_pass_testID_5_1() {
+        assertTrue("could not log out admin", bridge.login(ADMIN1_NAME,ADMIN1_PASS));
+        assertTrue("could not create sub forum", bridge.createSubForum(SUBFORUM_NAME, moderates));
     }
 
-        @Test
-        @Ignore
-    /*
-    *Test purpose: Sub Forum is not exists after giving incorrect data
-    *
-    * Steps:
-    * 1. insert correct data
-    * 2. verify: sub forum is not exists
-    *
-     */
-        public void createSubForumWithInCorrectData_ForumCreation_NewSubForumIsNotCreated(){
-            // TODO: Setup system to initial state
+    @Test
+    public void createNewSubForum_byManager_pass_testID_5_2() {
+        assertTrue("could not log in manager", bridge.login(MANAGER_NAME, MANAGER_PASS));
+        assertTrue("could not create sub forum", bridge.createSubForum(SUBFORUM_NAME, moderates));
+    }
 
-            // TODO: Forum creation
+    @Test
+    public void createNewSubForum_byAdminWithNoModerates_fail_testID_5_3() {
+        moderates.remove(MODERATE_NAME);
+        assertTrue("could not log out admin", bridge.login(ADMIN1_NAME, ADMIN1_PASS));
+        assertFalse("able to create sub forum with no moderate", bridge.createSubForum(SUBFORUM_NAME, moderates));
+    }
 
-            // TODO: Simulate Super-Admin clicks Create Sub Forum button
+    @Test
+    public void createNewSubForum_byManagerWithNoModeates_fail_testID_5_4() {
+        moderates.remove(MODERATE_NAME);
+        assertTrue("could not log in manager", bridge.login(MANAGER_NAME, MANAGER_PASS));
+        assertFalse("able to create sub forum with no moderate", bridge.createSubForum(SUBFORUM_NAME, moderates));
+    }
 
-            // TODO: Insert invalid data
+    @Test
+    public void createNewSubForum_byMember_fail_testID_5_5() {
+        assertTrue("could not log in manager", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertFalse("member is able to create sub forum", bridge.createSubForum(SUBFORUM_NAME, moderates));
+    }
 
-            // TODO: verify : new Sub Forum is not exists
-        }
+    @Test
+    public void createNewSubForum_byGuest_pass_testID_5_6() {
+        assertFalse("guest is able to create sub forum", bridge.createSubForum(SUBFORUM_NAME, moderates));
+    }
+
+    @Test
+    public void createNewSubForum_WithExsitingName_pass_testID_5_7() {
+        assertTrue("could not log out admin", bridge.login(ADMIN1_NAME,ADMIN1_PASS));
+        assertTrue("could not create sub forum", bridge.createSubForum(SUBFORUM_NAME, moderates));
+        assertFalse("able to create sub forum with existing name", bridge.createSubForum(SUBFORUM_NAME, moderates));
+    }
 }
