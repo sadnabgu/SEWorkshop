@@ -74,4 +74,16 @@ public class AdminService {
         return new RetObj<>(Result.SUCCESS);
     }
 
+    /**
+     *
+     * @param siD - some session just oppend with the server
+     * @return
+     */
+    public static RetObj<Boolean> isInitializedSystem(UUID siD){
+        if (!UserFacade.isInitializedSystem()){
+            return new RetObj<>(Result.UNINITIALIZED_SYSTEM, new Boolean(false));
+        }
+        else return new RetObj<>(Result.SUCCESS, new Boolean(true));
+    }
+
 }
