@@ -29,29 +29,6 @@ namespace StompTest
         }
         #endregion
 
-        #region Sub Forums
-
-        public string[] GetSubForums(string sid)
-        {
-            var msg = new StompMessage { Type = ServerActions.GetSubForums };
-
-            _subforums = null;
-            _client.OnReceived += HandleGetSubForumsResponse;
-            _client.Send(msg);
-            _waitEvent.WaitOne();
-            return _subforums;
-        }
-
-        private void HandleGetSubForumsResponse(object sender, StompMessage msg)
-        {
-            if (msg.Type != ServerActions.GetSubForums) return;
-            _subforums = msg.Content.Trim().Split('\n');
-            _client.OnReceived -= HandleGetSubForumsResponse;
-            _waitEvent.Set();
-        }
-
-        #endregion
-
         #region Notifications
         private static void HandleNotification(object sender, StompMessage msg)
         {
