@@ -4,9 +4,11 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
+import org.bgu.service.Exceptions.RetObj;
 import org.bgu.service.ForumService;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class RemoveMessage extends StompClientFrame {
@@ -25,7 +27,7 @@ public class RemoveMessage extends StompClientFrame {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        ForumService.removeMessage(UUID.fromString(sid), subforum, Integer.parseInt(msgid));
-        return new GeneralStompFrame(getCommand(), getHeaders(), String.format(" message {%s}", msgid));
+        RetObj<Object> retObj = ForumService.removeMessage(UUID.fromString(sid), subforum, Integer.parseInt(msgid));
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
     }
 }

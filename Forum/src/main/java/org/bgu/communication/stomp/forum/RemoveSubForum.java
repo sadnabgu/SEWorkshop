@@ -4,6 +4,7 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
+import org.bgu.service.Exceptions.RetObj;
 import org.bgu.service.ForumService;
 
 import java.util.HashMap;
@@ -23,8 +24,8 @@ public class RemoveSubForum extends StompClientFrame {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        ForumService.removeSubForum(UUID.fromString(sid), subforum);
-        return new GeneralStompFrame(getCommand(), getHeaders(), String.format(" sub forum {%s} removed", subforum));
+        RetObj<Object> retObj = ForumService.removeSubForum(UUID.fromString(sid), subforum);
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
     }
 }
 

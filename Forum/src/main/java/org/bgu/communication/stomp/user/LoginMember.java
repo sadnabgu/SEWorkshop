@@ -23,14 +23,14 @@ public class LoginMember extends StompClientFrame {
         this.sid = headers.get("sid");
         this.username = headers.get("username");
         this.password = headers.get("password");
-        addHeaders(headers);
+        //TODO - why this?? -> addHeaders(headers);
         setContent(content);
     }
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        UserService.logInMember(UUID.fromString(sid), username, password);
-        return new GeneralStompFrame(getCommand(), getHeaders(), String.format("user %s logged in", username));
+        RetObj<Void> retObj = UserService.logInMember(UUID.fromString(sid), username, password);
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
     }
 }
 

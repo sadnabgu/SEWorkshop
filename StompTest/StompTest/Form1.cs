@@ -77,6 +77,28 @@ namespace St1ompTest
         {
             FormAcceptance acceptance = new FormAcceptance();
             acceptance.Show();
+
+            
+        }
+
+        private void txtPreview_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtInput_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            toSend = new StompMessage();
         }
     }
 }

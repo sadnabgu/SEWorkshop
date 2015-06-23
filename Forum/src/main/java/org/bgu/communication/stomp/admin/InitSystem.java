@@ -6,6 +6,7 @@ import org.bgu.communication.stomp.LoginRequest;
 import org.bgu.communication.stomp.StompFrame;
 import org.bgu.service.AdminService;
 import org.bgu.service.Exceptions.ForumException;
+import org.bgu.service.Exceptions.RetObj;
 
 import java.util.HashMap;
 
@@ -16,9 +17,9 @@ public class InitSystem extends LoginRequest {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        AdminService.initializeSystem(username, password);
+        RetObj<Object> retObj = AdminService.initializeSystem(username, password);
 
-        return new GeneralStompFrame(getCommand(), new HashMap<String,String>(), "true");
+        return new GeneralStompFrame(getCommand(), new HashMap<String,String>(), retObj._result.toString());
     }
 }
 

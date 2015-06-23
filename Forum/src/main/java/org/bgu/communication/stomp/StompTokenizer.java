@@ -137,7 +137,7 @@ public class StompTokenizer implements MessageTokenizer<StompFrame> {
            case "register": return new Register(command, headers, content);
 
 	   default:
-            return new GeneralStompFrame(command, headers, content);
+            return new GeneralStompFrame(command, headers, content + "\ncan't parse header");
 	   }
    }
 }

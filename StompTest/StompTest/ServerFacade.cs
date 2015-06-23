@@ -95,27 +95,6 @@ namespace StompTest
 
         #endregion
 
-        #region Member Login
-        public void LogIn(string username, string password)
-        {
-            var msg = new StompMessage { Type = ServerActions.LoginMember };
-
-            msg.Headers.Add("username", username);
-            msg.Headers.Add("password", password);
-            _client.OnReceived += HandleLoginResponse;
-            _client.Send(msg);
-            _waitEvent.WaitOne();
-        }
-
-        private void HandleLoginResponse(object server, StompMessage msg)
-        {
-            if (msg.Type != ServerActions.LoginMember) return;
-
-            _client.OnReceived -= HandleLoginResponse;
-            _waitEvent.Set();
-        }
-        #endregion        
-
         /*
         
         TODO LIST:

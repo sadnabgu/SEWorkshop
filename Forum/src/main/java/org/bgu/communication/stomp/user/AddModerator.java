@@ -4,9 +4,11 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
+import org.bgu.service.Exceptions.RetObj;
 import org.bgu.service.UserService;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class AddModerator extends StompClientFrame {
@@ -25,8 +27,8 @@ public class AddModerator extends StompClientFrame {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        UserService.addModerator(UUID.fromString(sid), subforum, moderator);
-        return new GeneralStompFrame(getCommand(), getHeaders(), String.format("%s is now moderator of subforum %s", moderator, subforum));
+        RetObj<Object> retObj = UserService.addModerator(UUID.fromString(sid), subforum, moderator);
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
     }
 }
 

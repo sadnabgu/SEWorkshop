@@ -4,9 +4,11 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
+import org.bgu.service.Exceptions.RetObj;
 import org.bgu.service.UserService;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class RemoveFriend extends StompClientFrame {
@@ -23,8 +25,8 @@ public class RemoveFriend extends StompClientFrame {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        UserService.unFriend(UUID.fromString(sid), friend);
-        return new GeneralStompFrame(getCommand(), getHeaders(), String.format("%s is no longer friend of %s", friend, sid));
+        RetObj<Object> retObj = UserService.unFriend(UUID.fromString(sid), friend);
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
     }
 }
 

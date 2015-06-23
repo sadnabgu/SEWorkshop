@@ -4,6 +4,7 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
+import org.bgu.service.Exceptions.RetObj;
 import org.bgu.service.ForumService;
 
 import java.util.ArrayList;
@@ -33,8 +34,8 @@ public class CreateSubForum extends StompClientFrame {
         for (String current: moderators){
             moderatorsCollection.add(current);
         }
-        ForumService.addNewSubForum(UUID.fromString(sid), subforum, moderatorsCollection);
-        return new GeneralStompFrame(getCommand(), getHeaders(), String.format(" sub forum {%s} created", subforum));
+        RetObj<Object> retObj = ForumService.addNewSubForum(UUID.fromString(sid), subforum, moderatorsCollection);
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
     }
 }
 
