@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Sharon Kerzman on 23/06/2015.
  */
-public class ForumCreatedTestBase extends org.bgu.InitializedTestBase {
+public class ForumCreatedTestBase extends InitializedTestBase {
     public static final String SUBFORUM_NAME = "MILK";
     public static final String MODERATE_NAME = "kerz";
     public static final String MODERATE_PASS = "the cowboy";
