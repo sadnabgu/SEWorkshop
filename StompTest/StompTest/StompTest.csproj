@@ -67,6 +67,7 @@
     <Compile Include="ServerFacade.cs" />
     <Compile Include="StompClient.cs" />
     <Compile Include="StompMessage.cs" />
+    <Compile Include="UserFacade.cs" />
     <EmbeddedResource Include="FormAcceptance.resx">
       <DependentUpon>FormAcceptance.cs</DependentUpon>
     </EmbeddedResource>

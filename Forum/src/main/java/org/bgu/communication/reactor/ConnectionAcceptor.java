@@ -1,5 +1,7 @@
 package org.bgu.communication.reactor;
  
+import org.bgu.communication.stomp.StompFrame;
+
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.channels.SelectionKey;
@@ -11,7 +13,7 @@ import java.nio.channels.SocketChannel;
  * objects, which can produce new SocketChannels for new clients using its
  * <CODE>accept</CODE> method.
  */
-public class ConnectionAcceptor<T> {
+public class ConnectionAcceptor<T extends StompFrame> {
     protected ServerSocketChannel _ssChannel;
  
     protected ReactorData<T> _data;

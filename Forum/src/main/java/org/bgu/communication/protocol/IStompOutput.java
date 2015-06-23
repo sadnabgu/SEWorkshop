@@ -1,6 +1,5 @@
 package org.bgu.communication.protocol;
 
-
 import org.bgu.communication.stomp.StompFrame;
 
 /*

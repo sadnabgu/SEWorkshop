@@ -1,5 +1,6 @@
 package org.bgu.communication.stomp;
 
+import org.bgu.communication.reactor.ProtocolTask;
 import org.bgu.communication.tokenizer.Message;
 
 import java.util.HashMap;
@@ -13,10 +14,11 @@ public abstract class StompFrame implements Message<StompFrame> {
 	private String _command;
 	private HashMap<String, String> _headers;
 	private String _content;
-	
-	/*
-	 * constructor
-	 */
+    private ProtocolTask context;
+
+    /*
+     * constructor
+     */
 	protected StompFrame(String command) {
 		_command = command;
 		_headers = new HashMap<String, String>();
@@ -101,4 +103,10 @@ public abstract class StompFrame implements Message<StompFrame> {
     public HashMap<String, String> getHeaders() {
         return _headers;
     }
+
+    public void setContext(ProtocolTask context) {
+        this.context = context;
+    }
+
+    public ProtocolTask<StompFrame> getContext(){ return this.context; }
 }

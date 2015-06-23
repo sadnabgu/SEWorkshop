@@ -1,6 +1,7 @@
 package org.bgu.communication.reactor;
 
 import org.bgu.communication.protocol.ServerProtocolFactory;
+import org.bgu.communication.stomp.StompFrame;
 import org.bgu.communication.tokenizer.TokenizerFactory;
 
 import java.util.concurrent.ExecutorService;
@@ -10,7 +11,7 @@ import java.nio.channels.Selector;
 /**
  * a simple data structure that hold information about the reactor, including getter methods
  */
-public class ReactorData<T> {
+public class ReactorData<T extends StompFrame> {
 
     private final ExecutorService _executor;
     private final Selector _selector;

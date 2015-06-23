@@ -1,6 +1,7 @@
 package org.bgu.communication.reactor;
  
 import org.bgu.communication.protocol.ServerProtocolFactory;
+import org.bgu.communication.stomp.StompFrame;
 import org.bgu.communication.tokenizer.TokenizerFactory;
 
 import java.io.Closeable;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
 /**
  * An implementation of the Reactor pattern.
  */
-public class Reactor<T> implements Runnable, Closeable {
+public class Reactor<T extends StompFrame> implements Runnable, Closeable {
  
     private static final Logger logger = Logger.getLogger("edu.spl.reactor");
  
