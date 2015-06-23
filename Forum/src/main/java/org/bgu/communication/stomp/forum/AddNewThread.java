@@ -29,4 +29,3 @@ public class AddNewThread extends StompClientFrame {
         return new GeneralStompFrame(getCommand(), getHeaders(), String.format(" opened new thread {%s}", title));
     }
 }
-

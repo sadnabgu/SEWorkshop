@@ -10,6 +10,7 @@ namespace StompTest
         private readonly AutoResetEvent _waitEvent = new AutoResetEvent(false);
         private string _sessionId;
         private string[] _forums;
+        private bool _initialized;
 
         public AdminFacade Admin { get; private set; }
         public ForumFacade Forum { get; private set; }
@@ -112,6 +113,28 @@ namespace StompTest
             if (msg.Type != ServerActions.LoginMember) return;
 
             _client.OnReceived -= HandleLoginResponse;
+            _waitEvent.Set();
+        }
+        #endregion        
+
+        #region Is Initialized
+        public bool IsSystemInitialized()
+        {
+            var msg = new StompMessage { Type = ServerActions.IsSystemInitialized };
+
+            _client.OnReceived += HandleIsSystemInitializedResponse;
+            _initialized = false;
+            _client.Send(msg);
+            _waitEvent.WaitOne();
+            return _initialized;
+        }
+
+        private void HandleIsSystemInitializedResponse(object server, StompMessage msg)
+        {
+            if (msg.Type != ServerActions.LoginMember) return;
+
+            _client.OnReceived -= HandleLoginResponse;
+            _initialized = bool.Parse(msg.Content);
             _waitEvent.Set();
         }
         #endregion        

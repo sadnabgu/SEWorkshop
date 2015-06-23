@@ -20,5 +20,6 @@
         public static string AddFriend = "add_friend";
         public static string RemoveFriend = "remove_friend";
         public static string Register = "register";
+        public static string IsSystemInitialized = "is_system_initialized";
     }
 }
