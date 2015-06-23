@@ -79,7 +79,7 @@ public class AdminService {
      * @param siD - some session just oppend with the server
      * @return
      */
-    public static RetObj<Boolean> isInitializedSystem(UUID siD){
+    public static RetObj<Boolean> isInitializedSystem(){
         if (!UserFacade.isInitializedSystem()){
             return new RetObj<>(Result.UNINITIALIZED_SYSTEM, new Boolean(false));
         }
