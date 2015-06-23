@@ -1,5 +1,4 @@
-﻿﻿using System;
-using System.Threading;
+﻿using System.Threading;
 
 namespace StompTest
 {
@@ -11,6 +10,7 @@ namespace StompTest
         private string _sessionId;
         private string[] _forums;
         private bool _initialized;
+        private string[] _subforums;
 
         public AdminFacade Admin { get; private set; }
         public ForumFacade Forum { get; private set; }
@@ -27,6 +27,29 @@ namespace StompTest
             Forum = new ForumFacade(_client, _waitEvent);
             User = new UserFacade(_client, _waitEvent);
         }
+        #endregion
+
+        #region Sub Forums
+
+        public string[] GetSubForums(string sid)
+        {
+            var msg = new StompMessage { Type = ServerActions.GetSubForums };
+
+            _subforums = null;
+            _client.OnReceived += HandleGetSubForumsResponse;
+            _client.Send(msg);
+            _waitEvent.WaitOne();
+            return _subforums;
+        }
+
+        private void HandleGetSubForumsResponse(object sender, StompMessage msg)
+        {
+            if (msg.Type != ServerActions.GetSubForums) return;
+            _subforums = msg.Content.Trim().Split('\n');
+            _client.OnReceived -= HandleGetSubForumsResponse;
+            _waitEvent.Set();
+        }
+
         #endregion
 
         #region Notifications
@@ -67,7 +90,7 @@ namespace StompTest
         {
             if (msg.Type != ServerActions.LoginGuest) return;
 
-            _sessionId = msg.Content;
+            _sessionId = msg.Headers["sid"];
             _client.OnReceived -= HandleLoginGuestResponse;
             _waitEvent.Set();
         }
@@ -131,9 +154,9 @@ namespace StompTest
 
         private void HandleIsSystemInitializedResponse(object server, StompMessage msg)
         {
-            if (msg.Type != ServerActions.LoginMember) return;
+            if (msg.Type != ServerActions.IsSystemInitialized) return;
 
-            _client.OnReceived -= HandleLoginResponse;
+            _client.OnReceived -= HandleIsSystemInitializedResponse;
             _initialized = bool.Parse(msg.Content);
             _waitEvent.Set();
         }

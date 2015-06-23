@@ -25,7 +25,7 @@ public class LoginGuest extends StompClientFrame {
         RetObj<UUID> retObj = UserService.logInGuest(forum);
         GeneralStompFrame gsf = new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
         if (retObj._value != null)
-            gsf.addHeader("sId", retObj._value.toString());
+            gsf.addHeader("sid", retObj._value.toString());
         return gsf;
     }
 }

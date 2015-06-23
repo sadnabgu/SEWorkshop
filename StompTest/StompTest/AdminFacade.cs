@@ -9,12 +9,12 @@ namespace StompTest
 {
     class AdminFacade : AbstractFacade
     {
-        private bool _initSuccess;
+        private string _sid;
 
         internal AdminFacade(StompClient client, AutoResetEvent waitEvent) : base(client, waitEvent) {}
 
         #region Init System
-        public bool InitSystem(string admin, string adminpass)
+        public void InitSystem(string admin, string adminpass)
         {
             var msg = new StompMessage { Type = ServerActions.InitSystem };
 
@@ -23,15 +23,12 @@ namespace StompTest
             _client.OnReceived += HandleInitSystemResponse;
             _client.Send(msg);
             _waitEvent.WaitOne();
-
-            return _initSuccess;
         }
 
         private void HandleInitSystemResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.InitSystem) return;
 
-            _initSuccess = bool.Parse(msg.Content);
             _client.OnReceived -= HandleInitSystemResponse;
             _waitEvent.Set();
         }
@@ -63,21 +60,24 @@ namespace StompTest
         #endregion
 
         #region Login Admin
-        public void LogInAdmin(string username, string password)
+        public string LogInAdmin(string username, string password)
         {
             var msg = new StompMessage { Type = ServerActions.LoginAdmin };
 
             msg.Headers.Add("username", username);
             msg.Headers.Add("password", password);
             _client.OnReceived += HandleLoginAdminResponse;
+            _sid = string.Empty;
             _client.Send(msg);
             _waitEvent.WaitOne();
+            return _sid;
         }
 
         private void HandleLoginAdminResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.LoginAdmin) return;
 
+            _sid = msg.Headers["sid"];
             _client.OnReceived -= HandleLoginAdminResponse;
             _waitEvent.Set();
         }
