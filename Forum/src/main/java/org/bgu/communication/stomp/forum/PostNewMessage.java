@@ -4,6 +4,7 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
+import org.bgu.service.Exceptions.RetObj;
 import org.bgu.service.ForumService;
 
 import java.util.HashMap;
@@ -27,8 +28,11 @@ public class PostNewMessage extends StompClientFrame {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        ForumService.postNewComment(UUID.fromString(sid), subforum, Integer.parseInt(parentId), title, getContent());
-        return new GeneralStompFrame(getCommand(), getHeaders(), String.format(" commented on {%s}", parentId));
+        RetObj<Integer> retObj = ForumService.postNewComment(UUID.fromString(sid), subforum, Integer.parseInt(parentId), title, getContent());
+        GeneralStompFrame gsf = new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        if (null != retObj._value)
+            gsf.addHeader("msgId", retObj._value.toString());
+        return gsf;
     }
 }
 

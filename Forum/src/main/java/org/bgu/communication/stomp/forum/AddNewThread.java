@@ -4,6 +4,7 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
+import org.bgu.service.Exceptions.RetObj;
 import org.bgu.service.ForumService;
 
 import java.util.HashMap;
@@ -25,7 +26,10 @@ public class AddNewThread extends StompClientFrame {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        ForumService.addNewThread(UUID.fromString(sid), subforum, title, getContent());
-        return new GeneralStompFrame(getCommand(), getHeaders(), String.format(" opened new thread {%s}", title));
+        RetObj<Integer> retObj = ForumService.addNewThread(UUID.fromString(sid), subforum, title, getContent());
+        GeneralStompFrame gsf = new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        if (retObj._value != null)
+            gsf.addHeader("msgId", retObj._value.toString());
+        return gsf;
     }
 }

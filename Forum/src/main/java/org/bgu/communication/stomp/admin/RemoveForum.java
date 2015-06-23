@@ -6,6 +6,7 @@ import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
 import org.bgu.service.AdminService;
 import org.bgu.service.Exceptions.ForumException;
+import org.bgu.service.Exceptions.RetObj;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class RemoveForum extends StompClientFrame {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        AdminService.removeForum(UUID.fromString(adminSessionId), forum);
-        return new GeneralStompFrame(getCommand(), getHeaders(), forum);
+        RetObj<Object> retObj = AdminService.removeForum(UUID.fromString(adminSessionId), forum);
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
     }
 }

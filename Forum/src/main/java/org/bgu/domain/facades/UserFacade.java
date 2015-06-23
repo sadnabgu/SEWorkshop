@@ -20,24 +20,30 @@ public class UserFacade {
 
     /***********SUPER ADMIN HANDLE**************** */
 
-    /* notice - just add new superadmin to database, no auto-login */
-    public static boolean addSuperAdmin(String superAdminName, String superAdminPass) {
-        Member newSuperAdmin;
+        /* notice - just add new superadmin to database, no auto-login */
+    public static boolean initSystem(String superAdminName, String superAdminPass) {
         //TODO - change to ORM
         if (!systemInitialized){
             //the system yet to be initialized
             systemInitialized = true;
-            newSuperAdmin = new Member(superAdminName, superAdminPass);
-            superAdmins.add(newSuperAdmin);
-            //TODO - decide if after first initialization the super admin (the first one anyway) will be automaticly "logged-in"
-            //superAdminsCache.put(superAdminName ,newSuperAdmin);
-            return true;
+            return addSuperAdmin(superAdminName, superAdminPass);
         }
-        else if (null == getSuperAdmin(superAdminName))
+        else {
+            return false;
+        }
+    }
+
+    /* notice - just add new superadmin to database, no auto-login */
+    public static boolean addSuperAdmin(String superAdminName, String superAdminPass) {
+        //TODO - change to ORM
+        if (null != getSuperAdmin(superAdminName))
+            return false;
+        if (!systemInitialized)
             return false;
         Member admin = new Member(superAdminName, superAdminPass);
         superAdmins.add(admin);
         return true;
+
     }
 
     public static boolean isInitializedSystem(){

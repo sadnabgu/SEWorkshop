@@ -13,15 +13,16 @@ import java.util.UUID;
  * Created by hodai on 4/20/15.
  */
 public class AdminService {
+
     /**
      * first init routine  - initial administrator details
-     * //TODO - make sure that "initialization" can be made by several "super admins"
+     * //TODO - make sure that "initialization" can be made by several "super admins" using UserFacade.addSuperAdmin()
      * @param adminName - initial
      * @param adminPass - initial
      * @return true upon success. exception upon failure.
      */
    public static RetObj<Object> initializeSystem(String adminName, String adminPass){
-       if (!UserFacade.addSuperAdmin(adminName, adminPass))
+       if (!UserFacade.initSystem(adminName, adminPass))
            return new RetObj<>(Result.REINITIALIZE_SYSTEM);
        return new RetObj<>(Result.SUCCESS);
    }
@@ -56,6 +57,8 @@ public class AdminService {
             // only logged in admin can create new forum
             return new RetObj<>(Result.NOT_LOGGEDIN_SYSTEM);
         }
+        if (null == managerName || null == managerPass)
+            return new RetObj<Object>(Result.NAME_OR_PASS_MISSING);
         if(!ForumFacade.createForum(ForumName, managerName, managerPass))
             return new RetObj<>(Result.FORUM_EXISTS);
         return new RetObj<>(Result.SUCCESS);

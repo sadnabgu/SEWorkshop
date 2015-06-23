@@ -18,7 +18,7 @@ public class Server {
      * Reactor-based/Thread-per-client server for the tweeter protocol. 
      * "Usage: port pool_size reactor/tpc"
      */
-    public static void start(String args[]) {
+    public static void main(String args[]) {
     	if (args.length != 3) {
             System.err.println("Usage: <port> <pool_size> <reactor/tpc>");
             System.exit(1);

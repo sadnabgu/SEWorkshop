@@ -4,9 +4,11 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
+import org.bgu.service.Exceptions.RetObj;
 import org.bgu.service.ForumService;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class EditMessage extends StompClientFrame {
@@ -27,7 +29,7 @@ public class EditMessage extends StompClientFrame {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        ForumService.editMessage(UUID.fromString(sid), subforum, Integer.parseInt(msgid), title, getContent());
-        return new GeneralStompFrame(getCommand(), getHeaders(), String.format(" commented on {%s}", msgid));
+        RetObj<Object> retObj = ForumService.editMessage(UUID.fromString(sid), subforum, Integer.parseInt(msgid), title, getContent());
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
     }
 }

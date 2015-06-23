@@ -8,8 +8,8 @@ namespace StompTest
 {
     class StompClient
     {
-        public string Address { get; }
-        public int Port { get; }
+        public string Address { get; private set; }
+        public int Port { get; private set; }
         private readonly TcpClient _client;
         private readonly Thread _listenThread;
 
@@ -53,7 +53,7 @@ namespace StompTest
                     var messageString = Encoding.UTF8.GetString(total);
                     var msg = StompMessage.FromString(messageString);
                     stream.Clear();
-                    OnReceived?.Invoke(this, msg);
+                    if (OnReceived != null) { OnReceived(this, msg); }
                 }
                 else
                 {

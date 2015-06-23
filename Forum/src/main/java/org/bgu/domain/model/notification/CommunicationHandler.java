@@ -13,7 +13,7 @@ public class CommunicationHandler {
      * @param msg - the Notification message that contain the data
      * @return - true if success
      */
-    public boolean voidsendNotification(NotificationMsg msg){
+    public boolean sendNotification(NotificationMsg msg){
         // TODO
         return false;
     }

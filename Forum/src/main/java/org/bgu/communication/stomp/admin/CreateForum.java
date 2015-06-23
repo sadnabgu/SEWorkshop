@@ -6,6 +6,7 @@ import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
 import org.bgu.service.AdminService;
 import org.bgu.service.Exceptions.ForumException;
+import org.bgu.service.Exceptions.RetObj;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -22,13 +23,13 @@ public class CreateForum extends StompClientFrame {
         this.forum = headers.get("forum");
         this.manager = headers.get("manager");
         this.password = headers.get("password");
-        this.addHeaders(headers);
+        //TODO - why??? -> this.addHeaders(headers);
     }
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        AdminService.createForum(UUID.fromString(adminSessionId), forum, manager, password);
-        return new GeneralStompFrame(getCommand(), getHeaders(), forum);
+        RetObj<Object> retObj = AdminService.createForum(UUID.fromString(adminSessionId), forum, manager, password);
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
     }
 }
 

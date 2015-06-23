@@ -2,7 +2,6 @@ package org.bgu.communication.stomp.user;
 
 import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
-import org.bgu.communication.stomp.Sessions;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
 import org.bgu.service.Exceptions.RetObj;
@@ -17,14 +16,16 @@ public class LoginGuest extends StompClientFrame {
     public LoginGuest(String command, HashMap<String, String> headers, String content) {
         super(command);
         this.forum = headers.get("forum");
-        addHeaders(headers);
+        //TODO - why this?? -> addHeaders(headers);
         setContent(content);
     }
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        RetObj<UUID> sid = UserService.logInGuest(forum);
-        Sessions.getInstance().add(sid._value.toString(), this.getContext());
-        return new GeneralStompFrame(getCommand(), getHeaders(), sid._value.toString());
+        RetObj<UUID> retObj = UserService.logInGuest(forum);
+        GeneralStompFrame gsf = new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        if (retObj._value != null)
+            gsf.addHeader("sId", retObj._value.toString());
+        return gsf;
     }
 }
