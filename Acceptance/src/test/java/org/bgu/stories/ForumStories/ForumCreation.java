@@ -1,77 +1,33 @@
 package org.bgu.stories.ForumStories;
 
 
-import org.bgu.domain.facades.ForumFacade;
-import org.bgu.domain.model.Forum;
-import org.junit.Ignore;
+import org.bgu.InitializedTestBase;
 import org.junit.Test;
-import java.lang.System;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by gur on 21/04/2015.
- *
  */
-public class ForumCreation {
+public class ForumCreation extends InitializedTestBase {
     @Test
-
-    /*
-    *Test purpose: Forum is in waiting state after giving correct data
-    *
-    * Steps:
-    * 1. insert correct data
-    * 2. verify: forum is in Waiting state
-    *
-    *   TODO - acceptance test cant use the facade, can only use the service layer objects!!
-     */
-    public void createForumWithCorrectData_SystemInitialized_NewForumInWaitingState(){
-        System.out.print("testing 'createForumWithCorrectData_SystemInitialized_NewForumInWaitingState' \n");
-        // Setup system to initial state :
-        //ForumFacade forumFacade = new ForumFacade();
-
-        // Simulate Super-Admin clicks Create-Forum button
-        String forumName = "Tapuz";
-
-        // Insert valid data
-        Forum forumCreated = ForumFacade.createForum(forumName, "admin", "pass");
-
-        // verify : Query system so it has a new forum in waiting state
-        Forum forumReturned = ForumFacade.getForum(forumName);
-
-        if (forumCreated!=null &&
-                forumReturned!=null &&
-                forumCreated == forumReturned &&
-                forumName.equals(forumReturned.getName()) &&
-                forumReturned.getName().equals(forumName)
-            ){
-
-            System.out.print("Passed! :) \n");
-        }
-        else {
-            System.out.print("Failed! :( \n");
-        }
-
-        // Clear forum data
-        ForumFacade.resetForums();
+    public void createForum_pass_testID_2_1() {
+        assertTrue("could not create the forum", bridge.createNewForum(FORUM_NAME, MANAGER_NAME, MANAGER_PASS));
     }
 
     @Test
-    @Ignore
-    /*
-    *Test purpose: Forum is in not exist after giving incorrect data
-    *
-    * Steps:
-    * 1. insert incorrect data
-    * 2. verify: forum is in not exists
-    *
-    *
-     */
-    public void createForumWithIncorrectData_SystemInitialized_NewForumInNotExists() {
-        // TODO: Setup system to initial state
+    public void createForum_memberAction_fail_testID_2_2() {
+        assertTrue("could not log out admin", bridge.logout());
+        assertTrue("could not register member", bridge.register(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("could not log in member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertFalse("member succeed to create Forum", bridge.createNewForum(FORUM_NAME, MANAGER_NAME, MEMBER_PASS));
+    }
 
-        // TODO: Simulate Super-Admin clicks Create-Forum button
-
-        // TODO: Insert incorrect data
-
-        // TODO: Verify: forum is in not exists
+    @Test
+    public void createForum_guestAction_fail_testID_2_3() {
+        assertTrue("could not log out admin", bridge.logout());
+        assertFalse("member succeed to create Forum", bridge.createNewForum(FORUM_NAME, MANAGER_NAME, MEMBER_PASS));
     }
 }
