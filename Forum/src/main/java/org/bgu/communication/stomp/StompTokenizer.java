@@ -133,6 +133,7 @@ public class StompTokenizer implements MessageTokenizer<StompFrame> {
            case "remove_friend": return new RemoveFriend(command, headers, content);
            case "register": return new Register(command, headers, content);
            case "is_system_initialized": return new IsSystemInitialized(command, headers, content);
+           case "get_sub_forums": return new IsSystemInitialized(command, headers, content);
 	       default: return new GeneralStompFrame(command, headers, content + "\ncan't parse header");
 	   }
    }
