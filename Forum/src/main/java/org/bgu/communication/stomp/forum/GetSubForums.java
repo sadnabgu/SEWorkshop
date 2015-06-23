@@ -4,29 +4,33 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
-import org.bgu.service.ServiceObjects.RetObj;
 import org.bgu.service.ForumService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class RemoveMessage extends StompClientFrame {
+public class GetSubForums extends StompClientFrame {
     private final String sid;
-    private final String subforum;
-    private final String msgid;
 
-    public RemoveMessage(String command, HashMap<String, String> headers, String content) {
+    public GetSubForums(String command, HashMap<String, String> headers, String content) {
         super(command);
         this.sid = headers.get("sid");
-        this.subforum = headers.get("subforum");
-        this.msgid = headers.get("msgid");
         this.addHeaders(headers);
         this.setContent(content);
     }
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        RetObj<Object> retObj = ForumService.removeMessage(UUID.fromString(sid), subforum, Integer.parseInt(msgid));
-        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        ArrayList<String> subforums = ForumService.getAllSubForums(UUID.fromString(sid))._value;
+
+        StringBuilder builder = new StringBuilder();
+
+        for(String subforum: subforums){
+            builder.append(subforum);
+            builder.append('\n');
+        }
+
+        return new GeneralStompFrame(getCommand(), getHeaders(), builder.toString().trim());
     }
 }

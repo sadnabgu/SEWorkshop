@@ -1,14 +1,14 @@
 package org.bgu.service;
 
 import org.bgu.communication.server.Server;
-import org.bgu.service.Exceptions.ForumException;
+import org.bgu.service.ServiceObjects.ForumException;
 import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Created by gur on 09/06/2015.
  */
-public class ServerTest {@Ignore
+public class ServerTest {
 
     @Test
     public void test() throws InterruptedException, ForumException {

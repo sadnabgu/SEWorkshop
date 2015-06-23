@@ -1,4 +1,4 @@
-package org.bgu.service.Exceptions;
+package org.bgu.service.ServiceObjects;
 
 /**
  * Created by michael on 05/06/15.
@@ -38,7 +38,10 @@ public enum Result {
     NEW_COMMENT_FAIL("posting the new comment failed. please fill title or body"),
     REMOVE_COMMENT_FAILED("removal of the message failed"),
     EDIT_COMMENT_FAILED("edit of message failed"),
-    NAME_OR_PASS_MISSING("userName or password are null");
+    NAME_OR_PASS_MISSING("userName or password are null"),
+    SUBFORUM_NOT_FOUND("the given sub forum didn't found"),
+    MESSAGE_NOT_FOUND("meddage not found");
+
     final public String _desc;
 
     Result(String description){

@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using St1ompTest;
+using StompTest.Forms;
 
 namespace StompTest
 {
     static class Program
     {
+        public static readonly ServerFacade Server = new ServerFacade("127.0.0.1", 12345);
+        public static string SID = string.Empty;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,7 +17,17 @@ namespace StompTest
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Server.Connect();
+
+            if (Server.IsSystemInitialized())
+            {
+                Application.Run(new Welcome());
+            }
+            else
+            {
+                Application.Run(new InitSystem());
+            }
+            
         }
     }
 }

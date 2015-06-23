@@ -48,17 +48,35 @@
   <ItemGroup>
     <Compile Include="AbstractFacade.cs" />
     <Compile Include="AdminFacade.cs" />
-    <Compile Include="FormAcceptance.cs">
+    <Compile Include="Forms\Administration.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAcceptance.Designer.cs">
-      <DependentUpon>FormAcceptance.cs</DependentUpon>
+    <Compile Include="Forms\Administration.Designer.cs">
+      <DependentUpon>Administration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="Forms\Forum.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\Forum.Designer.cs">
+      <DependentUpon>Forum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\InitSystem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InitSystem.Designer.cs">
+      <DependentUpon>InitSystem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LogIn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LogIn.Designer.cs">
+      <DependentUpon>LogIn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Welcome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Welcome.Designer.cs">
+      <DependentUpon>Welcome.cs</DependentUpon>
     </Compile>
     <Compile Include="ForumFacade.cs" />
     <Compile Include="Program.cs" />
@@ -68,11 +86,20 @@
     <Compile Include="StompClient.cs" />
     <Compile Include="StompMessage.cs" />
     <Compile Include="UserFacade.cs" />
-    <EmbeddedResource Include="FormAcceptance.resx">
-      <DependentUpon>FormAcceptance.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Administration.resx">
+      <DependentUpon>Administration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Forum.resx">
+      <DependentUpon>Forum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InitSystem.resx">
+      <DependentUpon>InitSystem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LogIn.resx">
+      <DependentUpon>LogIn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Welcome.resx">
+      <DependentUpon>Welcome.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

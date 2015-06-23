@@ -1,9 +1,6 @@
 package org.bgu.domain.facades;
 
-import org.bgu.domain.model.Forum;
-import org.bgu.domain.model.Member;
-import org.bgu.domain.model.Session;
-import org.bgu.domain.model.SubForum;
+import org.bgu.domain.model.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -119,17 +116,61 @@ public class ForumFacade {
         return forumNames;
     }
 
-    public static ArrayList<String> getAllSubForums(String forumName){
-        Forum forum = getForum(forumName);
+    public static ArrayList<String> getAllSubForums(UUID sId){
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
+            return null;
+        Forum forum = session._forum;
         if (null == forum)
             return null;
         return forum.getAllSubForums();
     }
 
-    /**** FORUMS MANAGEMENT ****/
+    public static Collection<Message> getAllThreads(UUID sId, String subForumName) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
+            return null;
+        Forum forum = session._forum;
+        if (null == forum)
+            return null;
+        SubForum subForum = forum.getSubForumByName(subForumName);
+        if (null == subForum)
+            return null;
+        return subForum.getThreads();
 
-   /**********************************************************************************************************/
-    /*****************FOR TESTING*********************************************************************************/
+    }
+
+    public static Collection<Message> getAllComments(UUID sId, String subForumName, int messageId) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
+            return null;
+        Forum forum = session._forum;
+        if (null == forum)
+            return null;
+        SubForum subForum = forum.getSubForumByName(subForumName);
+        if (null == subForum)
+            return null;
+        return subForum.getComments(messageId);
+
+    }
+
+    public static Message getMessage(UUID sId, String subForumName, int msgId) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
+            return null;
+        Forum forum = session._forum;
+        if (null == forum)
+            return null;
+        SubForum subForum = forum.getSubForumByName(subForumName);
+        if (null == subForum)
+            return null;
+        return subForum.getMessage(msgId);
+
+    }
+
+
+    /*************************************************/
+    /*****************FOR TESTING*********************/
 
     /**
      * clear all the forums database

@@ -1,9 +1,6 @@
 package org.bgu.communication.stomp;
  
-import org.bgu.communication.stomp.admin.CreateForum;
-import org.bgu.communication.stomp.admin.InitSystem;
-import org.bgu.communication.stomp.admin.LoginAdmin;
-import org.bgu.communication.stomp.admin.RemoveForum;
+import org.bgu.communication.stomp.admin.*;
 import org.bgu.communication.stomp.forum.*;
 import org.bgu.communication.stomp.user.*;
 import org.bgu.communication.tokenizer.MessageTokenizer;
@@ -135,9 +132,10 @@ public class StompTokenizer implements MessageTokenizer<StompFrame> {
            case "add_friend": return new AddFriend(command, headers, content);
            case "remove_friend": return new RemoveFriend(command, headers, content);
            case "register": return new Register(command, headers, content);
-
-	   default:
-            return new GeneralStompFrame(command, headers, content + "\ncan't parse header");
+           case "is_system_initialized": return new IsSystemInitialized(command, headers, content);
+           case "get_sub_forums": return new GetSubForums(command, headers, content);    //TODO - need to fix
+           case "log_out_member": return new LogOutMember(command, headers, content);
+	       default: return new GeneralStompFrame(command, headers, content + "\ncan't parse header");
 	   }
    }
 }

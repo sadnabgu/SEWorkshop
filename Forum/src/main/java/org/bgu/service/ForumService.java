@@ -2,8 +2,10 @@ package org.bgu.service;
 
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
-import org.bgu.service.Exceptions.Result;
-import org.bgu.service.Exceptions.RetObj;
+import org.bgu.domain.model.Message;
+import org.bgu.service.ServiceObjects.Result;
+import org.bgu.service.ServiceObjects.RetObj;
+import org.bgu.service.ServiceObjects.ServiceMessage;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -118,6 +120,92 @@ public class ForumService {
     }
 
     /**
+     * @return - array of all the forums names as strings
+     */
+    public static RetObj<ArrayList<String>> getAllForums() {
+        ArrayList<String> forums = ForumFacade.getAllForums();
+        if (null == forums){
+            return new RetObj<>(Result.FAIL);
+        } else {
+            return new RetObj<>(Result.SUCCESS, forums);
+        }
+    }
+
+    /**
+     * @param sId - session Id
+     * @return - array of all the sub forums in the session forum
+     *           forum must be defined for the given 'sId'.
+     */
+    public static RetObj<ArrayList<String>> getAllSubForums(UUID sId) {
+        ArrayList<String> subForums = ForumFacade.getAllSubForums(sId);
+        if (null == subForums){
+            return new RetObj<>(Result.FAIL);
+        } else {
+            return new RetObj<>(Result.SUCCESS, subForums);
+        }
+    }
+
+    /**
+     * return all the sub-forum ('subForumName') threads as collection of ServiceMessages
+     * @param sId - session id
+     * @param subForumName - the name of the sub-forum
+     * @return all the sub-forum ('subForumName') threads as collection of ServiceMessages
+     */
+    public static RetObj<Collection<ServiceMessage>> getAllThreads(UUID sId, String subForumName) {
+        if (!ForumFacade.getAllSubForums(sId).contains(subForumName)){
+            return new RetObj<>(Result.SUBFORUM_NOT_FOUND);
+        }
+        Collection<Message> threads = ForumFacade.getAllThreads(sId, subForumName);
+        if (null == threads){
+            return new RetObj<>(Result.FAIL);
+        } else {
+            Collection<ServiceMessage> serviceMessages = new ArrayList<>();
+            for(Message message : threads){
+                serviceMessages.add(new ServiceMessage(message));
+            }
+            return new RetObj<>(Result.SUCCESS, serviceMessages);
+        }
+    }
+
+    /**
+     * return all the messages (as ServiceMessages) that are comment of the message (messageId)
+     * message id can be a thread opening message or a comment to another message.
+     *
+     * @param sId - session id
+     * @param subForum - the name of the sub-forum
+     * @param messageId - the id of the source message
+     * @return collection of 'ServiceMessages' contain all the comments
+     */
+    public static RetObj<Collection<ServiceMessage>> getAllComments(UUID sId, String subForum, int messageId){
+        Collection<Message> messages = ForumFacade.getAllComments(sId, subForum, messageId);
+        Collection<ServiceMessage> serviceMessages = new ArrayList<>();
+        if (null != messages){
+            for (Message m : messages){
+                serviceMessages.add(new ServiceMessage(m));
+            }
+            return new RetObj<>(Result.SUCCESS, serviceMessages);
+        } else {
+            return new RetObj<>(Result.MESSAGE_NOT_FOUND);
+        }
+    }
+
+    /**
+     * return the content of an message as 'ServiceMessage'
+     * @param sId - session id
+     * @param subForum - the sub-forum
+     * @param messageId - the wanted message id
+     * @return - return the content of the message 'messageId' as 'ServiceMessage'
+     */
+    public static RetObj<ServiceMessage> getMessage(UUID sId, String subForum, int messageId){
+        Message message = ForumFacade.getMessage(sId, subForum, messageId);
+        if (null == message){
+            return new RetObj<>(Result.FAIL);
+        } else {
+            return new RetObj<>(Result.SUCCESS, new ServiceMessage(message));
+        }
+    }
+
+    /**
      * change the properties of this specific forum
      * <p>
      * TODO - need to implement
@@ -127,13 +215,5 @@ public class ForumService {
     public static boolean setProperties() {
         //TODO - implement
         return false;
-    }
-
-    public static ArrayList<String> getAllForums() {
-        return ForumFacade.getAllForums();
-    }
-
-    public static ArrayList<String> getAllSubForums(String forumName) {
-        return ForumFacade.getAllSubForums(forumName);
     }
 }
