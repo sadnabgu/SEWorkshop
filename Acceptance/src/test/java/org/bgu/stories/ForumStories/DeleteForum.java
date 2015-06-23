@@ -1,6 +1,7 @@
 package org.bgu.stories.ForumStories;
 
 import org.bgu.ForumCreatedTestBase;
+import org.bgu.MemberResgiteredToForumTestBase;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -10,7 +11,7 @@ import static org.junit.Assert.assertTrue;
  * Created by gur on 21/04/2015.
  *
  */
-public class DeleteForum extends ForumCreatedTestBase {
+public class DeleteForum extends MemberResgiteredToForumTestBase {
 
     /*
     *Test purpose: Delete Forum succesfuly by admin
