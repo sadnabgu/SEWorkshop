@@ -3,6 +3,7 @@ package org.bgu.service;
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
+import org.bgu.domain.model.notification.OnlineStrategy;
 import org.bgu.service.Exceptions.Result;
 import org.bgu.service.Exceptions.RetObj;
 import org.junit.BeforeClass;
@@ -30,6 +31,7 @@ public class ForumServiceAdminTest extends abstractTest{
         UserFacade.resetSystem();
         ForumFacade.createForum(FORUM_NAME, MANAGER1_NAME, MANAGER1_PASS);
         forum = ForumFacade.getForum(FORUM_NAME);
+        forum.attach(new OnlineStrategy());
         mods = new ArrayList<>();
         mods.add("hodai");
         assertEquals(Result.SUCCESS, UserFacade.addMember(FORUM_NAME, "hodai", "hodai"));

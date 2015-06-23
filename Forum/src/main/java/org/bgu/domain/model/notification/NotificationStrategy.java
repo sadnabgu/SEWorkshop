@@ -1,5 +1,9 @@
 package org.bgu.domain.model.notification;
 
+import org.bgu.domain.model.Member;
+
+import java.util.Collection;
+
 /**
  * this interface implement strategy pattern,
  * basic implementers (strategies):
@@ -10,6 +14,6 @@ package org.bgu.domain.model.notification;
  * Created by hodai on 6/22/15.
  */
 public interface NotificationStrategy {
-    void notify(Subject subject, NotificationType type);
+    void update(Subject subject);
 }
 

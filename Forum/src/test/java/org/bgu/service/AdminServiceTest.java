@@ -92,5 +92,13 @@ public class AdminServiceTest extends abstractTest{
         logoutSystem();
     }
 
+    @Test
+    public void isInitializedSystem_checkIfSystemIsInitialized_expectTrue(){
+        assertEquals(Result.SUCCESS, AdminService.isInitializedSystem()._result);
+    }
 
+    @Test
+    public void isInitializedSystem_checkIfSystemIsInitialized_trueObjVal(){
+        assertTrue(AdminService.isInitializedSystem()._value);
+    }
 }
