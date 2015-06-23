@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Sharon Kerzman on 23/06/2015.
  */
-public class InitializedTestBase extends TestBase{
+public class InitializedTestBase extends org.bgu.TestBase {
     public static final String MANAGER_NAME = "MELKI'S";
     public static final String MANAGER_PASS = "MOM";
     public static final String FORUM_NAME = "milk and more";

@@ -95,6 +95,26 @@ namespace StompTest
         }
         #endregion
 
+        #region Log Out
+        public void LogoutMember(string sid)
+        {
+            var msg = new StompMessage { Type = ServerActions.LogoutMember };
+            msg.Headers.Add("sid", sid);
+            
+            _client.OnReceived += HandleLogoutMemberRequest;
+            _client.Send(msg);
+            _waitEvent.WaitOne();
+        }
+
+        private void HandleLogoutMemberRequest(object sender, StompMessage msg)
+        {
+            if (msg.Type != ServerActions.LogoutMember) return;
+
+            _client.OnReceived -= HandleLogoutMemberRequest;
+            _waitEvent.Set();
+        }
+        #endregion
+
         #region Register
         public void Register(string sid, string username, string password)
         {

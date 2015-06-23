@@ -10,8 +10,33 @@ namespace StompTest
     class ForumFacade : AbstractFacade
     {
         private string _sid;
-
+        private string[] _subforums;
         internal ForumFacade(StompClient client, AutoResetEvent waitEvent) : base(client, waitEvent) { }
+
+        #region Sub Forums
+
+        public string[] GetSubForums(string sid)
+        {
+            var msg = new StompMessage { Type = ServerActions.GetSubForums };
+
+            msg.Headers.Add("sid", sid);
+
+            _subforums = null;
+            _client.OnReceived += HandleGetSubForumsResponse;
+            _client.Send(msg);
+            _waitEvent.WaitOne();
+            return _subforums;
+        }
+
+        private void HandleGetSubForumsResponse(object sender, StompMessage msg)
+        {
+            if (msg.Type != ServerActions.GetSubForums) return;
+            _subforums = msg.Content.Trim().Split('\n');
+            _client.OnReceived -= HandleGetSubForumsResponse;
+            _waitEvent.Set();
+        }
+
+        #endregion
 
         #region Login Guest
 

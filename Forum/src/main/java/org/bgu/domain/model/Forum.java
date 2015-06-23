@@ -214,10 +214,6 @@ public class Forum extends Subject{
         return _members;
     }
 
-    public Collection<Member> getLoggedInMembers(){
-        return _loggedInMembers.values();
-    }
-
     @Override
     public void notifyObserver() {
         for (NotificationStrategy ns : _Observers){
