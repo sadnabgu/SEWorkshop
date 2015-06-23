@@ -20,7 +20,7 @@ public abstract class Subject {
             return false;
         } else {
             _Observers.remove(observer);
-            return false;
+            return true;
         }
     }
 
