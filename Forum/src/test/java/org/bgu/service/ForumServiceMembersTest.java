@@ -3,14 +3,12 @@ package org.bgu.service;
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.domain.model.Forum;
-import org.bgu.service.Exceptions.Result;
-import org.bgu.service.Exceptions.RetObj;
+import org.bgu.service.ServiceObjects.Result;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;/**/
 import java.util.Collection;
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 

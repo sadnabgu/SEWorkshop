@@ -4,11 +4,10 @@ import org.bgu.communication.protocol.StompProtocol;
 import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
-import org.bgu.service.Exceptions.RetObj;
+import org.bgu.service.ServiceObjects.RetObj;
 import org.bgu.service.ForumService;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 public class EditMessage extends StompClientFrame {

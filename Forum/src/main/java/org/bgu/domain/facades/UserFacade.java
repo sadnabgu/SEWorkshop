@@ -1,7 +1,7 @@
 package org.bgu.domain.facades;
 
 import org.bgu.domain.model.*;
-import org.bgu.service.Exceptions.Result;
+import org.bgu.service.ServiceObjects.Result;
 
 import java.util.*;
 

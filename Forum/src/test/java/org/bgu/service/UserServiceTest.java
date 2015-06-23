@@ -2,8 +2,8 @@ package org.bgu.service;
 
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
-import org.bgu.service.Exceptions.Result;
-import org.bgu.service.Exceptions.RetObj;
+import org.bgu.service.ServiceObjects.Result;
+import org.bgu.service.ServiceObjects.RetObj;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
