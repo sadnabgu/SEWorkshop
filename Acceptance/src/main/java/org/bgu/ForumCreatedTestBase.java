@@ -15,6 +15,9 @@ public class ForumCreatedTestBase extends InitializedTestBase{
     public static final String SUBFORUM_NAME = "MILK";
     public static final String MODERATE_NAME = "kerz";
     public static final String MODERATE_PASS = "the cowboy";
+    public static final String MEMBER_2_NAME= "tzipi";
+    public static final String MEMBER_2_PASS = "shmipi";
+
     protected Collection moderates;
 
     @Before

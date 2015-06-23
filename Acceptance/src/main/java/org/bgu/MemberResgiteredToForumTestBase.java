@@ -10,7 +10,6 @@ import static org.junit.Assert.assertTrue;
  * Created by Sharon Kerzman on 24/06/2015.
  */
 public class MemberResgiteredToForumTestBase extends ForumCreatedTestBase {
-
     @Before
     public void init(){
         super.init();
