@@ -141,4 +141,19 @@ public class SubForum {
             return false;
         }
     }
+
+    public Collection<Message> getComments(int msgId) {
+        for (Message t : threads){
+            if (t.getMsgId() == msgId) {
+                return t.getComments();
+            }
+            Message relevantMsg;
+            relevantMsg = t.searchForMsgId(msgId);
+            if (null != relevantMsg) {
+                return relevantMsg.getComments();
+            }
+        }
+        return null;
+
+    }
 }

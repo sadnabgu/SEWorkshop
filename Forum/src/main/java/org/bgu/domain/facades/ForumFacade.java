@@ -140,10 +140,23 @@ public class ForumFacade {
 
     }
 
-    /**** FORUMS MANAGEMENT ****/
+    public static Collection<Message> getAllComments(UUID sId, String subForumName, int messageId) {
+        Session session = UserFacade.getSession(sId);
+        if (null == session)
+            return null;
+        Forum forum = session._forum;
+        if (null == forum)
+            return null;
+        SubForum subForum = forum.getSubForumByName(subForumName);
+        if (null == subForum)
+            return null;
+        return subForum.getComments(messageId);
 
-   /**********************************************************************************************************/
-    /*****************FOR TESTING*********************************************************************************/
+    }
+
+
+    /*************************************************/
+    /*****************FOR TESTING*********************/
 
     /**
      * clear all the forums database

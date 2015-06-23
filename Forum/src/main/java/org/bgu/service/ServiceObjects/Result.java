@@ -39,7 +39,8 @@ public enum Result {
     REMOVE_COMMENT_FAILED("removal of the message failed"),
     EDIT_COMMENT_FAILED("edit of message failed"),
     NAME_OR_PASS_MISSING("userName or password are null"),
-    SUBFORUM_NOT_FOUND("the given sub forum didn't found");
+    SUBFORUM_NOT_FOUND("the given sub forum didn't found"),
+    MESSAGE_NOT_FOUND("meddage not found");
 
     final public String _desc;
 

@@ -161,6 +161,19 @@ public class ForumService {
         }
     }
 
+    public static RetObj<Collection<ServiceMessage>> getAllComments(UUID sId, String subForum, int messageId){
+        Collection<Message> messages = ForumFacade.getAllComments(sId, subForum, messageId);
+        Collection<ServiceMessage> serviceMessages = new ArrayList<>();
+        if (null != messages){
+            for (Message m : messages){
+                serviceMessages.add(new ServiceMessage(m));
+            }
+            return new RetObj<>(Result.SUCCESS, serviceMessages);
+        } else {
+            return new RetObj<>(Result.MESSAGE_NOT_FOUND);
+        }
+    }
+
 
     /**
      * change the properties of this specific forum
