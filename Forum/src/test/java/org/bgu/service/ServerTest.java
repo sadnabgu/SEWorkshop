@@ -8,7 +8,7 @@ import org.junit.Test;
 /**
  * Created by gur on 09/06/2015.
  */
-public class ServerTest {@Ignore
+public class ServerTest {
 
     @Test
     public void test() throws InterruptedException, ForumException {

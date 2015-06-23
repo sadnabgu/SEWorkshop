@@ -19,6 +19,8 @@ public class InitSystem extends LoginRequest {
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<Object> retObj = AdminService.initializeSystem(username, password);
 
+        Object value = retObj._value;
+
         return new GeneralStompFrame(getCommand(), new HashMap<String,String>(), retObj._result.toString());
     }
 }

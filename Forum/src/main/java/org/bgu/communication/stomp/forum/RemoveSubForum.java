@@ -30,3 +30,20 @@ public class RemoveSubForum extends StompClientFrame {
 }
 
 
+public class GetSubForums extends StompClientFrame {
+    private final String sid;
+
+    public GetSubForums(String command, HashMap<String, String> headers, String content) {
+        super(command);
+        this.sid = headers.get("sid");
+        this.addHeaders(headers);
+        this.setContent(content);
+    }
+
+    @Override
+    public StompFrame acceptProcess(StompProtocol processor) {
+        ForumService.getAllSubForums()
+        RetObj<Object> retObj = ForumService.removeSubForum(UUID.fromString(sid), subforum);
+        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+    }
+}

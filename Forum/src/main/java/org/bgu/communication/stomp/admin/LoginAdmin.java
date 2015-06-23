@@ -29,7 +29,7 @@ public class LoginAdmin extends StompClientFrame {
         RetObj<UUID> retObj = AdminService.loginSystem(username, password);
         GeneralStompFrame gsf = new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
         if(retObj._result == Result.SUCCESS)
-            gsf.addHeader("sId",retObj._value.toString());
+            gsf.addHeader("sid",retObj._value.toString());
         return gsf;
     }
 }
