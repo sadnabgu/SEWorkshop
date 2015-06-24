@@ -68,7 +68,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean deleteModerate() {
+    public boolean removeModerate(String forumName, String subforumName, String moderateName) {
         return true;
     }
 
