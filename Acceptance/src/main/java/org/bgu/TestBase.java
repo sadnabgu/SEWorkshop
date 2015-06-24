@@ -15,7 +15,7 @@ public class TestBase {
 
     public void setRealBridge(String whichBridge){
         if(whichBridge.equals("real")){
-            bridge = null;
+            bridge = new BrideReal();
         }
         else {
             bridge = new org.bgu.BridgeProxy();
@@ -24,7 +24,7 @@ public class TestBase {
 
     @Before
     public void init(){
-        setRealBridge("proxy");
+        setRealBridge("real");
     }
 
 }
