@@ -9,8 +9,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class SubForumCreatedTestBase extends MemberResgiteredToForumTestBase {
 
-    public static final String MESSAGE_TITLE = "why is this so sour?";
-    public static final String MESSAGE_BODY = "is it out of date or just poor milk?";
+    public static final String THREAD_TITLE = "why is this so sour?";
+    public static final String THREAD_BODY = "is it out of date or just poor milk?";
 
     @Before
     public void init() {
