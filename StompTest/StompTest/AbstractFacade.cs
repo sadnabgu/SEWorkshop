@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StompTest
 {
-    abstract class AbstractFacade
+    public abstract class AbstractFacade
     {
         protected readonly AutoResetEvent _waitEvent;
         protected readonly StompClient _client;

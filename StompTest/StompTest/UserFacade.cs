@@ -2,7 +2,7 @@
 
 namespace StompTest
 {
-    class UserFacade : AbstractFacade
+    public class UserFacade : AbstractFacade
     {
         internal UserFacade(StompClient client, AutoResetEvent waitEvent) : base(client, waitEvent){}
 
