@@ -21,28 +21,24 @@ import org.bgu.service.UserService;
  */
 public class SimpleHttpServer {
 
-    public static void main(String[] args) throws Exception {
+    public static void start(String[] args) throws Exception {
 
-        // TODO - just for testing
-        ForumFacade.createForum("sex", "hodai", "123");
-        RetObj<UUID> retObj = UserService.logInGuest("sex");
-        UserService.logInMember(retObj._value,"hodai", "123");
-        Collection<String> mod = new ArrayList<>();
-        mod.add("hodai");
-        ForumService.addNewSubForum(retObj._value, "protection",mod);
-        ForumService.addNewSubForum(retObj._value, "Ilan's Mom",mod);
-        RetObj<Integer> retMsg = ForumService.addNewThread(retObj._value, "protection", "thread1", "body 1");
-        ForumService.addNewThread(retObj._value, "protection", "thread2", "body 2");
-        ForumService.addNewThread(retObj._value, "Ilan's Mom", "thread3", "body 3");
-        ForumService.postNewComment(retObj._value,"protection", retMsg._value, "comment1 title", "comment1 bode");
-        retMsg = ForumService.postNewComment(retObj._value,"protection", retMsg._value, "comment2 title", "comment2 bode");
-        ForumService.postNewComment(retObj._value,"protection", retMsg._value, "comment3 title", "comment3 bode");
+        int port;
 
-        UserService.logOut(retObj._value);
+        if (args.length != 1) {
+            System.err.println("Usage: <port>");
+            return;
+        }
 
+        try{
+            port = Integer.parseInt(args[0]);
+        }
+        catch(Exception ex){
+            System.err.println("fail to parse - Usage: <port>");
+            return;
+        }
 
-
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", new HttpHandler() {
             @Override
             public void handle(HttpExchange httpExchange) throws IOException {
@@ -61,6 +57,7 @@ public class SimpleHttpServer {
 
         server.setExecutor(null); // creates a default executor
         server.start();
+        System.out.println("Running web server at port: " + port);
     }
 
 
