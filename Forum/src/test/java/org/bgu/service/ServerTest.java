@@ -61,5 +61,8 @@ public class ServerTest {
         args[0] = "8080";
 
         SimpleHttpServer.start(args);
+        while (true){
+            Thread.sleep(1000);
+        }
     }
 }
