@@ -118,6 +118,9 @@ namespace StompTest.Forms
                 threadNode.Nodes.Add(byNode);
                 threadNode.Nodes.Add(repNode);
                 threadNode.Tag = msg;
+                bodNode.Tag = msg;
+                repNode.Tag = msg;
+                byNode.Tag = msg;
                 threads.Nodes.Add(threadNode);
                 foreach (var reply in msg._replies)
                 {
@@ -197,6 +200,12 @@ namespace StompTest.Forms
             string id = ((Message)threads.SelectedNode.Tag)._id;
             Program.Server.Forum.RemoveMessage(Program.SID, gbSubForum.Text, id);
             UpdateAllThreads();
+        }
+
+        private void lblSignup_Click(object sender, EventArgs e)
+        {
+            SignUp signUp = new SignUp();
+            signUp.ShowDialog();
         }
     }
 }

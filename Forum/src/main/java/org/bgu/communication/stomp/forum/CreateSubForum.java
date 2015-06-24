@@ -35,7 +35,7 @@ public class CreateSubForum extends StompClientFrame {
             moderatorsCollection.add(current);
         }
         RetObj<Object> retObj = ForumService.addNewSubForum(UUID.fromString(sid), subforum, moderatorsCollection);
-        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        return GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
     }
 }
 

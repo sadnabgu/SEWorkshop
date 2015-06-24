@@ -10,9 +10,11 @@ import org.bgu.communication.stomp.StompTokenizer;
 import org.bgu.communication.tokenizer.MessageTokenizer;
 import org.bgu.communication.tokenizer.TokenizerFactory;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class Server {
+    static Reactor<StompFrame> reactor;
 	/*
      * Main program, used for demonstration purposes. Create and run a
      * Reactor-based/Thread-per-client server for the tweeter protocol. 
@@ -42,9 +44,18 @@ public class Server {
     	}
     }
 
+    public static void stop(){
+        reactor.stopReactor();
+        try {
+            reactor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 	private static void operateAsReactor(int port, int poolSize) throws InterruptedException {
 		System.out.println("Running as reactor");
-		Reactor<StompFrame> reactor = createReactor(port, poolSize);
+		reactor = createReactor(port, poolSize);
 		Cancellation.instance().register(reactor);
  
 		Thread thread = new Thread(reactor);

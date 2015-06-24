@@ -25,7 +25,7 @@ public class LoginAdmin extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<UUID> retObj = AdminService.loginSystem(username, password);
-        GeneralStompFrame gsf = new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        GeneralStompFrame gsf = GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
         if(retObj._result == Result.SUCCESS)
             gsf.addHeader("sid",retObj._value.toString());
         return gsf;

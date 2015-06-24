@@ -6,7 +6,7 @@ namespace StompTest
 {
     static class Program
     {
-        public static readonly ServerFacade Server = new ServerFacade("127.0.0.1", 12345);
+        public static readonly ServerFacade Server = new ServerFacade("10.0.0.1", 12345);
         public static string SID = string.Empty;
 
         /// <summary>

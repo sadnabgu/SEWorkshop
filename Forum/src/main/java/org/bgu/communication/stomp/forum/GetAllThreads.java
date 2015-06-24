@@ -40,7 +40,7 @@ public class GetAllThreads extends StompClientFrame{
             jsonMessages = "error parsing json";
         }
 
-        return new GeneralStompFrame(getCommand(), getHeaders(), jsonMessages);
+        return GeneralStompFrame.create(getCommand(), getHeaders(), jsonMessages);
     }
 
 }
