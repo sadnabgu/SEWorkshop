@@ -1,13 +1,13 @@
 package org.bgu;
 
+import org.bgu.domain.model.User;
 import org.bgu.service.AdminService;
+import org.bgu.service.ForumService;
 import org.bgu.service.ServiceObjects.Result;
 import org.bgu.service.ServiceObjects.RetObj;
 import org.bgu.service.UserService;
 
-import java.io.*;
 import java.util.Collection;
-import java.util.Scanner;
 import java.util.UUID;
 
 /**
@@ -16,6 +16,7 @@ import java.util.UUID;
 public class BridgeReal implements BridgeAPI {
         RetObj ans;
         UUID sid;
+        protected String forumName;
 
 
     @Override
@@ -33,7 +34,8 @@ public class BridgeReal implements BridgeAPI {
 
     @Override
     public boolean deleteForum(String forumName) {
-        return false;
+        ans = AdminService.removeForum(sid,forumName);
+        return ans._result==Result.SUCCESS;
     }
 
     @Override
@@ -47,33 +49,40 @@ public class BridgeReal implements BridgeAPI {
     }
     @Override
     public boolean createSubForum(String subforumName, Collection moderates) {
-        return false;
+        ans = ForumService.addNewSubForum(sid, subforumName, moderates);
+        return ans._result==Result.SUCCESS;
+
     }
 
     @Override
     public boolean deleteSubForum(String forumName, String subforumName) {
-        return false;
+        ans = ForumService.removeSubForum(sid,subforumName);
+        return ans._result==Result.SUCCESS;
     }
 
     @Override
     public boolean addModerate(String forumName, String subforumName, String moderateName) {
-        return false;
+        ans = UserService.addModerator(sid, subforumName, moderateName);
+        return ans._result==Result.SUCCESS;
     }
 
     @Override
     public boolean removeModerate(String forumName, String subforumName, String moderateName) {
-        return false;
+        ans = UserService.removeModerator(sid,subforumName, moderateName);
+        return ans._result==Result.SUCCESS;
     }
 
     @Override
-    public boolean register(String memberName, String memberPass) {
-        return false;
+    public boolean register(String forumName, String memberName, String memberPass) {
+        ans = UserService.registerMember(sid,memberName,memberPass);
+        return ans._result.equals(Result.SUCCESS);
+
     }
 
     @Override
-    public boolean login(String name, String pass) {
-
-        return false;
+    public boolean login(String forumName, String name, String pass) {
+        this.forumName = forumName;
+        return UserService.logInMember(sid,name,pass)._result.equals(Result.SUCCESS);
     }
 
     @Override
@@ -85,7 +94,7 @@ public class BridgeReal implements BridgeAPI {
         if (!ans._result.equals(Result.SUCCESS)){
             return false;
         }
-       // UserService.logInGuest()
+        sid=UserService.logInGuest(forumName)._value;
         return false;
     }
 

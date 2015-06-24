@@ -14,28 +14,28 @@ public class CreateNewThread extends SubForumCreatedTestBase {
 
     @Test
     public void WriteFirstMessage_TitleAndMsgExsits_pass_testID_6_1() {
-        assertTrue("can not Login manager", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login manager", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         firstMessageId = bridge.createNewThread(THREAD_TITLE, THREAD_BODY);
         assertTrue("member can not add new thread", firstMessageId > 0);
     }
 
     @Test
     public void WriteFirstMessage_TitleMissing_pass_testID_6_2() {
-        assertTrue("can not Login manager", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login manager", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         firstMessageId = bridge.createNewThread("", THREAD_BODY);
         assertTrue("member can not add new thread without title", firstMessageId > 0);
     }
 
     @Test
     public void WriteFirstMessage_MsgMissing_pass_testID_6_3() {
-        assertTrue("can not Login manager", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login manager", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         firstMessageId = bridge.createNewThread(THREAD_TITLE, "");
         assertTrue("member can not add new thread without body", firstMessageId > 0);
     }
 
     @Test
     public void WriteFirstMessage_bothMissing_fail_testID_6_4() {
-        assertTrue("can not Login manager", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login manager", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         firstMessageId = bridge.createNewThread("", "");
         assertFalse("member can add new thread without title and body", firstMessageId <= 0);
     }

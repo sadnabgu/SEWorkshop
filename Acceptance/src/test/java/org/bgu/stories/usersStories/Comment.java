@@ -14,28 +14,28 @@ public class Comment extends NewThreadCreatedTestBase {
 
     @Test
     public void WriteCommentMessage_TitleAndMsgExsits_pass_testID_7_1() {
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", memberCommentId > 0);
     }
 
     @Test
     public void WriteCommentMessage_TitleMissing_pass_testID_7_2() {
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, "", COMMENT_BODY);
         assertTrue("member can not add new comment without title", memberCommentId > 0);
     }
 
     @Test
     public void WriteCommentMessage_MsgMissing_pass_testID_7_3() {
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, "");
         assertTrue("member can not add new comment without body", memberCommentId > 0);
     }
 
     @Test
     public void WriteCommentMessage_bothMissing_fail_testID_7_4() {
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, "", "");
         assertFalse("member can add new comment with no title and body", memberCommentId > 0);
     }
@@ -58,22 +58,22 @@ public class Comment extends NewThreadCreatedTestBase {
         int adminComment;
         int managerComment;
 
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", memberCommentId > 0);
         assertTrue("can not Logout member", bridge.logout());
 
-        assertTrue("can not Login member", bridge.login(MEMBER_2_NAME, MEMBER_2_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_2_NAME, MEMBER_2_PASS));
         otherMemberComment = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", otherMemberComment > 0);
         assertTrue("can not Logout member", bridge.logout());
 
-        assertTrue("can not Login member", bridge.login(ADMIN1_NAME, ADMIN1_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, ADMIN1_NAME, ADMIN1_PASS));
         adminComment = bridge.createNewComment(memberCommentId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", adminComment > 0);
         assertTrue("can not Logout member", bridge.logout());
 
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         managerComment = bridge.createNewComment(otherMemberComment, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", managerComment > 0);
         assertTrue("can not Logout member", bridge.logout());

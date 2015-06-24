@@ -1,6 +1,5 @@
 package org.bgu;
 
-import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -51,12 +50,12 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean register(String memberName, String memberPass) {
+    public boolean register(String forumName, String memberName, String memberPass) {
         return false;
     }
 
     @Override
-    public boolean login(String name, String pass) {
+    public boolean login(String forumName, String name, String pass) {
         return false;
     }
 

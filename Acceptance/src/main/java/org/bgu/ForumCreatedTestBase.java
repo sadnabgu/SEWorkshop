@@ -23,7 +23,6 @@ public class ForumCreatedTestBase extends InitializedTestBase {
     public void init(){
         super.init();
         assertTrue("could not create forum", bridge.createNewForum(FORUM_NAME, MANAGER_NAME, MANAGER_PASS));
-        assertTrue("could not log out admin", bridge.logout());
         moderates = new ArrayList();
         moderates.add(MODERATE_NAME);
     }
