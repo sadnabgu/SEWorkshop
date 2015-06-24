@@ -38,7 +38,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean deleteMessage() {
+    public boolean deleteMessage(int messageId) {
         return true;
     }
 
