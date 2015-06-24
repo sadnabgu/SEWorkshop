@@ -1,35 +1,46 @@
 package org.bgu.stories.usersStories;
 
+import org.bgu.MemberResgiteredToForumTestBase;
 import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Created by Sharon Kerzman on 24/04/2015.
  */
-public class DeleteMessage {
+public class DeleteMessage extends MemberResgiteredToForumTestBase {
     @Test
-    @Ignore
-    /*
-    *Test purpose: Delete message by owner member user
-    *
-    * Steps:
-    * 1. delete message
-    * 2. verify: message is deleted
-    *
-    *
-     */
-    public void deleteMessageByOwnerMember_UserIsSignedUp_MessageIsDeleted(){
-        // TODO: Setup system to initial state
+    public void deleteMessage_ByOwnerMember_pass() {
 
-        // TODO: Forum snd subFOrum is creTED
+    }
 
-        // TODO: UserIsSignedIn
+    @Test
+    public void deleteMessage_ByAdmin_pass() {
 
-        // TODO: write message
+    }
 
-        // TODO: Simulate  clicks delete message button
+    @Test
+    public void deleteMessage_ByManager_pass() {
 
-        // TODO: verify : Query system so Message is deleted
+    }
+
+    @Test
+    public void deleteMessage_ByAnotherManager_fail(){
+
+    }
+
+    @Test
+    public void deleteMessage_ByGuest_fail(){
+
+    }
+
+    @Test
+    public void deleteFirstAndSecondMessages_ByOwnerUser_pass(){
+
+    }
+
+    @Test
+    public void deleteSecondAndFirstMessage_ByOwnerUser_fail(){
+
     }
 
     @Test
@@ -43,7 +54,7 @@ public class DeleteMessage {
     *
     *
      */
-    public void CanNotDeleteMessageByNotOwnerMember_UserIsSignedUp_MessageIsNotDeleted(){
+    public void CanNotDeleteMessageByNotOwnerMember_UserIsSignedUp_MessageIsNotDeleted() {
         // TODO: Setup system to initial state
 
         // TODO: Forum snd subFOrum is creTED
