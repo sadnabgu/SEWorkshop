@@ -9,9 +9,11 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import org.bgu.domain.facades.ForumFacade;
+import org.bgu.domain.model.Forum;
 import org.bgu.service.ForumService;
 import org.bgu.service.ServiceObjects.Result;
 import org.bgu.service.ServiceObjects.RetObj;
+import org.bgu.service.ServiceObjects.ServiceMessage;
 import org.bgu.service.UserService;
 
 /**
@@ -29,6 +31,13 @@ public class SimpleHttpServer {
         mod.add("hodai");
         ForumService.addNewSubForum(retObj._value, "protection",mod);
         ForumService.addNewSubForum(retObj._value, "Ilan's Mom",mod);
+        RetObj<Integer> retMsg = ForumService.addNewThread(retObj._value, "protection", "thread1", "body 1");
+        ForumService.addNewThread(retObj._value, "protection", "thread2", "body 2");
+        ForumService.addNewThread(retObj._value, "Ilan's Mom", "thread3", "body 3");
+        ForumService.postNewComment(retObj._value,"protection", retMsg._value, "comment1 title", "comment1 bode");
+        retMsg = ForumService.postNewComment(retObj._value,"protection", retMsg._value, "comment2 title", "comment2 bode");
+        ForumService.postNewComment(retObj._value,"protection", retMsg._value, "comment3 title", "comment3 bode");
+
         UserService.logOut(retObj._value);
 
 
@@ -45,20 +54,125 @@ public class SimpleHttpServer {
                 }
 
                 Map<String, String> params = queryToMap(httpExchange.getRequestURI().getQuery());
-                String sid;
-                if (params.containsKey("sid")) {
-                    sid = params.get("sid");
-                    sendSubForums(httpExchange, sid, params, forumName);
-                    return;
-                } else {
-                    sendWelcomeGuestPage(httpExchange, forumName);
-                    return;
-                }
+                handleRequest(httpExchange, params, forumName);
 
             }
         });
+
         server.setExecutor(null); // creates a default executor
         server.start();
+    }
+
+
+    public static void handleRequest(HttpExchange httpExchange,
+                                     Map<String, String> params,
+                                     String forumName){
+        String sid;
+        if (params.containsKey("sid")) {
+            sid = params.get("sid");
+            if (params.containsKey("login")){
+                if(params.get("login").equals("1")) {
+                    sendLoginPage(httpExchange, sid, params, forumName);
+                    return;
+                } else {
+                    tryToLogIn(httpExchange, sid, params, forumName);
+                    return;
+                }
+            }
+            if (params.containsKey("subforum")){
+                if (params.containsKey("mid")){
+                    sendThreadPage(httpExchange, sid, params, forumName);
+                    return;
+                }
+                sendThreads(httpExchange, sid, params, forumName);
+                return;
+            }
+            sendSubForums(httpExchange, sid, params, forumName);
+            return;
+        } else {
+            sendWelcomeGuestPage(httpExchange, forumName);
+            return;
+        }
+
+    }
+
+    private static void tryToLogIn(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
+        if (params.containsKey("login")) {
+            params.remove("login");
+        }
+        RetObj<Void> retObj = UserService.logInMember(UUID.fromString(sid), params.get("user"), params.get("pass"));
+        if (Result.SUCCESS != retObj._result){
+            sendError(httpExchange, retObj._result.toString());
+        } else {
+            handleRequest(httpExchange, params, forumName);
+        }
+    }
+
+    private static void sendLoginPage(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
+        HtmlBuilder htmlBuilder = new HtmlBuilder();
+        if (params.containsKey("login")) {
+            params.remove("login");
+            params.put("login", "2");
+        }
+        htmlBuilder.setParams(params);
+
+
+        sendResponse(httpExchange, 200, htmlBuilder.buildLoginPage(forumName));
+    }
+
+    private static void sendThreadPage(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
+        HtmlBuilder htmlBuilder = new HtmlBuilder();
+        try {
+            int mid = Integer.parseInt(params.get("mid"));
+            RetObj<ServiceMessage> retObj =
+                    ForumService.getMessage(UUID.fromString(sid), params.get("subforum"), mid);
+            if (Result.SUCCESS != retObj._result){
+                sendError(httpExchange, retObj._result.toString());
+                return;
+            }
+
+            if (params.containsKey("mid"))
+                params.remove("mid");
+            htmlBuilder.setParams(params);
+            //htmlBuilder.addMessage(retObj._value);
+
+            RetObj<String> memberName = UserService.getUserName(UUID.fromString(sid));
+            if (Result.SUCCESS != memberName._result){
+                sendError(httpExchange, retObj._result.toString());
+                return;
+            }
+
+            sendResponse(httpExchange, 200,
+                    htmlBuilder.buildTread(memberName._value, forumName, params.get("subforum"), retObj._value));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void sendThreads(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
+        HtmlBuilder htmlBuilder = new HtmlBuilder();
+        if (params.containsKey("thread"))
+            params.remove("thread");
+        htmlBuilder.setParams(params);
+
+        RetObj<Collection<ServiceMessage>> retObj = ForumService.getAllThreads(UUID.fromString(sid), params.get("subforum"));
+        if (Result.SUCCESS != retObj._result){
+            sendError(httpExchange, retObj._result.toString());
+            return;
+        }
+
+        htmlBuilder.addMessage(retObj._value);
+
+        RetObj<String> memberName = UserService.getUserName(UUID.fromString(sid));
+        if (Result.SUCCESS != memberName._result){
+            sendError(httpExchange, retObj._result.toString());
+            return;
+        }
+
+        sendResponse(httpExchange, 200,
+                htmlBuilder.buildTreadsPage(memberName._value, forumName, params.get("subforum")));
+
     }
 
     private static void sendSubForums(HttpExchange httpExchange, String sid,  Map<String, String> params, String forumName) {
@@ -153,7 +267,8 @@ public class SimpleHttpServer {
         for (String param : query.split("&")) {
             String pair[] = param.split("=");
             if (pair.length>1) {
-                result.put(pair[0], pair[1]);
+                String val = pair[1].replaceFirst("/+","");
+                result.put(pair[0], val);
             }else{
                 result.put(pair[0], "");
             }
