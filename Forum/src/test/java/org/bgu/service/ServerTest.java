@@ -18,6 +18,6 @@ public class ServerTest {
         args[1] = "20";
         args[2] = "reactor";
 
-        Server.start(args);
+        //Server.start(args);
     }
 }

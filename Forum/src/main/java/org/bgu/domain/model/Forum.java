@@ -90,6 +90,8 @@ public class Forum extends Subject{
         if (subForum == null)
             return -1;  // sub forum not found
         int newMsgId = subForum.addNewThread(creator, threadTitle, threadBody);
+        _notification = NotificationType.NEW_MESSAGE;
+        notifyObserver();
         return newMsgId;
     }
 
@@ -99,6 +101,8 @@ public class Forum extends Subject{
         if (subForum == null)
             return -1;  // sub forum not found
         int newMsgId = subForum.postNewComment(creator, msgId, commentTitle, commentBody);
+        _notification = NotificationType.NEW_MESSAGE;
+        notifyObserver();
         return newMsgId;
     }
 
@@ -107,6 +111,8 @@ public class Forum extends Subject{
 
         if (subForum == null)
             return false;  // sub forum not found
+        _notification = NotificationType.EDITED_MESSAGE;
+        notifyObserver();
        return subForum.editMessage(editor, msgId, edittedTitle, edittedBody);
     }
 
@@ -121,6 +127,8 @@ public class Forum extends Subject{
         SubForum subForum = getSubForumByName(subForumName);
         if (subForum == null)
             return false;  // sub forum not found
+        _notification = NotificationType.REMOVED_MESSAGE;
+        notifyObserver();
         return subForum.removeMessage(remover, msgId);
     }
 
