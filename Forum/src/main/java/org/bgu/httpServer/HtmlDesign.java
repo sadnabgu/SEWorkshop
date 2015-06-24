@@ -1,5 +1,7 @@
 package org.bgu.httpServer;
 
+import org.bgu.service.ServiceObjects.ServiceMessage;
+
 import javax.swing.text.html.parser.Entity;
 import java.util.Map;
 
@@ -49,4 +51,62 @@ public class HtmlDesign {
     }
 
 
+    public static String makeThreadLink(String title, Map<String, String> params, String forumName, int id) {
+        return "<a href=\"/" + forumName + buildParamString(params) + "mid=" + id + "\">" + title + "</a>";
+
+    }
+
+    public static String makeThreadTreeLink(ServiceMessage message, Map<String, String> params, String forumName, int level) {
+        StringBuilder builder = new StringBuilder();
+        // the link
+
+        builder.append("<table>\n" +
+                "\t\t\t<col width=\"20\">\n" +
+                "\t\t  <tr>\n" +
+                "\t\t    <th></th>\n" +
+                "\t\t    <td>");
+
+        builder.append("<a href=\"/");
+        builder.append(forumName);
+        builder.append(buildParamString(params));
+        builder.append("mid=");
+        builder.append(message._id);
+        builder.append("\">");
+        builder.append(message._title);
+        builder.append("</a> : ");
+
+        // creator
+        builder.append("<i>");
+        builder.append(message._creator);
+        builder.append("</i>\n<br>\n");
+
+        // the content:
+        builder.append(message._body);
+        builder.append("<br>");
+
+        //next level:
+        for (ServiceMessage m : message._replies) {
+            builder.append(makeThreadTreeLink(m, params,forumName, level+1));
+        }
+
+        // close the table
+        builder.append("</td>\n" +
+                "\t\t  </tr>\n" +
+                "\t</table>");
+
+        return builder.toString();
+
+    }
+
+    public static String makeLoginLink(String forumName, Map<String, String> params) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<a href=\"/");
+        builder.append(forumName);
+        builder.append(buildParamString(params));
+        builder.append("login=1\">");
+        builder.append("Lodin");
+        builder.append("</a> <br> ");
+        return builder.toString();
+    }
 }

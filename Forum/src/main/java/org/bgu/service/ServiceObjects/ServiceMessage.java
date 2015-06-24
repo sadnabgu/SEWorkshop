@@ -16,6 +16,9 @@ public class ServiceMessage {
     public final Collection<ServiceMessage> _replies;
 
     public ServiceMessage(int id, String title, String body, String creator){
+        if (creator == null){
+            creator = "guest";
+        }
         _creator = creator;
         _id = id;
         _title = title;
@@ -27,7 +30,14 @@ public class ServiceMessage {
         _id = message.getMsgId();
         _title = message.getTitle();
         _body = message.getBody();
-        _creator = message.getCreator().getUserName();
+        String cname;
+        try {
+            cname = message.getCreator().getUserName();
+        }
+        catch (Throwable ex){
+            cname = "guest";
+        }
+        _creator = cname;
         _replies = new ArrayList<>();
         for (Message m : message.getComments()){
             _replies.add(new ServiceMessage(m));

@@ -18,7 +18,7 @@ namespace StompTest
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Server.Connect();
-
+            
             if (Server.IsSystemInitialized())
             {
                 Application.Run(new Welcome());

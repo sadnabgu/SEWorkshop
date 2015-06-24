@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using StompTest.Forms;
 
 namespace StompTest
 {
@@ -22,7 +23,7 @@ namespace StompTest
             msg.Headers.Add("password", adminpass);
             _client.OnReceived += HandleInitSystemResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleInitSystemResponse(object sender, StompMessage msg)
@@ -47,7 +48,7 @@ namespace StompTest
             _client.OnReceived += HandleCreateForumResponse;
 
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleCreateForumResponse(object sender, StompMessage msg)
@@ -69,17 +70,28 @@ namespace StompTest
             _client.OnReceived += HandleLoginAdminResponse;
             _sid = string.Empty;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
             return _sid;
         }
 
         private void HandleLoginAdminResponse(object sender, StompMessage msg)
         {
+           
             if (msg.Type != ServerActions.LoginAdmin) return;
 
-            _sid = msg.Headers["sid"];
-            _client.OnReceived -= HandleLoginAdminResponse;
-            _waitEvent.Set();
+            try
+            {
+                _sid = msg.Headers["sid"];
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                _client.OnReceived -= HandleLoginAdminResponse;
+                _waitEvent.Set();
+            }
         }
 
         #endregion
@@ -95,7 +107,7 @@ namespace StompTest
             _client.OnReceived += HandleRemoveForumResponse;
 
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleRemoveForumResponse(object sender, StompMessage msg)

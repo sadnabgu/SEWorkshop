@@ -32,6 +32,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lstForums = new System.Windows.Forms.ListBox();
             this.btnGoToForum = new System.Windows.Forms.Button();
+            this.lblAdmin = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -57,7 +58,7 @@
             this.lstForums.FormattingEnabled = true;
             this.lstForums.Location = new System.Drawing.Point(15, 84);
             this.lstForums.Name = "lstForums";
-            this.lstForums.Size = new System.Drawing.Size(107, 251);
+            this.lstForums.Size = new System.Drawing.Size(241, 251);
             this.lstForums.TabIndex = 3;
             // 
             // btnGoToForum
@@ -70,11 +71,22 @@
             this.btnGoToForum.UseVisualStyleBackColor = true;
             this.btnGoToForum.Click += new System.EventHandler(this.btnGoToForum_Click);
             // 
+            // lblAdmin
+            // 
+            this.lblAdmin.AutoSize = true;
+            this.lblAdmin.Location = new System.Drawing.Point(220, 9);
+            this.lblAdmin.Name = "lblAdmin";
+            this.lblAdmin.Size = new System.Drawing.Size(36, 13);
+            this.lblAdmin.TabIndex = 5;
+            this.lblAdmin.Text = "Admin";
+            this.lblAdmin.Click += new System.EventHandler(this.lblAdmin_Click);
+            // 
             // Welcome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 472);
+            this.ClientSize = new System.Drawing.Size(268, 472);
+            this.Controls.Add(this.lblAdmin);
             this.Controls.Add(this.btnGoToForum);
             this.Controls.Add(this.lstForums);
             this.Controls.Add(this.label2);
@@ -93,5 +105,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox lstForums;
         private System.Windows.Forms.Button btnGoToForum;
+        private System.Windows.Forms.Label lblAdmin;
     }
 }

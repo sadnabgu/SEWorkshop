@@ -23,5 +23,6 @@
         public static string IsSystemInitialized = "is_system_initialized";
         public static string GetSubForums = "get_sub_forums";
         public static string LogoutMember = "log_out_member";
+        public static string GetThreads = "get_threads";
     }
 }
