@@ -58,7 +58,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean deleteSubForum() {
+    public boolean deleteSubForum(String forumName, String subforumName) {
         return true;
     }
 
