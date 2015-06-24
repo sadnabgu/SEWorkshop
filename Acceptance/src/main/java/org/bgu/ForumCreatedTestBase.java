@@ -4,7 +4,6 @@ import org.junit.Before;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import static org.junit.Assert.assertTrue;
 
@@ -23,7 +22,7 @@ public class ForumCreatedTestBase extends InitializedTestBase {
     @Before
     public void init(){
         super.init();
-        assertTrue("could not create forum", bridge.createNewForum(FORUM_NAME, MANAGER_NAME, MANAGER_PASS));
+        assertTrue("could not create forum", bridge.createNewForum(FORUM_NAME));
         assertTrue("could not log out admin", bridge.logout());
         moderates = new ArrayList();
         moderates.add(MODERATE_NAME);
