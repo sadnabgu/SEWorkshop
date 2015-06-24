@@ -15,9 +15,6 @@ public class DeleteMessage extends NewThreadCreatedTestBase {
     /*
     *Test purpose: Delete Forum succesfuly by admin
     *
-    * Steps:
-    * 1. delete forum
-    * 2. verify: forum is in Waiting state
     *
     *
      */
@@ -73,6 +70,14 @@ public class DeleteMessage extends NewThreadCreatedTestBase {
         assertTrue("can not Login member", bridge.login(MANAGER_NAME, MANAGER_PASS));
         assertTrue("admin not delete message", bridge.deleteMessage(newThreadId));
         assertFalse("admin delete deleted message", bridge.deleteMessage(memberCommentId));
+    }
+
+    @Test
+    public void DeleteMessage_byAdmin_Twice_fail_testID_9_8() {
+        assertTrue("could not log in admin", bridge.login(ADMIN1_NAME, ADMIN1_PASS));
+        assertTrue("admin not delete message", bridge.deleteMessage(newThreadId));
+        assertFalse("admin delete message twice", bridge.deleteMessage(newThreadId));
+
     }
 
 
