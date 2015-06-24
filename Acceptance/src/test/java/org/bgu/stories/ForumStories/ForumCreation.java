@@ -14,20 +14,12 @@ import static org.junit.Assert.assertTrue;
 public class ForumCreation extends InitializedTestBase {
     @Test
     public void createForum_pass_testID_2_1() {
-        assertTrue("could not create the forum", bridge.createNewForum(FORUM_NAME));
+        assertTrue("could not create the forum", bridge.createNewForum(FORUM_NAME, MANAGER_NAME, MANAGER_PASS));
     }
 
     @Test
     public void createForum_memberAction_fail_testID_2_2() {
-        assertTrue("could not log out admin", bridge.logout());
-        assertTrue("could not register member", bridge.register(MEMBER_NAME, MEMBER_PASS));
-        assertTrue("could not log in member", bridge.login(MEMBER_NAME, MEMBER_PASS));
-        assertFalse("member succeed to create Forum", bridge.createNewForum(FORUM_NAME));
-    }
-
-    @Test
-    public void createForum_guestAction_fail_testID_2_3() {
-        assertTrue("could not log out admin", bridge.logout());
-        assertFalse("member succeed to create Forum", bridge.createNewForum(FORUM_NAME));
+        assertTrue("could not create the forum", bridge.createNewForum(FORUM_NAME, MANAGER_NAME, MANAGER_PASS));
+        assertFalse("could create forum with exsisting name", bridge.createNewForum(FORUM_NAME, MANAGER_NAME, MANAGER_PASS));
     }
 }

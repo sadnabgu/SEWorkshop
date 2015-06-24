@@ -15,12 +15,18 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean createNewForum(String forumName) {
+    public boolean createNewForum(String forumName, String managerName, String managerPass) {
+        return false;
+    }
+
+
+    @Override
+    public boolean deleteForum(String forumName) {
         return false;
     }
 
     @Override
-    public boolean deleteForum(String forumName) {
+    public boolean loginAdmin(String name, String pass) {
         return false;
     }
 

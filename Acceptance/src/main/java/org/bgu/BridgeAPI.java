@@ -15,8 +15,9 @@ public interface BridgeAPI {
      * @param adminPass**********************/
 
     public boolean initSystem(String adminName, String adminPass);
-    public boolean createNewForum(String forumName);
+    public boolean createNewForum(String forumName, String managerName, String managerPass);
     public boolean deleteForum(String forumName);
+    public boolean loginAdmin(String name, String pass);
 
     /************************************ FORUM
      * @param subforumName
