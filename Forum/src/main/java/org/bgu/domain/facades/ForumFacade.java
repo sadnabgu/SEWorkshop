@@ -51,7 +51,7 @@ public class ForumFacade {
     public static int addNewThread(UUID sId, String subForumName, String threadTitle, String threadBody) {
         Session session = UserFacade.getSession(sId);
         if (null == session)
-            return -1;
+            return -3;
         return session._forum.addNewThread(subForumName, session._member, threadTitle, threadBody);
     }
 

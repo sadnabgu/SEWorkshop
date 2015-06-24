@@ -146,4 +146,15 @@ public class HtmlBuilder {
 
         return builder.toString();
     }
+
+    public String buildNewCommentPage(String forumName) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(HtmlDesign.HTML_TOP);
+
+        builder.append(HtmlDesign.buildNewCommentForm(forumName,_params));
+
+        builder.append(HtmlDesign.HTML_BOTTOM);
+
+        return builder.toString();
+    }
 }

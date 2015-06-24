@@ -71,6 +71,7 @@ public class HtmlDesign {
         builder.append(buildParamString(params));
         builder.append("mid=");
         builder.append(message._id);
+        builder.append("&newComment=1");
         builder.append("\">");
         builder.append(message._title);
         builder.append("</a> : ");
@@ -128,6 +129,35 @@ public class HtmlDesign {
 
         builder.append("<br>\nadd new thread:<br>");
         builder.append("\tthread title:<br>\n");
+        builder.append("\t<input type=\"text\" name=\"title\" >\n");
+        builder.append("\t<br>\n");
+        builder.append("\tbody:<br>\n");
+        builder.append("\t<input type=\"text\" name=\"body\" >\n");
+        builder.append("\t<br><br>\n");
+        builder.append("\t<input type=\"submit\" value=\"post!\">\n");
+        builder.append("\t</form>");
+
+
+        return builder.toString();
+    }
+
+    public static String buildNewCommentForm(String forumName, Map<String, String> params) {
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("\t<form action=\"");
+        builder.append(forumName);
+        builder.append("\">\n");
+
+        for (Map.Entry<String, String> e : params.entrySet()){
+            builder.append("<input type=\"hidden\" name=\"");
+            builder.append(e.getKey());
+            builder.append("\"  value=\"");
+            builder.append(e.getValue());
+            builder.append("\">\n");
+        }
+
+        builder.append("<br>\nadd new comment:<br>");
+        builder.append("\tcomment title:<br>\n");
         builder.append("\t<input type=\"text\" name=\"title\" >\n");
         builder.append("\t<br>\n");
         builder.append("\tbody:<br>\n");
