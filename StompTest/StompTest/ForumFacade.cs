@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StompTest
 {
-    class ForumFacade : AbstractFacade
+    public class ForumFacade : AbstractFacade
     {
         private string _sid;
         private string[] _subforums;

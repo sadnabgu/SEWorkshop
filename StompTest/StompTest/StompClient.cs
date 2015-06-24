@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace StompTest
 {
-    class StompClient
+    public class StompClient
     {
         public string Address { get; private set; }
         public int Port { get; private set; }
@@ -60,6 +60,11 @@ namespace StompTest
                     stream.Add(buffer[0]);
                 }
             }
+        }
+
+        public void Disconnect()
+        {
+            _client.Close();
         }
     }
 }

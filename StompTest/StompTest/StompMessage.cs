@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StompTest
 {
-    class StompMessage
+    public class StompMessage
     {
         public Dictionary<String, String> Headers { get; private set; }
         public String Content { get; set; }

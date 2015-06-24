@@ -1,72 +1,50 @@
 package org.bgu.stories.usersStories;
 
 import org.bgu.*;
+import org.bgu.domain.model.SubForum;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Sharon Kerzman on 24/04/2015.
  */
-public class WriteFirstMessage extends TestBase {
+public class WriteFirstMessage extends SubForumCreatedTestBase {
 
     @Test
-    @Ignore
-    /*
-    *Test purpose: first message is not published after sending incorrect data by member user
-    *
-    * Steps:
-    * 1. insert incorrect data
-    * 2. verify: message is not published
-    *
-    *
-     */
-    public void WriteFirstMessageWithiInvalidDataByMember_UserIsSignedUp_MessageIsNotPublished(){
-        // TODO: Setup system to initial state
-
-        // TODO: Forum snd subFOrum is creTED
-
-        // TODO: UserIsSignedIn
-
-        // TODO: Simulate Member clicks write message button
-
-        // TODO: Insert invalid data
-
-        // TODO: verify : Query system so Message is not published
+    public void WriteFirstMessage_TitleAndMsgExsits_pass_testID_6_1() {
+        assertTrue("can not Login manager", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        int firstMessageId = bridge.createNewThread(MESSAGE_TITLE, MESSAGE_BODY);
+        assertTrue("member can not add new thread", firstMessageId > 0);
     }
-    @Test
-    /*
-    *Test purpose: first message is published after sending correct data by member user
-    *
-    * Steps:
-    * 1. insert correct data
-    * 2. verify: message is published
-    *
-    *
-     */
-    public void WriteFirstMessageWithValidDataByMember_UserIsSignedUp_MessageIsPublished(){
-
-
-    }
-
 
     @Test
-    @Ignore
-    /*
-    *Test purpose: first message is not published after sending incorrect data by member user
-    *
-    * Steps:
-    * 1. insert incorrect data
-    * 2. verify: message is not published
-    *
-    *
-     */
-    public void ClickFirstMessageByGuest_SubForumCreated_MessageIsNotPublished(){
-        // TODO: Setup system to initial state
-
-        // TODO: Forum snd subFOrum is creTED
-
-        // TODO: Simulate guest clicks write message button
-
-        // TODO: verify : Query system so Message is not published
+    public void WriteFirstMessage_TitleMissing_pass_testID_6_2() {
+        assertTrue("can not Login manager", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        int firstMessageId = bridge.createNewThread("", MESSAGE_BODY);
+        assertTrue("member can not add new thread without title", firstMessageId > 0);
     }
+
+    @Test
+    public void WriteFirstMessage_MsgMissing_pass_testID_6_3() {
+        assertTrue("can not Login manager", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        int firstMessageId = bridge.createNewThread(MESSAGE_TITLE, "");
+        assertTrue("member can not add new thread without body", firstMessageId > 0);
+    }
+
+    @Test
+    public void WriteFirstMessage_bothMissing_fail_testID_6_4() {
+        assertTrue("can not Login manager", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        int firstMessageId = bridge.createNewThread("", "");
+        assertFalse("member can add new thread without title and body", firstMessageId <= 0);
+    }
+
+    @Test
+    public void WriteFirstMessage_byGuest_fail_testID_6_5() {
+        int firstMessageId = bridge.createNewThread(MESSAGE_TITLE, MESSAGE_BODY);
+        assertFalse("guest can add new threads", firstMessageId <= 0);
+    }
+
 }
