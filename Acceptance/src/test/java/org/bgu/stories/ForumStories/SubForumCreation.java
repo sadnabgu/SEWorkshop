@@ -1,6 +1,7 @@
 package org.bgu.stories.ForumStories;
 
 import org.bgu.ForumCreatedTestBase;
+import org.bgu.MemberResgiteredToForumTestBase;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -9,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Sharon Kerzman on 24/04/2015.
  */
-public class SubForumCreation extends ForumCreatedTestBase {
+public class SubForumCreation extends MemberResgiteredToForumTestBase {
 
     @Test
     public void createNewSubForum_byAdmin_pass_testID_5_1() {

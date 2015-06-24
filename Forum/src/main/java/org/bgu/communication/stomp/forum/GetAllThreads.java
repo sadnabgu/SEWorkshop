@@ -6,7 +6,6 @@ import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
 import org.bgu.service.ForumService;
 import org.bgu.service.ServiceObjects.ServiceMessage;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -30,6 +29,7 @@ public class GetAllThreads extends StompClientFrame{
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
+      /*
         Collection<ServiceMessage> messages = ForumService.getAllThreads(UUID.fromString(sid), subforum)._value;
 
         ObjectMapper mapper = new ObjectMapper();
@@ -41,5 +41,9 @@ public class GetAllThreads extends StompClientFrame{
         }
 
         return new GeneralStompFrame(getCommand(), getHeaders(), jsonMessages);
+        */
+
+        return null;
     }
+
 }

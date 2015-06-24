@@ -1,8 +1,7 @@
 package org.bgu;
 
-import org.bgu.*;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+
+import org.bgu.BridgeAPI;
 import org.junit.Before;
 
 /**
@@ -19,7 +18,7 @@ public class TestBase {
             bridge = null;
         }
         else {
-            bridge = new BridgeProxy();
+            bridge = new org.bgu.BridgeProxy();
         }
     }
 
