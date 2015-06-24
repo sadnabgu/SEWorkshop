@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Json;
+using System.Runtime.Serialization.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Utilities;
+using Newtonsoft.Json;
 
 namespace StompTest
 {
@@ -11,6 +16,8 @@ namespace StompTest
     {
         private string _sid;
         private string[] _subforums;
+        private IEnumerable<Message> _messages;
+
         internal ForumFacade(StompClient client, AutoResetEvent waitEvent) : base(client, waitEvent) { }
 
         #region Sub Forums
@@ -24,7 +31,7 @@ namespace StompTest
             _subforums = null;
             _client.OnReceived += HandleGetSubForumsResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
             return _subforums;
         }
 
@@ -49,7 +56,7 @@ namespace StompTest
             _sid = string.Empty;
             _client.OnReceived += HandleLoginGuestRequest;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
 
             return _sid;
         }
@@ -80,7 +87,7 @@ namespace StompTest
 
             _client.OnReceived += HandleAddNewSubForumResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleAddNewSubForumResponse(object sender, StompMessage e)
@@ -108,7 +115,7 @@ namespace StompTest
 
             _client.OnReceived += HandleRemoveSubForumResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleRemoveSubForumResponse(object sender, StompMessage e)
@@ -133,7 +140,7 @@ namespace StompTest
 
             _client.OnReceived += HandleAddNewThreadResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleAddNewThreadResponse(object sender, StompMessage msg)
@@ -158,7 +165,7 @@ namespace StompTest
 
             _client.OnReceived += HandleRemoveMessageResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleRemoveMessageResponse(object sender, StompMessage msg)
@@ -185,7 +192,7 @@ namespace StompTest
 
             _client.OnReceived += HandlePostCommentResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
        
         private void HandlePostCommentResponse(object sender, StompMessage msg)
@@ -212,7 +219,7 @@ namespace StompTest
 
             _client.OnReceived += HandleEditMessageResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleEditMessageResponse(object sender, StompMessage msg)
@@ -223,6 +230,40 @@ namespace StompTest
             _waitEvent.Set();
         }
 
+        #endregion
+
+        #region Get Threads
+        public IEnumerable<Message> GetThreads(string sid, string subforum)
+        {
+            var msg = new StompMessage { Type = ServerActions.GetThreads };
+
+            msg.Headers.Add("sid", sid);
+            msg.Headers.Add("subforum", subforum);
+
+            _client.OnReceived += HandleGetThreadsResponse;
+            _client.Send(msg);
+            _waitEvent.WaitOne(TIMEOUT);
+            
+            return _messages;
+        }
+
+        private void HandleGetThreadsResponse(object sender, StompMessage msg)
+        {
+            if (msg.Type != ServerActions.GetThreads) return;
+
+            _client.OnReceived -= HandleGetThreadsResponse;
+
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(IEnumerable<Message>));
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(msg.Content)))
+            {
+                IEnumerable<Message> messages = (IEnumerable<Message>)serializer.ReadObject(stream);
+
+                //JsonValue value = JsonObject.Parse(msg.Content);
+                _messages = messages;
+
+                _waitEvent.Set();
+            }
+        }
         #endregion
 
 
