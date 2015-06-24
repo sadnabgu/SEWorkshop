@@ -2,6 +2,7 @@ package org.bgu;
 
 import org.bgu.domain.model.SubForum;
 
+import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -13,7 +14,7 @@ public interface BridgeAPI {
      * @param adminName
      * @param adminPass**********************/
 
-    public boolean initSystem(String adminName, String adminPass);
+    public boolean initSystem(String adminName, String adminPass) throws IOException, InterruptedException;
     public boolean createNewForum(String forumName);
     public boolean deleteForum(String forumName);
 
