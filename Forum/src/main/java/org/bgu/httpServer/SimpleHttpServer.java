@@ -75,6 +75,9 @@ public class SimpleHttpServer {
                     tryToLogIn(httpExchange, sid, params, forumName);
                     return;
                 }
+            } else if(params.containsKey("newThread")){
+                addNewThread(httpExchange, sid, params, forumName);
+                return;
             }
             if (params.containsKey("subforum")){
                 if (params.containsKey("mid")){
@@ -91,6 +94,21 @@ public class SimpleHttpServer {
             return;
         }
 
+    }
+
+    private static void addNewThread(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
+        if (params.containsKey("newThread")) {
+            params.remove("newThread");
+        }
+        RetObj<Integer> retObj = ForumService.addNewThread(UUID.fromString(sid),
+                params.get("subforum"), params.get("title"), params.get("body"));
+        params.remove("title");
+        params.remove("body");
+        if (Result.SUCCESS != retObj._result){
+            sendError(httpExchange, retObj._result.toString());
+        } else {
+            handleRequest(httpExchange, params, forumName);
+        }
     }
 
     private static void tryToLogIn(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
@@ -264,7 +282,7 @@ public class SimpleHttpServer {
         for (String param : query.split("&")) {
             String pair[] = param.split("=");
             if (pair.length>1) {
-                String val = pair[1].replaceFirst("/+","");
+                String val = pair[1].replace("+"," ");
                 result.put(pair[0], val);
             }else{
                 result.put(pair[0], "");
