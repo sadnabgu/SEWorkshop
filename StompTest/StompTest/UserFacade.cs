@@ -16,7 +16,7 @@ namespace StompTest
 
             _client.OnReceived += HandleAddModeratorResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
 
         }
 
@@ -39,7 +39,7 @@ namespace StompTest
 
             _client.OnReceived += HandleAddFriendRequest;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleAddFriendRequest(object sender, StompMessage msg)
@@ -61,7 +61,7 @@ namespace StompTest
 
             _client.OnReceived += HandleRemoveFriendRequest;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleRemoveFriendRequest(object sender, StompMessage msg)
@@ -83,7 +83,7 @@ namespace StompTest
 
             _client.OnReceived += HandleLoginMemberRequest;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleLoginMemberRequest(object sender, StompMessage msg)
@@ -103,7 +103,7 @@ namespace StompTest
             
             _client.OnReceived += HandleLogoutMemberRequest;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleLogoutMemberRequest(object sender, StompMessage msg)
@@ -125,7 +125,7 @@ namespace StompTest
 
             _client.OnReceived += HandleRegisterRequest;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleRegisterRequest(object sender, StompMessage msg)

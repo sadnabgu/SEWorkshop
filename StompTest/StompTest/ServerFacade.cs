@@ -4,6 +4,7 @@ namespace StompTest
 {
     public class ServerFacade
     {
+        private static int TIMEOUT = 3000;
         #region Ctors & Fields
         private readonly StompClient _client;
         private readonly AutoResetEvent _waitEvent = new AutoResetEvent(false);
@@ -65,7 +66,7 @@ namespace StompTest
             _sessionId = string.Empty;
             _client.OnReceived += HandleLoginGuestResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
             return _sessionId;
         }
 
@@ -86,7 +87,7 @@ namespace StompTest
 
             _client.OnReceived += HandleGetForumsResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
 
             return _forums;
         }
@@ -111,7 +112,7 @@ namespace StompTest
             msg.Headers.Add("password", password);
             _client.OnReceived += HandleLoginResponse;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
         }
 
         private void HandleLoginResponse(object server, StompMessage msg)
@@ -131,7 +132,7 @@ namespace StompTest
             _client.OnReceived += HandleIsSystemInitializedResponse;
             _initialized = false;
             _client.Send(msg);
-            _waitEvent.WaitOne();
+            _waitEvent.WaitOne(TIMEOUT);
             return _initialized;
         }
 

@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StompTest
+﻿namespace StompTest
 {
-    class Message
+    public class Message
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public string Body { get; set; }
-        public ICollection<Message> Replies { get; set; }
-
-        public Message()
-        {
-            Replies = new List<Message>();
-            Id = "";
-            Title = "";
-            Body = "";
-        }
+        public string _id { get; set; }
+        public string _title { get; set; }
+        public string _body { get; set; }
+        public string _creator { get; set; }
+        public Message[] _replies { get; set; }
     }
 }

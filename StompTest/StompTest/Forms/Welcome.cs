@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace StompTest.Forms
 {
@@ -32,6 +33,18 @@ namespace StompTest.Forms
             {
                 lstForums.Items.Add(forum);
             }
+        }
+
+        private void lblAdmin_Click(object sender, EventArgs e)
+        {
+            AdminLogin login = new AdminLogin();
+            login.ShowDialog();
+            if (login.DialogResult == DialogResult.OK)
+            {
+                Administration administration = new Administration();
+                administration.Show();
+            }
+
         }
     }
 }

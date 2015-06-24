@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StompTest", "StompTest\StompTest.csproj", "{359C5DC6-0A16-4704-8E97-4F39AB7907D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "StompTest\GUI.csproj", "{359C5DC6-0A16-4704-8E97-4F39AB7907D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineClient", "CommandLineClient\CommandLineClient.csproj", "{32E8F50C-A140-44B1-832E-83A3C0860EEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{359C5DC6-0A16-4704-8E97-4F39AB7907D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{359C5DC6-0A16-4704-8E97-4F39AB7907D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{359C5DC6-0A16-4704-8E97-4F39AB7907D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32E8F50C-A140-44B1-832E-83A3C0860EEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32E8F50C-A140-44B1-832E-83A3C0860EEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32E8F50C-A140-44B1-832E-83A3C0860EEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32E8F50C-A140-44B1-832E-83A3C0860EEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
