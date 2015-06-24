@@ -33,7 +33,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean editMessage() {
+    public boolean editMessage(int messageId, String commentTitle, String commentBody) {
         return true;
     }
 
