@@ -13,35 +13,35 @@ public class Comment extends NewThreadCreatedTestBase {
     int memberCommentId;
 
     @Test
-    public void WriteCommentMessage_TitleAndMsgExsits_pass_testID_6_1() {
+    public void WriteCommentMessage_TitleAndMsgExsits_pass_testID_7_1() {
         assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", memberCommentId > 0);
     }
 
     @Test
-    public void WriteCommentMessage_TitleMissing_pass_testID_6_2() {
+    public void WriteCommentMessage_TitleMissing_pass_testID_7_2() {
         assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, "", COMMENT_BODY);
         assertTrue("member can not add new comment without title", memberCommentId > 0);
     }
 
     @Test
-    public void WriteCommentMessage_MsgMissing_pass_testID_6_3() {
+    public void WriteCommentMessage_MsgMissing_pass_testID_7_3() {
         assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, "");
         assertTrue("member can not add new comment without body", memberCommentId > 0);
     }
 
     @Test
-    public void WriteCommentMessage_bothMissing_fail_testID_6_4() {
+    public void WriteCommentMessage_bothMissing_fail_testID_7_4() {
         assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, "", "");
         assertFalse("member can add new comment with no title and body", memberCommentId > 0);
     }
 
     @Test
-    public void WriteCommentMessage_byGuest_fail_testID_6_5() {
+    public void WriteCommentMessage_byGuest_fail_testID_7_5() {
         memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertFalse("guest can add comments threads", memberCommentId <= 0);
     }
@@ -53,7 +53,7 @@ public class Comment extends NewThreadCreatedTestBase {
     4. manager comment to member 2
      */
     @Test
-    public void WriteCommentMessage_ManyComments_pass_testID_6_1() {
+    public void WriteCommentMessage_ManyComments_pass_testID_7_6() {
         int otherMemberComment;
         int adminComment;
         int managerComment;
