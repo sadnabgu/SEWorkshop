@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace StompTest
 {
-    class AdminFacade : AbstractFacade
+    public class AdminFacade : AbstractFacade
     {
         private string _sid;
 
-        internal AdminFacade(StompClient client, AutoResetEvent waitEvent) : base(client, waitEvent) {}
+        public AdminFacade(StompClient client, AutoResetEvent waitEvent) : base(client, waitEvent) {}
 
         #region Init System
         public void InitSystem(string admin, string adminpass)

@@ -2,7 +2,7 @@
 
 namespace StompTest
 {
-    class ServerFacade
+    public class ServerFacade
     {
         #region Ctors & Fields
         private readonly StompClient _client;
@@ -47,6 +47,12 @@ namespace StompTest
         {
             _client.Connect();
         }
+
+        public void Disconnect()
+        {
+            _client.Disconnect();
+        }
+
         #endregion
 
         #region Login Guest

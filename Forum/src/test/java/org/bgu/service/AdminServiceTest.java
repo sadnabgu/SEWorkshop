@@ -3,15 +3,18 @@ import org.bgu.domain.facades.UserFacade;
 import org.bgu.service.ServiceObjects.Result;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by hodai on 4/21/15.
  */
 public class AdminServiceTest extends abstractTest{
-
 
     @BeforeClass
     public static void initialSystem() {
