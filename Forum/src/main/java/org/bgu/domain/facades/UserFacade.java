@@ -278,6 +278,17 @@ public class UserFacade {
         return sessions.get(sId);
     }
 
+    public static String getSessionUserName(UUID sId) {
+        Session session = sessions.get(sId);
+        if (null == session)
+            return null;
+        Member member = session._member;
+        if (null == member) {
+            return new Guest().getUserName();
+        } else {
+            return member.getUserName();
+        }
+    }
                     /*****************FOR TESTING******************/
                     /**********************************************/
 
@@ -297,4 +308,5 @@ public class UserFacade {
         ForumFacade.resetForums();
         sessions.clear();
     }
+
 }

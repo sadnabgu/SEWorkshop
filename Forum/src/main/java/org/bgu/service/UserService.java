@@ -145,4 +145,15 @@ public class UserService {
         return new RetObj<>(Result.SUCCESS);
     }
 
+    /**
+     * retorn the name of the member registred for the given sid
+     * @param sId - session id
+     * @return - the name of the member or Guest if not login
+     */
+    public static RetObj<String> getUserName(UUID sId) {
+        String name = UserFacade.getSessionUserName(sId);
+        if(null == name)
+            return new RetObj<>(Result.FAIL);
+        return new RetObj<>(Result.SUCCESS, name);
+    }
 }
