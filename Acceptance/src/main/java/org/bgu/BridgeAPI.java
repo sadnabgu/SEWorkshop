@@ -14,7 +14,7 @@ public interface BridgeAPI {
      * @param adminName
      * @param adminPass**********************/
 
-    public boolean initSystem(String adminName, String adminPass) throws IOException, InterruptedException;
+    public boolean initSystem(String adminName, String adminPass);
     public boolean createNewForum(String forumName);
     public boolean deleteForum(String forumName);
 

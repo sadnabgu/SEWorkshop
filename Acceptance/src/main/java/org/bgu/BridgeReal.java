@@ -1,31 +1,27 @@
 package org.bgu;
 
-import java.io.IOException;
+import org.bgu.service.AdminService;
+import org.bgu.service.ServiceObjects.Result;
+import org.bgu.service.ServiceObjects.RetObj;
+
+import java.io.*;
 import java.util.Collection;
+import java.util.Scanner;
 
 /**
  * Created by Sharon Kerzman on 24/06/2015.
  */
 public class BridgeReal implements BridgeAPI {
-    protected Runtime rt;
-    protected String[] args;
-    protected Process proc;
-
-    public BridgeReal(){
-        rt = Runtime.getRuntime();
-        args = new String[2]; // creates arguments
-    }
+        RetObj ans;
 
 
     @Override
-    public boolean initSystem(String adminName, String adminPass) throws IOException, InterruptedException {
-        args[0] = "LoginGuest"; // first is the method to invoke
-        args[1] = "sport"; // second and more are real args.. this time is forum name to log in
-        proc = rt.exec("path to CommandLineClient.exe", args); // create a process and executes
-        proc.waitFor(); // waits till process finishes
-        proc.getOutputStream(); // gets the output stream of the process to perform actions
-
-        return true;
+    public boolean initSystem(String adminName, String adminPass) {
+        ans = AdminService.initializeSystem(adminName, adminPass);
+        if (ans._result== Result.SUCCESS){
+            return true;
+        }
+        return false;
     }
 
     @Override

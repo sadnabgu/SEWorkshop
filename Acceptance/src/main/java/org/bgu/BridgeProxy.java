@@ -10,7 +10,7 @@ public class BridgeProxy implements BridgeAPI{
 
 
     @Override
-    public boolean initSystem(String adminName, String adminPass) throws IOException, InterruptedException {
+    public boolean initSystem(String adminName, String adminPass) {
         return false;
     }
 
