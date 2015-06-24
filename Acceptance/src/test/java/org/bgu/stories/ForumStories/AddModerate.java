@@ -12,31 +12,31 @@ import static org.junit.Assert.assertTrue;
 public class AddModerate extends SubForumCreatedTestBase {
 
     @Test
-    public void addModerate_byManager_pass_testID_6_1() {
+    public void addModerate_byManager_pass_testID_12_1() {
         assertTrue("can not Login manager", bridge.login(MANAGER_NAME, MANAGER_PASS));
         assertTrue("can not add moderate", bridge.addModerate(FORUM_NAME, SUBFORUM_NAME, MODERATE_2_NAME));
     }
 
     @Test
-    public void addModerate_byAdmin_pass_testID_6_1() {
+    public void addModerate_byAdmin_pass_testID_12_2() {
         assertTrue("can not Login admin", bridge.login(ADMIN1_NAME, ADMIN1_PASS));
         assertTrue("can not add moderate", bridge.addModerate(FORUM_NAME, SUBFORUM_NAME, MODERATE_2_NAME));
     }
 
     @Test
-    public void addModerate_alreadyModerate_fail_testID_6_1() {
+    public void addModerate_alreadyModerate_fail_testID_12_3() {
         assertTrue("can not Login admin", bridge.login(MANAGER_NAME, MANAGER_PASS));
         assertFalse("can add existing moderate", bridge.addModerate(FORUM_NAME, SUBFORUM_NAME, MODERATE_NAME));
     }
 
     @Test
-    public void addModerate_byMember_fail_testID_6_1() {
+    public void addModerate_byMember_fail_testID_12_4() {
         assertTrue("can not Login admin", bridge.login(MEMBER_NAME, MEMBER_PASS));
         assertFalse("member can add moderate", bridge.addModerate(FORUM_NAME, SUBFORUM_NAME, MODERATE_2_NAME));
     }
 
     @Test
-    public void addModerate_byGuest_fail_testID_6_1() {
+    public void addModerate_byGuest_fail_testID_12_5() {
         assertFalse("guest can add moderate", bridge.addModerate(FORUM_NAME, SUBFORUM_NAME, MODERATE_2_NAME));
     }
 }
