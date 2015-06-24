@@ -27,6 +27,6 @@ public class RemoveMessage extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<Object> retObj = ForumService.removeMessage(UUID.fromString(sid), subforum, Integer.parseInt(msgid));
-        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        return GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
     }
 }

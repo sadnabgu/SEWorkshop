@@ -20,7 +20,7 @@ public class InitSystem extends LoginRequest {
 
         Object value = retObj._value;
 
-        return new GeneralStompFrame(getCommand(), new HashMap<String,String>(), retObj._result.toString());
+        return GeneralStompFrame.create(getCommand(), new HashMap<String,String>(), retObj._result.toString(), retObj);
     }
 }
 

@@ -23,7 +23,7 @@ public class LoginGuest extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<UUID> retObj = UserService.logInGuest(forum);
-        GeneralStompFrame gsf = new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        GeneralStompFrame gsf = GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
         if (retObj._value != null)
             gsf.addHeader("sid", retObj._value.toString());
         return gsf;

@@ -5,6 +5,7 @@ import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
 import org.bgu.service.ForumService;
+import org.bgu.service.ServiceObjects.RetObj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,15 +23,18 @@ public class GetSubForums extends StompClientFrame {
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        ArrayList<String> subforums = ForumService.getAllSubForums(UUID.fromString(sid))._value;
+        RetObj<ArrayList<String>> retObj = ForumService.getAllSubForums(UUID.fromString(sid));
+        ArrayList<String> subforums = retObj._value;
 
         StringBuilder builder = new StringBuilder();
 
-        for(String subforum: subforums){
-            builder.append(subforum);
-            builder.append('\n');
+        if (subforums != null) {
+            for (String subforum : subforums) {
+                builder.append(subforum);
+                builder.append('\n');
+            }
         }
 
-        return new GeneralStompFrame(getCommand(), getHeaders(), builder.toString().trim());
+        return GeneralStompFrame.create(getCommand(), getHeaders(), builder.toString().trim(), retObj);
     }
 }
