@@ -16,31 +16,31 @@ public class EditMessage extends NewThreadCreatedTestBase {
 
     @Test
     public void EditMessage_TitleAndMsgExsits_pass_testID_8_1() {
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         assertTrue("member can not edit message", bridge.editMessage(newThreadId, EDITED_TITLE, EDITED_BODY));
     }
 
     @Test
     public void EditMessage_TitleMissing_pass_testID_8_2() {
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         assertTrue("member can not edit message without title", bridge.editMessage(newThreadId, "", EDITED_BODY));
     }
 
     @Test
     public void EditMessage_MsgMissing_pass_testID_8_3() {
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         assertTrue("member can not edit message without body", bridge.editMessage(newThreadId, EDITED_TITLE, ""));
     }
 
     @Test
     public void EditMessage_bothMissing_fail_testID_8_4() {
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         assertFalse("member can edit message without body and title", bridge.editMessage(newThreadId, "", ""));
     }
 
     @Test
     public void EditMessage_byother_fail_testID_8_5() {
-        assertTrue("can not Login member", bridge.login(MEMBER_2_NAME, MEMBER_2_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_2_NAME, MEMBER_2_PASS));
         assertFalse("member can edit message without body and title", bridge.editMessage(newThreadId, "", ""));
     }
 
@@ -64,31 +64,31 @@ public class EditMessage extends NewThreadCreatedTestBase {
         int adminComment;
         int managerComment;
 
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", memberCommentId > 0);
         assertTrue("can not Logout member", bridge.logout());
 
-        assertTrue("can not Login member", bridge.login(MEMBER_2_NAME, MEMBER_2_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_2_NAME, MEMBER_2_PASS));
         otherMemberComment = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", otherMemberComment > 0);
         assertTrue("can not Logout member", bridge.logout());
 
-        assertTrue("can not Login member", bridge.login(ADMIN1_NAME, ADMIN1_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, ADMIN1_NAME, ADMIN1_PASS));
         adminComment = bridge.createNewComment(memberCommentId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", adminComment > 0);
         assertTrue("can not Logout member", bridge.logout());
 
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         managerComment = bridge.createNewComment(otherMemberComment, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", managerComment > 0);
         assertTrue("can not Logout member", bridge.logout());
 
-        assertTrue("can not Login member", bridge.login(ADMIN1_NAME, ADMIN1_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, ADMIN1_NAME, ADMIN1_PASS));
         assertTrue("member can not edit message", bridge.editMessage(memberCommentId, EDITED_TITLE, EDITED_BODY));
         assertTrue("can not Logout member", bridge.logout());
 
-        assertTrue("can not Login member", bridge.login(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         assertTrue("member can not edit message", bridge.editMessage(otherMemberComment, EDITED_TITLE, EDITED_BODY));
         assertTrue("can not Logout member", bridge.logout());
 

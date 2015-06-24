@@ -17,9 +17,9 @@ public class SubForumCreatedTestBase extends MemberResgiteredToForumTestBase {
     @Before
     public void init() {
         super.init();
-        assertTrue("can not register member", bridge.register(MODERATE_2_NAME, MODERATE_2_PASS));
-        assertTrue("can not Login manager", bridge.login(MANAGER_NAME, MANAGER_PASS));
+        assertTrue("can not register member", bridge.register(FORUM_NAME, MODERATE_2_NAME, MODERATE_2_PASS));
+        assertTrue("can not Login manager", bridge.login(FORUM_NAME, MANAGER_NAME, MANAGER_PASS));
         assertTrue("could not register member", bridge.createSubForum(SUBFORUM_NAME, moderates));
-        assertTrue("can not logout member", bridge.login(MANAGER_NAME, MANAGER_PASS));
+        assertTrue("can not logout member", bridge.login(FORUM_NAME, MANAGER_NAME, MANAGER_PASS));
     }
 }

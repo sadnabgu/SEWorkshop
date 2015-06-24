@@ -2,8 +2,6 @@ package org.bgu;
 
 import org.junit.Before;
 
-import java.util.ArrayList;
-
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -13,6 +11,6 @@ public class MemberResgiteredToForumTestBase extends ForumCreatedTestBase {
     @Before
     public void init(){
         super.init();
-        assertTrue("could not register member", bridge.register(MEMBER_NAME, MEMBER_PASS));
+        assertTrue("could not register member", bridge.register(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
     }
 }

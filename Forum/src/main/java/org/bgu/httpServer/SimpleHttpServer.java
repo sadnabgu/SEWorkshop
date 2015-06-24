@@ -75,6 +75,16 @@ public class SimpleHttpServer {
                     tryToLogIn(httpExchange, sid, params, forumName);
                     return;
                 }
+            } else if(params.containsKey("newThread")){
+                addNewThread(httpExchange, sid, params, forumName);
+                return;
+            } else if(params.containsKey("newComment")){
+                if (params.get("newComment").equals("1")) {
+                    sendAddCommentForm(httpExchange, sid, params, forumName);
+                    return;
+                } else {
+                    addNewComment(httpExchange, sid, params, forumName);
+                }
             }
             if (params.containsKey("subforum")){
                 if (params.containsKey("mid")){
@@ -91,6 +101,52 @@ public class SimpleHttpServer {
             return;
         }
 
+    }
+
+    private static void addNewComment(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
+        if (params.containsKey("newComment")) {
+            params.remove("newComment");
+        }
+        RetObj<Integer> retObj = ForumService.postNewComment(UUID.fromString(sid),
+                params.get("subforum"), Integer.parseInt(params.get("mid")),  params.get("title"), params.get("body"));
+        params.remove("title");
+        params.remove("body");
+        if (Result.SUCCESS != retObj._result){
+            sendError(httpExchange, retObj._result.toString());
+            return;
+        } else {
+            handleRequest(httpExchange, params, forumName);
+            return;
+        }
+    }
+
+    private static void sendAddCommentForm(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
+        HtmlBuilder htmlBuilder = new HtmlBuilder();
+        if (params.containsKey("newComment")) {
+            params.remove("newComment");
+            params.put("newComment", "2");
+        }
+        htmlBuilder.setParams(params);
+
+
+        sendResponse(httpExchange, 200, htmlBuilder.buildNewCommentPage(forumName));
+    }
+
+    private static void addNewThread(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
+        if (params.containsKey("newThread")) {
+            params.remove("newThread");
+        }
+        RetObj<Integer> retObj = ForumService.addNewThread(UUID.fromString(sid),
+                params.get("subforum"), params.get("title"), params.get("body"));
+        params.remove("title");
+        params.remove("body");
+        if (Result.SUCCESS != retObj._result){
+            sendError(httpExchange, retObj._result.toString());
+            return;
+        } else {
+            handleRequest(httpExchange, params, forumName);
+            return;
+        }
     }
 
     private static void tryToLogIn(HttpExchange httpExchange, String sid, Map<String, String> params, String forumName) {
@@ -264,7 +320,7 @@ public class SimpleHttpServer {
         for (String param : query.split("&")) {
             String pair[] = param.split("=");
             if (pair.length>1) {
-                String val = pair[1].replaceFirst("/+","");
+                String val = pair[1].replace("+", " ");
                 result.put(pair[0], val);
             }else{
                 result.put(pair[0], "");

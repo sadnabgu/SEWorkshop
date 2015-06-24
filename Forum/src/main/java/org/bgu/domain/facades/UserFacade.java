@@ -40,6 +40,9 @@ public class UserFacade {
             return false;
         if (!systemInitialized)
             return false;
+        if (superAdminName.equals("") || superAdminPass.equals("")){
+            return false;
+        }
         Member admin = new Member(superAdminName, superAdminPass);
         superAdmins.add(admin);
         return true;

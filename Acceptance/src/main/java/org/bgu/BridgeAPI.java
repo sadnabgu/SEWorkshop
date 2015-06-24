@@ -2,6 +2,7 @@ package org.bgu;
 
 import org.bgu.domain.model.SubForum;
 
+import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -14,8 +15,9 @@ public interface BridgeAPI {
      * @param adminPass**********************/
 
     public boolean initSystem(String adminName, String adminPass);
-    public boolean createNewForum(String forumName);
+    public boolean createNewForum(String forumName, String managerName, String managerPass);
     public boolean deleteForum(String forumName);
+    public boolean loginAdmin(String name, String pass);
 
     /************************************ FORUM
      * @param subforumName
@@ -27,11 +29,12 @@ public interface BridgeAPI {
     public boolean removeModerate(String forumName, String subforumName, String moderateName);
 
     /************************************ USER
+     * @param forumName
      * @param memberName
-     * @param memberPass**********************/
+     * @param memberPass **********************/
 
-    public boolean register(String memberName, String memberPass);
-    public boolean login(String name, String pass);
+    public boolean register(String forumName, String memberName, String memberPass);
+    public boolean login(String forumName, String name, String pass);
     public boolean logout();
     public int createNewThread(String messageTitle, String messageBody);
     public int createNewComment(int newThreadId, String commentTitle, String commentBody);

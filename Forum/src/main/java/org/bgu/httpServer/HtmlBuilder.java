@@ -1,8 +1,6 @@
 package org.bgu.httpServer;
 
-import org.bgu.service.ForumService;
 import org.bgu.service.ServiceObjects.ServiceMessage;
-import org.bgu.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -93,6 +91,10 @@ public class HtmlBuilder {
             builder.append(HtmlDesign.makeThreadLink(m._title, _params, forumName, m._id));
             builder.append("\n<br>\n");
         }
+
+        // new thread form
+        builder.append(HtmlDesign.buildNewThreadForm(forumName, _params));
+
         builder.append(HtmlDesign.HTML_BOTTOM);
 
         return builder.toString();
@@ -139,6 +141,17 @@ public class HtmlBuilder {
         builder.append("\t<br><br>\n");
         builder.append("\t<input type=\"submit\" value=\"login\">\n");
         builder.append("\t</form>");
+
+        builder.append(HtmlDesign.HTML_BOTTOM);
+
+        return builder.toString();
+    }
+
+    public String buildNewCommentPage(String forumName) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(HtmlDesign.HTML_TOP);
+
+        builder.append(HtmlDesign.buildNewCommentForm(forumName,_params));
 
         builder.append(HtmlDesign.HTML_BOTTOM);
 

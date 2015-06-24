@@ -192,6 +192,9 @@ public class Forum extends Subject{
         Member member  = getMemberByName(userName);
         if (!(null == member))
             return false;
+        if (userName.equals("") || password.equals("")){
+            return false;
+        }
         member = new Member(userName, password);
         _members.add(member);
         return true;
