@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * Created by Sharon Kerzman on 24/04/2015.
  */
-public class WriteSecondMessage {
+public class Comment {
     @Test
     @Ignore
     /*
@@ -25,7 +25,7 @@ public class WriteSecondMessage {
 
         // TODO: UserIsSignedIn
 
-        //TODO: WriteFirstMessage
+        //TODO: CreateNewThread
 
         // TODO: Simulate guest clicks write message button
 
