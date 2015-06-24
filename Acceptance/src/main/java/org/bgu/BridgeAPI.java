@@ -23,7 +23,7 @@ public interface BridgeAPI {
 
     public boolean createSubForum(String subforumName, Collection moderates);
     public boolean deleteSubForum(String forumName, String subforumName);
-    public boolean addModerate();
+    public boolean addModerate(String forumName, String subforumName, String moderateName);
     public boolean deleteModerate();
 
     /************************************ USER

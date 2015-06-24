@@ -63,7 +63,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean addModerate() {
+    public boolean addModerate(String forumName, String subforumName, String moderateName) {
         return true;
     }
 
