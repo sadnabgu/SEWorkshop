@@ -28,7 +28,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public int createNewComment() {
+    public int createNewComment(int newThreadId, String commentTitle, String commentBody) {
         return 0;
     }
 

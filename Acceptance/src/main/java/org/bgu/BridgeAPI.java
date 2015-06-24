@@ -34,7 +34,7 @@ public interface BridgeAPI {
     public boolean login(String name, String pass);
     public boolean logout();
     public int createNewThread(String messageTitle, String messageBody);
-    public int createNewComment();
+    public int createNewComment(int newThreadId, String commentTitle, String commentBody);
     public boolean editMessage();
     public boolean deleteMessage();
 
