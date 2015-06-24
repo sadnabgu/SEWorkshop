@@ -23,13 +23,13 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean createNewThread() {
-        return true;
+    public int createNewThread(String messageTitle, String messageBody) {
+        return 0;
     }
 
     @Override
-    public boolean createNewComment() {
-        return true;
+    public int createNewComment() {
+        return 0;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean createNewForum(String forumName, String managerName, String managerPass) {
+    public boolean createNewForum(String forumName) {
         return true;
     }
 

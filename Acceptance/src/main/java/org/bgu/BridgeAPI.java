@@ -14,7 +14,7 @@ public interface BridgeAPI {
      * @param adminPass**********************/
 
     public boolean initSystem(String adminName, String adminPass);
-    public boolean createNewForum(String forumName, String managerName, String managerPass);
+    public boolean createNewForum(String forumName);
     public boolean deleteForum(String forumName);
 
     /************************************ FORUM
@@ -33,8 +33,8 @@ public interface BridgeAPI {
     public boolean register(String memberName, String memberPass);
     public boolean login(String name, String pass);
     public boolean logout();
-    public boolean createNewThread();
-    public boolean createNewComment();
+    public int createNewThread(String messageTitle, String messageBody);
+    public int createNewComment();
     public boolean editMessage();
     public boolean deleteMessage();
 
