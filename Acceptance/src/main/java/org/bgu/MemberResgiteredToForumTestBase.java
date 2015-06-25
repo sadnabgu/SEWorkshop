@@ -9,8 +9,9 @@ import static org.junit.Assert.assertTrue;
  */
 public class MemberResgiteredToForumTestBase extends ForumCreatedTestBase {
     @Before
-    public void init(){
+    public void init() {
         super.init();
         assertTrue("could not register member", bridge.register(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
+        assertTrue("could not register member", bridge.register(FORUM_NAME, MODERATE_NAME, MODERATE_PASS));
     }
 }
