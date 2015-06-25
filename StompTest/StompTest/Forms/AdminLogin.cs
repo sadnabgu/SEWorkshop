@@ -19,7 +19,14 @@ namespace StompTest.Forms
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            Program.SID = Program.Server.Admin.LogInAdmin(txtUser.Text, txtPass.Text);
+            try
+            {
+                Program.SID = Program.Server.Admin.LogInAdmin(txtUser.Text, txtPass.Text);
+            }
+            catch (Exception ex)
+            {
+                Program.SID = string.Empty;
+            }
             if (Program.SID == null || Program.SID == string.Empty)
             {
                 this.DialogResult = DialogResult.No;

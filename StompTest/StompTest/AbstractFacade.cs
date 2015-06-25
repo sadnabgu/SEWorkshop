@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StompTest
 {
-    public abstract class AbstractFacade
+    public abstract class AbstractFacade: BaseFacade
     {
         public static readonly int TIMEOUT = 3000;
         protected readonly AutoResetEvent _waitEvent;

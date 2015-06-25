@@ -26,16 +26,24 @@ namespace StompTest.Forms
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (txtPass.Text == string.Empty || txtUser.Text == string.Empty)
+            try
             {
-                lblError.Text = "Empty input or error logging in";
+                if (txtPass.Text == string.Empty || txtUser.Text == string.Empty)
+                {
+                    lblError.Text = "Empty input or error logging in";
+                    lblError.Visible = true;
+                }
+
+                Program.Server.User.LoginMember(Program.SID, txtUser.Text, txtPass.Text);
+                callback.Invoke(txtUser.Text);
+                this.Visible = false;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "Failed: " + ex.Message;
                 lblError.Visible = true;
             }
-
-            Program.Server.User.LoginMember(Program.SID, txtUser.Text, txtPass.Text);
-            callback.Invoke(txtUser.Text);
-            this.Visible = false;
-            this.Close();
         }
     }
 }

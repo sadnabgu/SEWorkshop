@@ -13,7 +13,14 @@ namespace StompTest.Forms
         {
             InitializeComponent();
             _forumName = forumName;
-            Program.SID = Program.Server.LogInGuest(forumName);
+            try
+            {
+                Program.SID = Program.Server.LogInGuest(forumName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to establish session");
+            }
         }
 
         private void Forum_Load(object sender, EventArgs e)
@@ -41,12 +48,18 @@ namespace StompTest.Forms
 
         private void lblLogOut_Click(object sender, EventArgs e)
         {
-            Program.Server.User.LogoutMember(Program.SID);
-            
-            lblWelcome.Text = "Welcome Guest";
-            lblLogin.Visible = true;
-            lblLogOut.Visible = false;
-            lblManage.Visible = false;
+            try
+            {
+                Program.Server.User.LogoutMember(Program.SID);
+                lblWelcome.Text = "Welcome Guest";
+                lblLogin.Visible = true;
+                lblLogOut.Visible = false;
+                lblManage.Visible = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to log out");
+            }
         }
 
         private void lblManage_Click(object sender, EventArgs e)
@@ -58,15 +71,22 @@ namespace StompTest.Forms
 
         private void Forum_MouseEnter(object sender, EventArgs e)
         {
-            string[] subforums = Program.Server.Forum.GetSubForums(Program.SID);
-            if (subforums == null) return;
-            
-            lstSubForums.Items.Clear();
-            foreach(var subforum in subforums)
+            try
             {
-                lstSubForums.Items.Add(subforum);
+                string[] subforums = Program.Server.Forum.GetSubForums(Program.SID);
+                if (subforums == null) return;
+
+                lstSubForums.Items.Clear();
+                foreach (var subforum in subforums)
+                {
+                    lstSubForums.Items.Add(subforum);
+                }
+                lstSubForums.Refresh();
             }
-            lstSubForums.Refresh();
+            catch (Exception ex)
+            {
+                //TODO: some error messge?
+            }
         }
 
         private void lstSubForums_SelectedValueChanged(object sender, EventArgs e)
@@ -78,58 +98,73 @@ namespace StompTest.Forms
 
         private void lblPost_Click(object sender, EventArgs e)
         {
-            if (txtTitle.Text == string.Empty)
+            try
             {
-                lblError.Text = "Cannot post empty title";
-                lblError.Visible = true;
-                return;
-            }
+                if (txtTitle.Text == string.Empty)
+                {
+                    lblError.Text = "Cannot post empty title";
+                    lblError.Visible = true;
+                    return;
+                }
 
-            if (threads.SelectedNode == null)
+                if (threads.SelectedNode == null)
+                {
+                    Program.Server.Forum.AddNewThread(Program.SID, gbSubForum.Text, txtTitle.Text, txtBody.Text);
+                }
+                else
+                {
+                    Program.Server.Forum.PostComment(Program.SID, gbSubForum.Text,
+                        ((Message) threads.SelectedNode.Tag)._id, txtTitle.Text, txtBody.Text);
+                }
+
+                UpdateAllThreads();
+
+                lblError.Visible = false;
+            }
+            catch (Exception ex)
             {
-                Program.Server.Forum.AddNewThread(Program.SID, gbSubForum.Text, txtTitle.Text, txtBody.Text);
+                MessageBox.Show(ex.Message, "Failed to post message");
             }
-            else
-            {
-                Program.Server.Forum.PostComment(Program.SID, gbSubForum.Text, ((Message)threads.SelectedNode.Tag)._id, txtTitle.Text, txtBody.Text);
-            }
-
-            UpdateAllThreads();
-
-            lblError.Visible = false;
         }
 
         private void UpdateAllThreads()
         {
-            IEnumerable<Message> messages = Program.Server.Forum.GetThreads(Program.SID, gbSubForum.Text);
-
-            if (messages == null) return;
-
-            threads.BeginUpdate();
-            threads.Nodes.Clear();
-            foreach (var msg in messages)
+            try
             {
-                TreeNode threadNode = new TreeNode(msg._title);
-                var bodNode = new TreeNode(msg._body) { ForeColor = Color.DarkSlateGray};
-                var byNode = new TreeNode(msg._creator) { ForeColor = Color.Blue }; 
-                var repNode = new TreeNode("replies") { ForeColor = Color.Chocolate };
+                IEnumerable<Message> messages = Program.Server.Forum.GetThreads(Program.SID, gbSubForum.Text);
 
-                threadNode.Nodes.Add(bodNode);
-                threadNode.Nodes.Add(byNode);
-                threadNode.Nodes.Add(repNode);
-                threadNode.Tag = msg;
-                bodNode.Tag = msg;
-                repNode.Tag = msg;
-                byNode.Tag = msg;
-                threads.Nodes.Add(threadNode);
-                foreach (var reply in msg._replies)
+                if (messages == null) return;
+
+                threads.BeginUpdate();
+                threads.Nodes.Clear();
+                foreach (var msg in messages)
                 {
-                    UpdateNode(repNode, reply);
-                }
-            }
+                    TreeNode threadNode = new TreeNode(msg._title);
+                    var bodNode = new TreeNode(msg._body) {ForeColor = Color.DarkSlateGray};
+                    var byNode = new TreeNode(msg._creator) {ForeColor = Color.Blue};
+                    var repNode = new TreeNode("replies (" + msg._replies.Length + ")") {ForeColor = Color.Chocolate};
 
-            threads.EndUpdate();
-            threads.Refresh();
+                    threadNode.Nodes.Add(bodNode);
+                    threadNode.Nodes.Add(byNode);
+                    threadNode.Nodes.Add(repNode);
+                    threadNode.Tag = msg;
+                    bodNode.Tag = msg;
+                    repNode.Tag = msg;
+                    byNode.Tag = msg;
+                    threads.Nodes.Add(threadNode);
+                    foreach (var reply in msg._replies)
+                    {
+                        UpdateNode(repNode, reply);
+                    }
+                }
+
+                threads.EndUpdate();
+                threads.Refresh();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to update threads");
+            }
         }
 
         private void UpdateNode(TreeNode parentNode, Message msg)
@@ -137,7 +172,7 @@ namespace StompTest.Forms
             TreeNode threadNode = new TreeNode(msg._title);
             var bodNode = new TreeNode(msg._body) { ForeColor = Color.DarkSlateGray };
             var byNode = new TreeNode(msg._creator) { ForeColor = Color.Blue };
-            var repNode = new TreeNode("replies") { ForeColor = Color.Chocolate };
+            var repNode = new TreeNode("replies (" + msg._replies.Length + ")") { ForeColor = Color.Chocolate };
 
             threadNode.Nodes.Add(bodNode);
             threadNode.Nodes.Add(byNode);
@@ -160,46 +195,68 @@ namespace StompTest.Forms
 
         private void lblNewThread_Click(object sender, EventArgs e)
         {
-            if (txtTitle.Text == string.Empty)
+            try
             {
-                lblError.Text = "Cannot post empty title";
-                lblError.Visible = true;
-                return;
+                if (txtTitle.Text == string.Empty)
+                {
+                    lblError.Text = "Cannot post empty title";
+                    lblError.Visible = true;
+                    return;
+                }
+
+                Program.Server.Forum.AddNewThread(Program.SID, gbSubForum.Text, txtTitle.Text, txtBody.Text);
+
+                UpdateAllThreads();
+
+                lblError.Visible = false;
             }
-
-            Program.Server.Forum.AddNewThread(Program.SID, gbSubForum.Text, txtTitle.Text, txtBody.Text);
-
-            UpdateAllThreads();
-
-            lblError.Visible = false;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to add thread");
+            }
         }
 
         private void lblEdit_Click(object sender, EventArgs e)
         {
-            if (threads.SelectedNode == null) return;
-            var result = MessageBox.Show("Are you sure you want to edit", "Edit Message", MessageBoxButtons.OKCancel);
-            if (result != DialogResult.OK) return;
-            if (txtTitle.Text == string.Empty)
+            try
             {
-                lblError.Text = "Cannot post empty title";
-                lblError.Visible = true;
-                return;
-            }
+                if (threads.SelectedNode == null) return;
+                var result = MessageBox.Show("Are you sure you want to edit", "Edit Message", MessageBoxButtons.OKCancel);
+                if (result != DialogResult.OK) return;
+                if (txtTitle.Text == string.Empty)
+                {
+                    lblError.Text = "Cannot post empty title";
+                    lblError.Visible = true;
+                    return;
+                }
 
-            string id = ((Message) threads.SelectedNode.Tag)._id;
-            Program.Server.Forum.EditMessage(Program.SID, gbSubForum.Text, id, txtTitle.Text, txtBody.Text);
-            UpdateAllThreads();
+                string id = ((Message) threads.SelectedNode.Tag)._id;
+                Program.Server.Forum.EditMessage(Program.SID, gbSubForum.Text, id, txtTitle.Text, txtBody.Text);
+                UpdateAllThreads();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to edit message");
+            }
         }
 
         private void lblRem_Click(object sender, EventArgs e)
         {
-            if (threads.SelectedNode == null) return;
-            var result = MessageBox.Show("Are you sure you want to remove", "Remove Message", MessageBoxButtons.OKCancel);
-            if (result != DialogResult.OK) return;
+            try
+            {
+                if (threads.SelectedNode == null) return;
+                var result = MessageBox.Show("Are you sure you want to remove", "Remove Message",
+                    MessageBoxButtons.OKCancel);
+                if (result != DialogResult.OK) return;
 
-            string id = ((Message)threads.SelectedNode.Tag)._id;
-            Program.Server.Forum.RemoveMessage(Program.SID, gbSubForum.Text, id);
-            UpdateAllThreads();
+                string id = ((Message) threads.SelectedNode.Tag)._id;
+                Program.Server.Forum.RemoveMessage(Program.SID, gbSubForum.Text, id);
+                UpdateAllThreads();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to remove message");
+            }
         }
 
         private void lblSignup_Click(object sender, EventArgs e)

@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AbstractFacade.cs" />
     <Compile Include="AdminFacade.cs" />
+    <Compile Include="BaseFacade.cs" />
     <Compile Include="Forms\Administration.cs">
       <SubType>Form</SubType>
     </Compile>
