@@ -26,7 +26,7 @@ public class LogOutMember extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<Object> retObj = UserService.logOut(UUID.fromString(sid));
-        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        return GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
     }
 }
 

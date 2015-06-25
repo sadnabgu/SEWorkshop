@@ -29,7 +29,7 @@ public class PostNewMessage extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<Integer> retObj = ForumService.postNewComment(UUID.fromString(sid), subforum, Integer.parseInt(parentId), title, getContent());
-        GeneralStompFrame gsf = new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        GeneralStompFrame gsf = GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
         if (null != retObj._value)
             gsf.addHeader("msgId", retObj._value.toString());
         return gsf;

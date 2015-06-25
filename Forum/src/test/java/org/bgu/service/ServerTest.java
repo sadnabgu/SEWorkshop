@@ -17,7 +17,7 @@ import java.util.UUID;
  * Created by gur on 09/06/2015.
  */
 public class ServerTest {
-
+/*
     @Ignore
     @BeforeClass
     public static void prepareBasicForum(){
@@ -38,10 +38,8 @@ public class ServerTest {
         ForumService.postNewComment(retObj._value,"protection", retMsg._value, "comment3 title", "comment3 bode");
 
         UserService.logOut(retObj._value);
-
     }
-
-    @Ignore
+*/
     @Test
     public void test() throws InterruptedException, ForumException {
         String[] args = new String[3];
@@ -50,7 +48,7 @@ public class ServerTest {
         args[1] = "20";
         args[2] = "reactor";
 
-        //Server.start(args);
+        Server.start(args);
     }
 
     @Ignore

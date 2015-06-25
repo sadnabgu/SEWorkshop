@@ -34,13 +34,14 @@ public enum Result {
     WRONG_USER_NAME_OR_PASS("Wrong username or password"),
     DUPLICATED_USERNAME("already exist user with this username"),
     SUBFORUM_ALREADY_REMOVED("the subforum was already removed from forum"),
-    NEW_THREAD_FAIL("adding the new thread failed. please fill title or body"),
-    NEW_COMMENT_FAIL("posting the new comment failed. please fill title or body"),
+    NEW_THREAD_FAIL("adding the new thread failed. please fill title or select sub forum"),
+    NEW_COMMENT_FAIL("posting the new comment failed. please fill title select thread"),
     REMOVE_COMMENT_FAILED("removal of the message failed"),
     EDIT_COMMENT_FAILED("edit of message failed"),
-    NAME_OR_PASS_MISSING("userName or password are null"),
-    SUBFORUM_NOT_FOUND("the given sub forum didn't found"),
-    MESSAGE_NOT_FOUND("meddage not found");
+    NAME_OR_PASS_MISSING("userName or password are missing"),
+    SUBFORUM_NOT_FOUND("the given sub forum was not found"),
+    MESSAGE_NOT_FOUND("message not found"),
+    SESSION_NOT_FOUND("session id not found");
 
     final public String _desc;
 

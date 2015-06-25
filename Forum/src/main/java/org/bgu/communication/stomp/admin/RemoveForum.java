@@ -27,6 +27,6 @@ public class RemoveForum extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<Object> retObj = AdminService.removeForum(UUID.fromString(adminSessionId), forum);
-        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        return GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
     }
 }

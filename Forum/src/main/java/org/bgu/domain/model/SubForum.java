@@ -62,7 +62,8 @@ public class SubForum {
         else{
             Message newThread = new Message(newThreadID, creator, threadTitle, threadBody);
             threads.add(newThread);
-            creator.updateNumberOfMessage();
+            if (creator != null)
+                creator.updateNumberOfMessage();
             return newThread.getMsgId();
         }
     }
@@ -86,7 +87,8 @@ public class SubForum {
             Message relevantMsg = getMessage(msgId);
             if (null != relevantMsg) {
                 relevantMsg.addNewComment(newMsg);
-                creator.updateNumberOfMessage();
+                if(creator != null)
+                    creator.updateNumberOfMessage();
                 return newMsg.getMsgId();
             } else {
                 return -2;

@@ -30,6 +30,9 @@
         {
             this.lstSubForums = new System.Windows.Forms.ListBox();
             this.gbSubForum = new System.Windows.Forms.GroupBox();
+            this.lblRem = new System.Windows.Forms.Label();
+            this.lblEdit = new System.Windows.Forms.Label();
+            this.lblNewThread = new System.Windows.Forms.Label();
             this.threads = new System.Windows.Forms.TreeView();
             this.lblError = new System.Windows.Forms.Label();
             this.lblPost = new System.Windows.Forms.Label();
@@ -39,12 +42,9 @@
             this.txtTitle = new System.Windows.Forms.TextBox();
             this.lblWelcome = new System.Windows.Forms.Label();
             this.lblLogin = new System.Windows.Forms.Label();
-            this.lblSignin = new System.Windows.Forms.Label();
+            this.lblSignup = new System.Windows.Forms.Label();
             this.lblLogOut = new System.Windows.Forms.Label();
             this.lblManage = new System.Windows.Forms.Label();
-            this.lblNewThread = new System.Windows.Forms.Label();
-            this.lblEdit = new System.Windows.Forms.Label();
-            this.lblRem = new System.Windows.Forms.Label();
             this.gbSubForum.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,6 +75,42 @@
             this.gbSubForum.TabIndex = 2;
             this.gbSubForum.TabStop = false;
             this.gbSubForum.Text = "Sub Forum Name";
+            // 
+            // lblRem
+            // 
+            this.lblRem.AutoSize = true;
+            this.lblRem.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.lblRem.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.lblRem.Location = new System.Drawing.Point(165, 403);
+            this.lblRem.Name = "lblRem";
+            this.lblRem.Size = new System.Drawing.Size(47, 13);
+            this.lblRem.TabIndex = 13;
+            this.lblRem.Text = "Remove";
+            this.lblRem.Click += new System.EventHandler(this.lblRem_Click);
+            // 
+            // lblEdit
+            // 
+            this.lblEdit.AutoSize = true;
+            this.lblEdit.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.lblEdit.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.lblEdit.Location = new System.Drawing.Point(218, 403);
+            this.lblEdit.Name = "lblEdit";
+            this.lblEdit.Size = new System.Drawing.Size(25, 13);
+            this.lblEdit.TabIndex = 12;
+            this.lblEdit.Text = "Edit";
+            this.lblEdit.Click += new System.EventHandler(this.lblEdit_Click);
+            // 
+            // lblNewThread
+            // 
+            this.lblNewThread.AutoSize = true;
+            this.lblNewThread.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.lblNewThread.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.lblNewThread.Location = new System.Drawing.Point(249, 403);
+            this.lblNewThread.Name = "lblNewThread";
+            this.lblNewThread.Size = new System.Drawing.Size(62, 13);
+            this.lblNewThread.TabIndex = 11;
+            this.lblNewThread.Text = "New thread";
+            this.lblNewThread.Click += new System.EventHandler(this.lblNewThread_Click);
             // 
             // threads
             // 
@@ -160,16 +196,17 @@
             this.lblLogin.Text = "Log in";
             this.lblLogin.Click += new System.EventHandler(this.lblLogin_Click);
             // 
-            // lblSignin
+            // lblSignup
             // 
-            this.lblSignin.AutoSize = true;
-            this.lblSignin.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.lblSignin.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lblSignin.Location = new System.Drawing.Point(428, 13);
-            this.lblSignin.Name = "lblSignin";
-            this.lblSignin.Size = new System.Drawing.Size(43, 13);
-            this.lblSignin.TabIndex = 5;
-            this.lblSignin.Text = "Sign up";
+            this.lblSignup.AutoSize = true;
+            this.lblSignup.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.lblSignup.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.lblSignup.Location = new System.Drawing.Point(428, 13);
+            this.lblSignup.Name = "lblSignup";
+            this.lblSignup.Size = new System.Drawing.Size(43, 13);
+            this.lblSignup.TabIndex = 5;
+            this.lblSignup.Text = "Sign up";
+            this.lblSignup.Click += new System.EventHandler(this.lblSignup_Click);
             // 
             // lblLogOut
             // 
@@ -197,42 +234,6 @@
             this.lblManage.Visible = false;
             this.lblManage.Click += new System.EventHandler(this.lblManage_Click);
             // 
-            // lblNewThread
-            // 
-            this.lblNewThread.AutoSize = true;
-            this.lblNewThread.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.lblNewThread.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lblNewThread.Location = new System.Drawing.Point(249, 403);
-            this.lblNewThread.Name = "lblNewThread";
-            this.lblNewThread.Size = new System.Drawing.Size(62, 13);
-            this.lblNewThread.TabIndex = 11;
-            this.lblNewThread.Text = "New thread";
-            this.lblNewThread.Click += new System.EventHandler(this.lblNewThread_Click);
-            // 
-            // lblEdit
-            // 
-            this.lblEdit.AutoSize = true;
-            this.lblEdit.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.lblEdit.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lblEdit.Location = new System.Drawing.Point(218, 403);
-            this.lblEdit.Name = "lblEdit";
-            this.lblEdit.Size = new System.Drawing.Size(25, 13);
-            this.lblEdit.TabIndex = 12;
-            this.lblEdit.Text = "Edit";
-            this.lblEdit.Click += new System.EventHandler(this.lblEdit_Click);
-            // 
-            // lblRem
-            // 
-            this.lblRem.AutoSize = true;
-            this.lblRem.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.lblRem.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lblRem.Location = new System.Drawing.Point(165, 403);
-            this.lblRem.Name = "lblRem";
-            this.lblRem.Size = new System.Drawing.Size(47, 13);
-            this.lblRem.TabIndex = 13;
-            this.lblRem.Text = "Remove";
-            this.lblRem.Click += new System.EventHandler(this.lblRem_Click);
-            // 
             // Forum
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -240,7 +241,7 @@
             this.ClientSize = new System.Drawing.Size(483, 484);
             this.Controls.Add(this.lblManage);
             this.Controls.Add(this.lblLogOut);
-            this.Controls.Add(this.lblSignin);
+            this.Controls.Add(this.lblSignup);
             this.Controls.Add(this.lblLogin);
             this.Controls.Add(this.lblWelcome);
             this.Controls.Add(this.gbSubForum);
@@ -262,7 +263,7 @@
         private System.Windows.Forms.GroupBox gbSubForum;
         private System.Windows.Forms.Label lblWelcome;
         private System.Windows.Forms.Label lblLogin;
-        private System.Windows.Forms.Label lblSignin;
+        private System.Windows.Forms.Label lblSignup;
         private System.Windows.Forms.Label lblLogOut;
         private System.Windows.Forms.Label lblManage;
         private System.Windows.Forms.Label label2;

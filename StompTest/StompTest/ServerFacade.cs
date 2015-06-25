@@ -1,8 +1,9 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace StompTest
 {
-    public class ServerFacade
+    public class ServerFacade : BaseFacade
     {
         private static int TIMEOUT = 3000;
         #region Ctors & Fields
@@ -28,6 +29,7 @@ namespace StompTest
             Forum = new ForumFacade(_client, _waitEvent);
             User = new UserFacade(_client, _waitEvent);
         }
+
         #endregion
 
         #region Notifications
@@ -67,6 +69,8 @@ namespace StompTest
             _client.OnReceived += HandleLoginGuestResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
             return _sessionId;
         }
 
@@ -74,6 +78,7 @@ namespace StompTest
         {
             if (msg.Type != ServerActions.LoginGuest) return;
 
+            FillError(msg);
             _sessionId = msg.Headers["sid"];
             _client.OnReceived -= HandleLoginGuestResponse;
             _waitEvent.Set();
@@ -88,14 +93,14 @@ namespace StompTest
             _client.OnReceived += HandleGetForumsResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
-
+            ValidateError();
             return _forums;
         }
 
         private void HandleGetForumsResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.GetForums) return;
-
+            FillError(msg);
             _forums = msg.Content.Split('\n');
             _client.OnReceived -= HandleGetForumsResponse;
             _waitEvent.Set();
@@ -127,19 +132,28 @@ namespace StompTest
         #region Is Initialized
         public bool IsSystemInitialized()
         {
+
             var msg = new StompMessage { Type = ServerActions.IsSystemInitialized };
 
             _client.OnReceived += HandleIsSystemInitializedResponse;
             _initialized = false;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
-            return _initialized;
+            try
+            {
+                ValidateError();
+                return _initialized;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         private void HandleIsSystemInitializedResponse(object server, StompMessage msg)
         {
             if (msg.Type != ServerActions.IsSystemInitialized) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleIsSystemInitializedResponse;
             _initialized = bool.Parse(msg.Content);
             _waitEvent.Set();
@@ -147,17 +161,11 @@ namespace StompTest
         #endregion        
 
         /*
-        
         TODO LIST:
         ***admin service***
         *** forum service ***
         8. get reports ~~
-
-        *** user service ***
-        1. login
-        2. logout
         7. submit complaint
-        
         */
     }
 }

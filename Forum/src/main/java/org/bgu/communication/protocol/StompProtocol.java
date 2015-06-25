@@ -1,5 +1,6 @@
 package org.bgu.communication.protocol;
 
+import org.apache.log4j.Logger;
 import org.bgu.communication.stomp.*;
 
 /**
@@ -9,7 +10,9 @@ import org.bgu.communication.stomp.*;
  * implements AsyncServerProtocol<TClientMessage, TServerMessage>
  */
 public class StompProtocol implements AsyncServerProtocol<StompFrame>{
-	public StompProtocol() {
+	Logger logger = Logger.getLogger(StompProtocol.class);
+
+    public StompProtocol() {
 		_model = null;
 		_output = null;
 	}
@@ -61,7 +64,9 @@ public class StompProtocol implements AsyncServerProtocol<StompFrame>{
 		// THIS CAST IS ONLY BECAUSE THE INTERFACE PROVIDED IS NOT GENERIC ENOUGH!!
 		// ALL SERVER-CLIENT PROTOCOL NEED DOUBLE GENERIC TYPE OF REQUES-RESPONSE GENERIC TYPES
 		// AND NOT ONLY ONE GENERIC TYPE OF MESSAGE
-		System.out.println("Handling frame: "+msg.getCommand());
-		return ((StompClientFrame)msg).acceptProcess(this);
+		logger.debug("stating to handle frame on server: " + msg.getCommand());
+        StompFrame response = ((StompClientFrame)msg).acceptProcess(this);
+        logger.debug("finished to handle frame on server: " + msg.getCommand());
+		return response;
 	}
 }

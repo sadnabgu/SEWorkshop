@@ -32,12 +32,15 @@ namespace StompTest
             _client.OnReceived += HandleGetSubForumsResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
             return _subforums;
         }
 
         private void HandleGetSubForumsResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.GetSubForums) return;
+            FillError(msg);
             _subforums = msg.Content.Trim().Split('\n');
             _client.OnReceived -= HandleGetSubForumsResponse;
             _waitEvent.Set();
@@ -58,12 +61,14 @@ namespace StompTest
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
 
+            ValidateError();
             return _sid;
         }
 
         private void HandleLoginGuestRequest(object sender, StompMessage e)
         {
             if (e.Type != ServerActions.LoginGuest) return;
+            FillError(e);
             _client.OnReceived -= HandleLoginGuestRequest;
             _sid = e.Content;
             _waitEvent.Set();
@@ -88,12 +93,14 @@ namespace StompTest
             _client.OnReceived += HandleAddNewSubForumResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleAddNewSubForumResponse(object sender, StompMessage e)
         {
             if (e.Type != ServerActions.AddNewSubForum) return;
-
+            FillError(e);
             _client.OnReceived -= HandleAddNewSubForumResponse;
             _waitEvent.Set();
         }
@@ -116,12 +123,14 @@ namespace StompTest
             _client.OnReceived += HandleRemoveSubForumResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleRemoveSubForumResponse(object sender, StompMessage e)
         {
             if (e.Type != ServerActions.RemoveSubForum) return;
-
+            FillError(e);
             _client.OnReceived -= HandleRemoveSubForumResponse;
             _waitEvent.Set();
         }
@@ -141,12 +150,14 @@ namespace StompTest
             _client.OnReceived += HandleAddNewThreadResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleAddNewThreadResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.AddNewThread) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleAddNewThreadResponse;
             _waitEvent.Set();
         }
@@ -166,12 +177,14 @@ namespace StompTest
             _client.OnReceived += HandleRemoveMessageResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleRemoveMessageResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.RemoveMessage) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleRemoveMessageResponse;
             _waitEvent.Set();
         }
@@ -193,12 +206,14 @@ namespace StompTest
             _client.OnReceived += HandlePostCommentResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
        
         private void HandlePostCommentResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.PostComment) return;
-
+            FillError(msg);
             _client.OnReceived -= HandlePostCommentResponse;
             _waitEvent.Set();
         }
@@ -220,12 +235,14 @@ namespace StompTest
             _client.OnReceived += HandleEditMessageResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleEditMessageResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.EditMessage) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleEditMessageResponse;
             _waitEvent.Set();
         }
@@ -243,14 +260,15 @@ namespace StompTest
             _client.OnReceived += HandleGetThreadsResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
-            
+
+            ValidateError();
             return _messages;
         }
 
         private void HandleGetThreadsResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.GetThreads) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleGetThreadsResponse;
 
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(IEnumerable<Message>));

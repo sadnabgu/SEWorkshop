@@ -27,7 +27,7 @@ public class AddNewThread extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<Integer> retObj = ForumService.addNewThread(UUID.fromString(sid), subforum, title, getContent());
-        GeneralStompFrame reply = new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        GeneralStompFrame reply = GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
         if (retObj._value != null)
             reply.addHeader("msgId", retObj._value.toString());
         return reply;

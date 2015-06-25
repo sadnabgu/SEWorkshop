@@ -5,6 +5,7 @@ import org.bgu.communication.stomp.GeneralStompFrame;
 import org.bgu.communication.stomp.StompClientFrame;
 import org.bgu.communication.stomp.StompFrame;
 import org.bgu.service.ForumService;
+import org.bgu.service.ServiceObjects.RetObj;
 import org.bgu.service.ServiceObjects.ServiceMessage;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -30,7 +31,9 @@ public class GetAllThreads extends StompClientFrame{
 
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
-        Collection<ServiceMessage> messages = ForumService.getAllThreads(UUID.fromString(sid), subforum)._value;
+        RetObj<Collection<ServiceMessage>> retObj = ForumService.getAllThreads(UUID.fromString(sid), subforum);
+
+        Collection<ServiceMessage> messages = retObj._value;
 
         ObjectMapper mapper = new ObjectMapper();
         String jsonMessages;
@@ -40,7 +43,7 @@ public class GetAllThreads extends StompClientFrame{
             jsonMessages = "error parsing json";
         }
 
-        return new GeneralStompFrame(getCommand(), getHeaders(), jsonMessages);
+        return GeneralStompFrame.create(getCommand(), getHeaders(), jsonMessages, retObj);
     }
 
 }
