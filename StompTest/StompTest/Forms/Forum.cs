@@ -44,6 +44,7 @@ namespace StompTest.Forms
             lblLogin.Visible = false;
             lblLogOut.Visible = true;
             lblManage.Visible = true;
+            lblSignup.Visible = false;
         }
 
         private void lblLogOut_Click(object sender, EventArgs e)
@@ -55,6 +56,7 @@ namespace StompTest.Forms
                 lblLogin.Visible = true;
                 lblLogOut.Visible = false;
                 lblManage.Visible = false;
+                lblSignup.Visible = true;
             }
             catch (Exception ex)
             {
