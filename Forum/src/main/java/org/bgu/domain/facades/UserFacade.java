@@ -148,7 +148,6 @@ public class UserFacade {
         if (!session._forum.logOut(session._member.getUserName()))
             return false;
 
-        sessions.remove(sId);
         return true;
     }
 
