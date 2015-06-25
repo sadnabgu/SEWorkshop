@@ -75,7 +75,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean editMessage(int messageId, String commentTitle, String commentBody) {
+    public boolean editMessage(String subforumName, int messageId, String commentTitle, String commentBody) {
         return false;
     }
 
