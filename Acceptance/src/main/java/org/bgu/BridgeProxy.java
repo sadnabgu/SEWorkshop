@@ -70,7 +70,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public int createNewComment(int newThreadId, String commentTitle, String commentBody) {
+    public int createNewComment(String subforumName, int newThreadId, String commentTitle, String commentBody) {
         return 0;
     }
 

@@ -65,22 +65,22 @@ public class EditMessage extends NewThreadCreatedTestBase {
         int managerComment;
 
         assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
-        memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
+        memberCommentId = bridge.createNewComment(SUBFORUM_NAME, newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", memberCommentId > 0);
         assertTrue("can not Logout member", bridge.logout());
 
         assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_2_NAME, MEMBER_2_PASS));
-        otherMemberComment = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
+        otherMemberComment = bridge.createNewComment(SUBFORUM_NAME, newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", otherMemberComment > 0);
         assertTrue("can not Logout member", bridge.logout());
 
         assertTrue("can not Login member", bridge.login(FORUM_NAME, ADMIN1_NAME, ADMIN1_PASS));
-        adminComment = bridge.createNewComment(memberCommentId, COMMENT_TITLE, COMMENT_BODY);
+        adminComment = bridge.createNewComment(SUBFORUM_NAME, memberCommentId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", adminComment > 0);
         assertTrue("can not Logout member", bridge.logout());
 
         assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
-        managerComment = bridge.createNewComment(otherMemberComment, COMMENT_TITLE, COMMENT_BODY);
+        managerComment = bridge.createNewComment(SUBFORUM_NAME, otherMemberComment, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", managerComment > 0);
         assertTrue("can not Logout member", bridge.logout());
 

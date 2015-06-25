@@ -49,7 +49,7 @@ public class DeleteMessage extends NewThreadCreatedTestBase {
     @Test
     public void DeleteMessage_byManager_DeleteSecondAndFirst_pass_testID_9_6() {
         assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
-        int memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
+        int memberCommentId = bridge.createNewComment(SUBFORUM_NAME, newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", memberCommentId > 0);
         assertTrue("can not log out member", bridge.logout());
 
@@ -62,7 +62,7 @@ public class DeleteMessage extends NewThreadCreatedTestBase {
     @Test
          public void DeleteMessage_byManager_DeleteFirstAndSecond_fail_testID_9_7() {
         assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
-        int memberCommentId = bridge.createNewComment(newThreadId, COMMENT_TITLE, COMMENT_BODY);
+        int memberCommentId = bridge.createNewComment(SUBFORUM_NAME, newThreadId, COMMENT_TITLE, COMMENT_BODY);
         assertTrue("member can not add new comment", memberCommentId > 0);
         assertTrue("can not log out member", bridge.logout());
 
