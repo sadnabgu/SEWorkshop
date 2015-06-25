@@ -123,22 +123,22 @@ public class UserFacade {
         return sId;
     }
 
-    public static boolean logInMember(UUID sId, String userName) {
+    public static Result logInMember(UUID sId, String userName) {
         if(!sessions.containsKey(sId))
-            return false;
+            return Result.SESSION_NOT_FOUND;
         Session session = sessions.get(sId);
 
         if (null == session._forum)
-            return false;
+            return Result.FORUM_NOT_EXISTS;
         if(null != session._member)
-            return false;
+            return Result.ALREADY_LOGDIN;
         Member member = session._forum.logInUser(userName);
 
         // login success - update the session information
         session.terminateSession();
         sessions.remove(sId);
         sessions.put(sId, new Session(sId, member, session._forum));
-        return true;
+        return Result.SUCCESS;
     }
 
     public static boolean logOut(UUID sId) {
