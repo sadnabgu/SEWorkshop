@@ -74,6 +74,7 @@ public class BridgeReal implements BridgeAPI {
 
     @Override
     public boolean register(String forumName, String memberName, String memberPass) {
+        sid=UserService.logInGuest(forumName)._value;
         ans = UserService.registerMember(sid,memberName,memberPass);
         return ans._result.equals(Result.SUCCESS);
 
@@ -95,7 +96,7 @@ public class BridgeReal implements BridgeAPI {
             return false;
         }
         sid=UserService.logInGuest(forumName)._value;
-        return false;
+        return true;
     }
 
     @Override
