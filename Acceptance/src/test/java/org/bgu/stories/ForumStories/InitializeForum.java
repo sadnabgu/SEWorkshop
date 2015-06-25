@@ -1,6 +1,7 @@
 package org.bgu.stories.ForumStories;
 
 import org.bgu.TestBase;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -11,6 +12,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class InitializeForum extends TestBase {
     @Test
+    @Ignore
     public void initializeSystem_pass_testID_1_1() {
         assertTrue("system is not initialized", bridge.initSystem(ADMIN1_NAME, ADMIN1_PASS));
     }
