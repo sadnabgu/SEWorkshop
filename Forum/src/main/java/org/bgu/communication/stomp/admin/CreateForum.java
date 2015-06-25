@@ -28,7 +28,7 @@ public class CreateForum extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<Object> retObj = AdminService.createForum(UUID.fromString(adminSessionId), forum, manager, password);
-        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        return GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
     }
 }
 

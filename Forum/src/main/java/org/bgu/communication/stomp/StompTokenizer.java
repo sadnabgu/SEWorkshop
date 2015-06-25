@@ -136,7 +136,7 @@ public class StompTokenizer implements MessageTokenizer<StompFrame> {
            case "get_sub_forums": return new GetSubForums(command, headers, content);    //TODO - need to fix
            case "log_out_member": return new LogOutMember(command, headers, content);
            case "get_threads": return new GetAllThreads(command, headers, content);
-	       default: return new GeneralStompFrame(command, headers, content + "\ncan't parse header");
+	       default: return null;
 	   }
    }
 }

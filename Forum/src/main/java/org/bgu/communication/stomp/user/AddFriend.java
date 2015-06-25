@@ -25,7 +25,7 @@ public class AddFriend extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<Object> retObj = UserService.addFriend(UUID.fromString(sid), friend);
-        return new GeneralStompFrame(getCommand(), getHeaders(), retObj._result.toString());
+        return GeneralStompFrame.create(getCommand(), getHeaders(), retObj._result.toString(), retObj);
     }
 }
 

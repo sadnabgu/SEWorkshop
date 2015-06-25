@@ -17,6 +17,6 @@ public class IsSystemInitialized extends StompClientFrame {
     @Override
     public StompFrame acceptProcess(StompProtocol processor) {
         RetObj<Boolean> result = AdminService.isInitializedSystem();
-        return new GeneralStompFrame(getCommand(), new HashMap<String,String>(), Boolean.toString(result._value));
+        return GeneralStompFrame.create(getCommand(), new HashMap<String,String>(), Boolean.toString(result._value), result);
     }
 }

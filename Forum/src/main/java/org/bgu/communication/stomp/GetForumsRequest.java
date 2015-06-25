@@ -17,7 +17,7 @@ public class GetForumsRequest extends StompClientFrame{
         RetObj<ArrayList<String>> retObj =ForumService.getAllForums();
         if (retObj._result != Result.SUCCESS){
             //TODO - send fail
-            GeneralStompFrame gfs = new GeneralStompFrame(getCommand(), null, "fail");
+            GeneralStompFrame gfs = GeneralStompFrame.create(getCommand(), null, "fail", retObj);
             gfs.addHeader("error", retObj._result.toString());
             return gfs;
         }
@@ -28,6 +28,6 @@ public class GetForumsRequest extends StompClientFrame{
             forumString.append(current + "\n");
         }
 
-        return new GeneralStompFrame(getCommand(), null, forumString.toString().trim());
+        return GeneralStompFrame.create(getCommand(), null, forumString.toString().trim(), retObj);
     }
 }
