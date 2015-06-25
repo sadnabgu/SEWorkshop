@@ -173,6 +173,10 @@ public class UserFacade {
             return Result.ALREADY_LOGDIN;
         Member member = session._forum.logInUser(userName);
 
+        if (null == member){
+            return Result.ALREADY_LOGDIN;
+        }
+
         // login success - update the session information
         session.terminateSession();
         sessions.remove(sId);
