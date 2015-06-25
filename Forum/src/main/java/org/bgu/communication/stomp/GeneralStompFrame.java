@@ -19,7 +19,7 @@ public class GeneralStompFrame extends StompClientFrame {
     public static GeneralStompFrame create(String command, HashMap<String, String> headers, String content, RetObj ret) {
         if (ret._result != Result.SUCCESS) {
             GeneralStompFrame frame = new GeneralStompFrame(command, headers, content);
-            frame.addHeader("error", ret._result.name());
+            frame.addHeader("error", ret._result.toString());
             return frame;
         }
         else {

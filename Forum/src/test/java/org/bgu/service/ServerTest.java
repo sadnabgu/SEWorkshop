@@ -17,7 +17,7 @@ import java.util.UUID;
  * Created by gur on 09/06/2015.
  */
 public class ServerTest {
-
+/*
     @Ignore
     @BeforeClass
     public static void prepareBasicForum(){
@@ -39,7 +39,7 @@ public class ServerTest {
 
         UserService.logOut(retObj._value);
     }
-
+*/
     @Test
     public void test() throws InterruptedException, ForumException {
         String[] args = new String[3];
