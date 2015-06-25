@@ -1,6 +1,7 @@
 package org.bgu.stories.ForumStories;
 
 import org.bgu.SubForumCreatedTestBase;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -21,8 +22,9 @@ public class DeleteSubForum extends SubForumCreatedTestBase {
     *
      */
     @Test
+    @Ignore("admin actions")
     public void DeleteSubForum_byAdmin_pass_testID_11_1() {
-        assertTrue("could not log in admin", bridge.login(FORUM_NAME, ADMIN1_NAME, ADMIN1_PASS));
+        assertTrue("could not log in admin", bridge.loginAdmin(ADMIN1_NAME, ADMIN1_PASS));
         assertTrue("could not delete sub forum", bridge.deleteSubForum(FORUM_NAME, SUBFORUM_NAME));
     }
 
