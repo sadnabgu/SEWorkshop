@@ -1,5 +1,6 @@
 package org.bgu.communication.reactor;
  
+import org.apache.log4j.Logger;
 import org.bgu.communication.protocol.AsyncServerProtocol;
 import org.bgu.communication.protocol.IStompOutput;
 import org.bgu.communication.protocol.StompProtocol;
@@ -14,7 +15,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.CharacterCodingException;
 import java.util.Vector;
-import java.util.logging.Logger;
 
 /**
  * Handles messages from clients
@@ -100,7 +100,7 @@ public class ConnectionHandler<T extends StompFrame> implements IStompOutput {
         }
  
         SocketAddress address = _sChannel.socket().getRemoteSocketAddress();
-        logger.info("Reading from " + address);
+        logger.trace("Reading from " + address);
  
         ByteBuffer buf = ByteBuffer.allocate(BUFFER_SIZE);
         int numBytesRead = 0;
@@ -112,7 +112,7 @@ public class ConnectionHandler<T extends StompFrame> implements IStompOutput {
         // is the channel closed??
         if (numBytesRead == -1) {
             // No more bytes can be read from the channel
-            logger.info("client on " + address + " has disconnected");
+            logger.trace("client on " + address + " has disconnected");
             closeConnection();
             // tell the protocol that the connection terminated.
             _protocol.connectionTerminated();
@@ -163,7 +163,7 @@ public class ConnectionHandler<T extends StompFrame> implements IStompOutput {
             if (buf.remaining() == 0) {
                 closeConnection();
                 SocketAddress address = _sChannel.socket().getRemoteSocketAddress();
-                logger.info("disconnecting client on " + address);
+                logger.trace("disconnecting client on " + address);
             }
         }
     }
