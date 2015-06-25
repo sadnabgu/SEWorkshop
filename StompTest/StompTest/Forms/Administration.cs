@@ -13,17 +13,25 @@ namespace StompTest.Forms
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (ValidateForm())
+            try
             {
-                lblError.Visible = false;
-                Program.Server.Admin.CreateForum(Program.SID, txtForum.Text, txtAdmin.Text, txtPass.Text);
+                if (ValidateForm())
+                {
+                    lblError.Visible = false;
+                    Program.Server.Admin.CreateForum(Program.SID, txtForum.Text, txtAdmin.Text, txtPass.Text);
+                }
+                else
+                {
+                    new Exception("Some data is missing or forum already exists");
+                }
+                UpdateForums();
             }
-            else
+            catch (Exception ex)
             {
-                lblError.Text = "Some data is missing or forum already exists";
+                lblError.Text = ex.Message;
                 lblError.Visible = true;
             }
-            UpdateForums();
+            
         }
 
         private bool ValidateForm()
@@ -36,18 +44,32 @@ namespace StompTest.Forms
 
         private void UpdateForums()
         {
-            lstForums.Items.Clear();
-            foreach (var forum in Program.Server.GetForums())
+            try
             {
-                lstForums.Items.Add(forum);
+                lstForums.Items.Clear();
+                foreach (var forum in Program.Server.GetForums())
+                {
+                    lstForums.Items.Add(forum);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error loading forums");
             }
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            if (lstForums.SelectedItem != null)
+            try
             {
-                Program.Server.Admin.RemoveForum(Program.SID, (string) lstForums.SelectedItem);
+                if (lstForums.SelectedItem != null)
+                {
+                    Program.Server.Admin.RemoveForum(Program.SID, (string) lstForums.SelectedItem);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to remove forum");
             }
             UpdateForums();
         }
@@ -55,6 +77,23 @@ namespace StompTest.Forms
         private void lstForums_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void Administration_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+
+        private void Administration_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Administration_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
     }
 }

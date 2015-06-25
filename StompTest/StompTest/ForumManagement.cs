@@ -23,13 +23,20 @@ namespace StompTest
 
         private void UpdateSubForums()
         {
-            lstSubForums.Items.Clear();
-            string[] subforums = Program.Server.Forum.GetSubForums(Program.SID);
-            foreach (var subforum in subforums)
+            try
             {
-                lstSubForums.Items.Add(subforum);
+                lstSubForums.Items.Clear();
+                string[] subforums = Program.Server.Forum.GetSubForums(Program.SID);
+                foreach (var subforum in subforums)
+                {
+                    lstSubForums.Items.Add(subforum);
+                }
+                lstSubForums.Refresh();
             }
-            lstSubForums.Refresh();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to load sub forums");
+            }
         }
 
         private void ForumManagement_Load(object sender, EventArgs e)
@@ -54,38 +61,52 @@ namespace StompTest
 
         private void btnAddSubForum_Click(object sender, EventArgs e)
         {
-            if (txtSubForumName.Text != string.Empty)
+            try
             {
-
-                string[] mods = new string[lstModerators.Items.Count];
-                for (int i = 0; i < mods.Length; i++)
+                if (txtSubForumName.Text != string.Empty)
                 {
-                    mods[i] = (string) lstModerators.Items[i];
-                }
 
-                Program.Server.Forum.AddNewSubForum(Program.SID, 
-                                                    txtSubForumName.Text, 
-                                                    mods);
+                    string[] mods = new string[lstModerators.Items.Count];
+                    for (int i = 0; i < mods.Length; i++)
+                    {
+                        mods[i] = (string) lstModerators.Items[i];
+                    }
 
-                StringBuilder builder = new StringBuilder();
-                foreach (var str in mods)
-                {
-                    builder.AppendLine(str);
+                    Program.Server.Forum.AddNewSubForum(Program.SID,
+                        txtSubForumName.Text,
+                        mods);
+
+                    StringBuilder builder = new StringBuilder();
+                    foreach (var str in mods)
+                    {
+                        builder.AppendLine(str);
+                    }
+                    MessageBox.Show($"Name: {txtSubForumName.Text} \nModerators: \n{builder}", @"Sub-Forum added");
+                    txtModName.Text = string.Empty;
+                    txtSubForumName.Text = string.Empty;
+                    lstModerators.Items.Clear();
+                    lstModerators.Refresh();
+                    UpdateSubForums();
                 }
-                MessageBox.Show($"Name: {txtSubForumName.Text} \nModerators: \n{builder}", @"Sub-Forum added");
-                txtModName.Text = string.Empty;
-                txtSubForumName.Text = string.Empty;
-                lstModerators.Items.Clear();
-                lstModerators.Refresh();
-                UpdateSubForums();
             }
-            
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to add sub forum");
+            }
+
         }
 
         private void btnRemoveSubforum_Click(object sender, EventArgs e)
         {
-            Program.Server.Forum.RemoveNewSubForum(Program.SID, (string)lstSubForums.SelectedItem, new string[] {});
-            UpdateSubForums();
+            try
+            {
+                Program.Server.Forum.RemoveNewSubForum(Program.SID, (string) lstSubForums.SelectedItem, new string[] {});
+                UpdateSubForums();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to remove sub forum");
+            }
         }
     }
 }

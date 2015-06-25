@@ -145,7 +145,7 @@
             this.groupBox1.Controls.Add(this.txtPass);
             this.groupBox1.Location = new System.Drawing.Point(16, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(223, 159);
+            this.groupBox1.Size = new System.Drawing.Size(564, 159);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Add new forum";
@@ -156,7 +156,7 @@
             this.groupBox3.Controls.Add(this.btnRemove);
             this.groupBox3.Location = new System.Drawing.Point(16, 183);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(223, 245);
+            this.groupBox3.Size = new System.Drawing.Size(564, 245);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Forums";
@@ -170,6 +170,9 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "Administration";
             this.Text = "Administration";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Administration_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Administration_FormClosed);
+            this.Load += new System.EventHandler(this.Administration_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);

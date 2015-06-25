@@ -28,10 +28,17 @@ namespace StompTest.Forms
 
         private void Welcome_Load(object sender, EventArgs e)
         {
-            lstForums.Items.Clear();
-            foreach (var forum in Program.Server.GetForums())
+            try
             {
-                lstForums.Items.Add(forum);
+                lstForums.Items.Clear();
+                foreach (var forum in Program.Server.GetForums())
+                {
+                    lstForums.Items.Add(forum);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to load forums");
             }
         }
 

@@ -24,12 +24,14 @@ namespace StompTest
             _client.OnReceived += HandleInitSystemResponse;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleInitSystemResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.InitSystem) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleInitSystemResponse;
             _waitEvent.Set();
         }
@@ -49,12 +51,14 @@ namespace StompTest
 
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleCreateForumResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.CreateForum) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleCreateForumResponse;
             _waitEvent.Set();
         }
@@ -71,6 +75,8 @@ namespace StompTest
             _sid = string.Empty;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
             return _sid;
         }
 
@@ -78,6 +84,7 @@ namespace StompTest
         {
            
             if (msg.Type != ServerActions.LoginAdmin) return;
+            ValidateError();
 
             try
             {
@@ -108,12 +115,14 @@ namespace StompTest
 
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleRemoveForumResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.RemoveForum) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleCreateForumResponse;
             _waitEvent.Set();
         }

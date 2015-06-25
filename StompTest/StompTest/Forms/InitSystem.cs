@@ -19,16 +19,23 @@ namespace StompTest.Forms
 
         private void btnInit_Click(object sender, EventArgs e)
         {
-            if (validateForm())
+            try
             {
-                Program.Server.Admin.InitSystem(txtUser.Text, txtPass.Text);
-                Program.SID = Program.Server.Admin.LogInAdmin(txtUser.Text, txtPass.Text);
-                Visible = false;
-                var administration = new Administration();
-                administration.Show();
+                if (validateForm())
+                {
+                    Program.Server.Admin.InitSystem(txtUser.Text, txtPass.Text);
+                    Program.SID = Program.Server.Admin.LogInAdmin(txtUser.Text, txtPass.Text);
+                    Visible = false;
+                    var administration = new Administration();
+                    administration.Show();
+                }
+                lblError.Text = "Empty user name or passwords do not match";
+                lblError.Visible = true;
             }
-            lblError.Text = "Empty user name or passwords do not match";
-            lblError.Visible = true;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to initialize system");
+            }
         }
 
         private bool validateForm()

@@ -1,0 +1,1 @@
+C:\Users\gur\Documents\GitHub\SEWorkshop\StompTest\CommandLineClient\obj\Debug\CommandLineClient.csprojResolveAssemblyReference.cache

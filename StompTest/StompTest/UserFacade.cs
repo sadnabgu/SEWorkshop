@@ -18,12 +18,14 @@ namespace StompTest
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
 
+            ValidateError();
+
         }
 
         private void HandleAddModeratorResponse(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.AddModerator) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleAddModeratorResponse;
             _waitEvent.Set();
         }
@@ -40,12 +42,14 @@ namespace StompTest
             _client.OnReceived += HandleAddFriendRequest;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleAddFriendRequest(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.AddFriend) return;
-            
+            FillError(msg);
             _client.OnReceived -= HandleAddFriendRequest;
             _waitEvent.Set();
         }
@@ -62,12 +66,14 @@ namespace StompTest
             _client.OnReceived += HandleRemoveFriendRequest;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleRemoveFriendRequest(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.RemoveFriend) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleRemoveFriendRequest;
             _waitEvent.Set();
         }
@@ -84,12 +90,14 @@ namespace StompTest
             _client.OnReceived += HandleLoginMemberRequest;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleLoginMemberRequest(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.LoginMember) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleLoginMemberRequest;
             _waitEvent.Set();
         }
@@ -104,12 +112,14 @@ namespace StompTest
             _client.OnReceived += HandleLogoutMemberRequest;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleLogoutMemberRequest(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.LogoutMember) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleLogoutMemberRequest;
             _waitEvent.Set();
         }
@@ -126,12 +136,14 @@ namespace StompTest
             _client.OnReceived += HandleRegisterRequest;
             _client.Send(msg);
             _waitEvent.WaitOne(TIMEOUT);
+
+            ValidateError();
         }
 
         private void HandleRegisterRequest(object sender, StompMessage msg)
         {
             if (msg.Type != ServerActions.Register) return;
-
+            FillError(msg);
             _client.OnReceived -= HandleRegisterRequest;
             _waitEvent.Set();
         }
