@@ -150,7 +150,8 @@ public class UserFacade {
         }
         if (!session._forum.logOut(session._member.getUserName()))
             return false;
-
+        sessions.remove(sId);
+        sessions.put(sId, new Session(sId,null, session._forum));
         return true;
     }
 
