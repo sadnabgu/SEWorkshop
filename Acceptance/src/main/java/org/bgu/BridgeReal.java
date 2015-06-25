@@ -119,12 +119,15 @@ public class BridgeReal implements BridgeAPI {
     }
 
     @Override
-    public boolean editMessage(int messageId, String commentTitle, String commentBody) {
-        return false;
+    public boolean editMessage(String subforumName, int messageId, String commentTitle, String commentBody) {
+        ans = ForumService.editMessage(sid,subforumName,messageId,commentTitle,commentBody);
+        return ans._result==Result.SUCCESS;
+
     }
 
     @Override
-    public boolean deleteMessage(int messageId) {
-        return false;
+    public boolean deleteMessage(String subforumName, int messageId) {
+        ans = ForumService.removeMessage(sid, subforumName, messageId );
+        return ans._result==Result.SUCCESS;
     }
 }
