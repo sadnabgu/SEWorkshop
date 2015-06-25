@@ -1,5 +1,6 @@
 package org.bgu.communication.reactor;
  
+import org.apache.log4j.Logger;
 import org.bgu.communication.protocol.ServerProtocolFactory;
 import org.bgu.communication.stomp.StompFrame;
 import org.bgu.communication.tokenizer.TokenizerFactory;
@@ -15,14 +16,13 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
  
 /**
  * An implementation of the Reactor pattern.
  */
 public class Reactor<T extends StompFrame> implements Runnable, Closeable {
  
-    private static final Logger logger = Logger.getLogger("edu.spl.reactor");
+    private static final Logger logger = Logger.getLogger(Reactor.class);
  
     private final int _port;
  
@@ -68,7 +68,7 @@ public class Reactor<T extends StompFrame> implements Runnable, Closeable {
             ssChannel.socket().bind(new InetSocketAddress(port));
             return ssChannel;
         } catch (IOException e) {
-            logger.info("Port " + port + " is busy");
+            logger.error("Port " + port + " is busy");
             throw e;
         }
     }
@@ -96,7 +96,7 @@ public class Reactor<T extends StompFrame> implements Runnable, Closeable {
             selector = Selector.open();
             ssChannel = createServerSocket(_port);
         } catch (IOException e) {
-            logger.info("cannot create the selector -- server socket is busy?");
+            logger.error("cannot create the selector -- server socket is busy?");
             return;
         }
  
@@ -109,7 +109,7 @@ public class Reactor<T extends StompFrame> implements Runnable, Closeable {
         try {
             ssChannel.register(selector, SelectionKey.OP_ACCEPT, connectionAcceptor);
         } catch (ClosedChannelException e) {
-            logger.info("server channel seems to be closed!");
+            logger.error("server channel seems to be closed!");
             return;
         }
  
@@ -118,7 +118,7 @@ public class Reactor<T extends StompFrame> implements Runnable, Closeable {
             try {
                 selector.select();
             } catch (IOException e) {
-                logger.info("trouble with selector: " + e.getMessage());
+                logger.error("trouble with selector: " + e.getMessage());
                 continue;
             }
  
@@ -136,13 +136,13 @@ public class Reactor<T extends StompFrame> implements Runnable, Closeable {
  
                 // Check if it's a connection request
                 if (selKey.isValid() && selKey.isAcceptable()) {
-                    logger.info("Accepting a connection");
+                    logger.trace("Accepting a connection");
                     @SuppressWarnings("unchecked")
 					ConnectionAcceptor<T> acceptor = (ConnectionAcceptor<T>) selKey.attachment();
                     try {
                         acceptor.accept();
                     } catch (IOException e) {
-                        logger.info("problem accepting a new connection: " + e.getMessage());
+                        logger.warn("problem accepting a new connection: " + e.getMessage());
                     }
                     continue;
                 }
@@ -150,14 +150,14 @@ public class Reactor<T extends StompFrame> implements Runnable, Closeable {
                 if (selKey.isValid() && selKey.isReadable()) {
                     @SuppressWarnings("unchecked")
 					ConnectionHandler<T> handler = (ConnectionHandler<T>) selKey.attachment();
-                    logger.info("Channel is ready for reading");
+                    logger.trace("Channel is ready for reading");
                     handler.read();
                 }
                 // Check if there are messages to send
                 if (selKey.isValid() && selKey.isWritable()) {
                     @SuppressWarnings("unchecked")
 					ConnectionHandler<T> handler = (ConnectionHandler<T>) selKey.attachment();
-                    logger.info("Channel is ready for writing");
+                    logger.trace("Channel is ready for writing");
                     handler.write();
                 }
             }

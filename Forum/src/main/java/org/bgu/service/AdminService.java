@@ -1,5 +1,6 @@
 package org.bgu.service;
 
+import org.apache.log4j.Logger;
 import org.bgu.domain.facades.ForumFacade;
 import org.bgu.domain.facades.UserFacade;
 import org.bgu.service.ServiceObjects.Result;
@@ -13,6 +14,7 @@ import java.util.UUID;
  * Created by hodai on 4/20/15.
  */
 public class AdminService {
+    static Logger logger = Logger.getLogger(AdminService.class);
 
     /**
      * first init routine  - initial administrator details
@@ -22,9 +24,16 @@ public class AdminService {
      * @return true upon success. exception upon failure.
      */
    public static RetObj<Object> initializeSystem(String adminName, String adminPass){
-       if (!UserFacade.initSystem(adminName, adminPass))
+       logger.debug(String.format("Going to initialize system admin: %s, pass: %s", adminName, adminPass));
+
+       if (!UserFacade.initSystem(adminName, adminPass)) {
+           logger.error(String.format("Cannot to initialize system admin: %s, pass: %s", adminName, adminPass));
            return new RetObj<>(Result.REINITIALIZE_SYSTEM);
+       }
+
+       logger.info(String.format("Cannot to initialize system admin: %s, pass: %s", adminName, adminPass));
        return new RetObj<>(Result.SUCCESS);
+
    }
 
     /**

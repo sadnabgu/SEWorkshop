@@ -1,5 +1,6 @@
 package org.bgu.communication.server;
 
+import org.apache.log4j.Logger;
 import org.bgu.communication.protocol.AsyncServerProtocol;
 import org.bgu.communication.protocol.Cancellation;
 import org.bgu.communication.protocol.ServerProtocolFactory;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class Server {
+    static Logger logger = Logger.getLogger(Server.class);
     static Reactor<StompFrame> reactor;
 	/*
      * Main program, used for demonstration purposes. Create and run a
@@ -54,14 +56,14 @@ public class Server {
     }
 
 	private static void operateAsReactor(int port, int poolSize) throws InterruptedException {
-		System.out.println("Running as reactor");
+		logger.info(String.format("Running reactor on port %d", port));
 		reactor = createReactor(port, poolSize);
 		Cancellation.instance().register(reactor);
  
 		Thread thread = new Thread(reactor);
 		thread.start();
 		thread.join();
-		System.out.println("Server was shutdown");
+		logger.info("Server was shutdown");
 	}
  
     private static Reactor<StompFrame> createReactor(int port, int poolSize){

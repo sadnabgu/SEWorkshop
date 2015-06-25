@@ -13,8 +13,8 @@ import org.junit.Test;
 public class Main {
 
     public static void main(String[] args) {
-        Logger logger = Logger.getLogger(Main.class);
-        logger.info("starting server");
+        Logger logger = Logger.getLogger(Main.class + "sid");
+        logger.info("starting...");
         // usage: <desktop port> <web port>
         if(args.length != 2){
             // set default ports
