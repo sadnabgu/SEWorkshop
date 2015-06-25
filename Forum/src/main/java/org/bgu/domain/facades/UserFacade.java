@@ -150,8 +150,10 @@ public class UserFacade {
         }
         if (!session._forum.logOut(session._member.getUserName()))
             return false;
+
+        Forum forum = session._forum;
         sessions.remove(sId);
-        sessions.put(sId, new Session(sId,null, session._forum));
+        sessions.put(sId, new Session(sId,null, forum));
         return true;
     }
 
@@ -168,6 +170,9 @@ public class UserFacade {
         if(!sessions.containsKey(sId))
             return false;
         Session session = sessions.get(sId);
+        if(null == session._member)
+            return false;
+
         // TODO - replace signature to get Member Object rather than name
         if (!session._forum.isLoggedInMember(session._member.getUserName()))
             return false;
@@ -230,6 +235,8 @@ public class UserFacade {
     public static boolean isForumManager(UUID sId) {
         Session session = sessions.get(sId);
         if (null == session)
+            return false;
+        if (null == session._member)
             return false;
         // TODO - refactor signature of isForumManager??
         return session._forum.isForumManager(session._member.getUserName());
