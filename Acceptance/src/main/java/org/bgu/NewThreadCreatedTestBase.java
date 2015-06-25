@@ -17,7 +17,7 @@ public class NewThreadCreatedTestBase extends SubForumCreatedTestBase {
     public void init() {
         super.init();
         assertTrue("can not Login member", bridge.login(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
-        newThreadId = bridge.createNewThread(THREAD_TITLE, THREAD_BODY);
+        newThreadId = bridge.createNewThread(SUBFORUM_NAME, THREAD_TITLE, THREAD_BODY);
         assertTrue("can not create new thread", newThreadId > 0);
         assertTrue("can not logout member", bridge.logout());
         assertTrue("can not register second member", bridge.register(FORUM_NAME, MEMBER_2_NAME, MEMBER_2_PASS));

@@ -2,6 +2,7 @@ package org.bgu.stories.usersStories;
 
 
 import org.bgu.ForumCreatedTestBase;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -34,6 +35,7 @@ public class Register extends ForumCreatedTestBase{
     }
 
     @Test
+    @Ignore
     public void Register_UserIsSignedIn_fail_testID_3_5(){
         assertTrue("can not register member", bridge.register(FORUM_NAME, MEMBER_NAME, MEMBER_PASS));
         assertTrue("can not log in member", bridge.login(FORUM_NAME, MANAGER_NAME , MANAGER_PASS));

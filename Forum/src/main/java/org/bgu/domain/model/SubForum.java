@@ -48,7 +48,7 @@ public class SubForum {
     }
 
     public boolean removeModerator(Member moderate) {
-        if (!(moderates.contains(moderate)) || null == moderate)
+        if (!(moderates.contains(moderate)) || null == moderate || moderates.size()==1)
             return false;
         moderates.remove(moderate);
         return true;

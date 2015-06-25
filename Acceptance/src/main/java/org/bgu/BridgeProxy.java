@@ -65,7 +65,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public int createNewThread(String messageTitle, String messageBody) {
+    public int createNewThread(String subforumName, String messageTitle, String messageBody) {
         return 0;
     }
 
