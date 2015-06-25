@@ -145,6 +145,9 @@ public class UserFacade {
         if(!sessions.containsKey(sId))
             return false;
         Session session = sessions.get(sId);
+        if(session._member == null){
+            return false;
+        }
         if (!session._forum.logOut(session._member.getUserName()))
             return false;
 
