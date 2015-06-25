@@ -1,6 +1,7 @@
 package org.bgu.communication.protocol;
 
 import org.apache.log4j.Logger;
+import org.bgu.communication.reactor.ConnectionHandler;
 import org.bgu.communication.stomp.*;
 
 /**
@@ -20,7 +21,7 @@ public class StompProtocol implements AsyncServerProtocol<StompFrame>{
 	protected ForumProtocol _model;
 	private boolean _shouldClose = false;
 	private IStompOutput _output;
-	private boolean _isEnd = false; 
+	private boolean _isEnd = false;
 
 	/*
 	 * initializes the protocol by binding it to an output

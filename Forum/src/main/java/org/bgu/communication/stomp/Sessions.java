@@ -1,10 +1,14 @@
 package org.bgu.communication.stomp;
 
+import org.apache.log4j.Logger;
 import org.bgu.communication.reactor.ProtocolTask;
 import org.bgu.domain.model.Session;
 import org.bgu.domain.model.notification.NotificationType;
+import org.bgu.service.ServiceObjects.ServiceMessage;
 
 import java.awt.*;
+import java.nio.ByteBuffer;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.UUID;
 
@@ -12,8 +16,10 @@ import java.util.UUID;
  * Created by gur on 22/06/2015.
  */
 public class Sessions {
+    private static Logger logger = Logger.getLogger(Sessions.class);
     private static Sessions instance = null;
     private Hashtable<String, ProtocolTask<StompFrame>> sessions;
+    StompTokenizer _tokenizer = new StompTokenizer();
 
     public static Sessions getInstance(){
         if (instance == null){
@@ -38,8 +44,15 @@ public class Sessions {
         sessions.remove(id);
     }
 
-    public void setNotificationPush(NotificationType type, UUID Sid){
-        //TODO - buid protocol frame for notifying the client on session sid that type notification has occured
-        System.out.println("notifying....");
+    public void sendNotification(String sid, String subforum, Collection<ServiceMessage> messages){
+        try{
+            NotificationMessage msg = new NotificationMessage(subforum, messages);
+            ByteBuffer bytes = _tokenizer.getBytesForMessage(msg);
+            sessions.get(sid).getConnectionHandler().addOutData(bytes);
+        }
+        catch (Throwable ex){
+            // error sending notification
+            logger.error("error seding notifications: " + ex.getMessage());
+        }
     }
 }

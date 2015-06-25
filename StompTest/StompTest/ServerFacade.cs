@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Threading;
 
 namespace StompTest
@@ -18,6 +22,9 @@ namespace StompTest
         public ForumFacade Forum { get; private set; }
         public UserFacade User { get; private set; }
 
+        //public event EventHandler<StompMessage> OnReceived;
+        public event EventHandler<Notification> OnNotification;
+
         // default
         public ServerFacade() : this ("127.0.0.1", 12345) { }
 
@@ -33,19 +40,40 @@ namespace StompTest
         #endregion
 
         #region Notifications
-        private static void HandleNotification(object sender, StompMessage msg)
-        {
-            if (!msg.Type.Equals(ServerActions.Notification)){
-                return;
-            }
 
-            // TODO: handle notification here
-            var type = msg.Headers["type"];
-            // TODO: what types do we have?
+        private void HandleNotification(object sender, StompMessage msg)
+        {
+            try
+            {
+                if (!msg.Type.Equals(ServerActions.Notification))
+                {
+                    return;
+                }
+
+                // TODO: handle notification here
+                var type = msg.Headers["type"];
+                var subforum = msg.Headers["subforum"];
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof (IEnumerable<Message>));
+                using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(msg.Content)))
+                {
+                    IEnumerable<Message> messages = (IEnumerable<Message>) serializer.ReadObject(stream);
+                
+
+                    Notification notification = new Notification { SubForum = subforum, Type = NotifictionType.RefreshAll, Messages = messages};
+                    if (OnNotification != null)
+                    {
+                        OnNotification(this, notification);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
+
         #endregion
 
-        #region Connect / Disconnect
+            #region Connect / Disconnect
         public void Connect()
         {
             _client.Connect();

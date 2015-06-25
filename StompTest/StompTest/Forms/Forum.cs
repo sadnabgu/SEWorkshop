@@ -16,10 +16,25 @@ namespace StompTest.Forms
             try
             {
                 Program.SID = Program.Server.LogInGuest(forumName);
+                Program.Server.OnNotification += Server_OnNotification;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Failed to establish session");
+            }
+        }
+
+        private void Server_OnNotification(object sender, Notification e)
+        {
+            try
+            {
+                if (gbSubForum.Text == e.SubForum)
+                {
+                    this.Invoke(new Action(UpdateAllThreads));
+                }
+            }
+            catch (Exception ex)
+            {
             }
         }
 
