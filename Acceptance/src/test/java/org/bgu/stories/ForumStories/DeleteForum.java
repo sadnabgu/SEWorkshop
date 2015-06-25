@@ -23,7 +23,7 @@ public class DeleteForum extends MemberResgiteredToForumTestBase {
      */
     @Test
     public void DeleteForum_byAdmin_pass_testID_10_1(){
-        assertTrue("could not log out admin", bridge.login(FORUM_NAME, ADMIN1_NAME,ADMIN1_PASS));
+        assertTrue("could not log out admin", bridge.loginAdmin(ADMIN1_NAME,ADMIN1_PASS));
         assertTrue("could not delete forum", bridge.deleteForum(FORUM_NAME));
     }
     @Test
@@ -42,7 +42,7 @@ public class DeleteForum extends MemberResgiteredToForumTestBase {
     }
     @Test
     public void DeleteForum_byAdmin_DeleteTwice_pass_testID_10_5(){
-        assertTrue("can not log out admin", bridge.login(FORUM_NAME, ADMIN1_NAME,ADMIN1_PASS));
+        assertTrue("can not log out admin", bridge.loginAdmin(ADMIN1_NAME,ADMIN1_PASS));
         assertTrue("can not delete forum", bridge.deleteForum(FORUM_NAME));
         assertFalse("can delete forum twice", bridge.deleteForum(FORUM_NAME));
     }
