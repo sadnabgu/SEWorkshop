@@ -109,8 +109,13 @@ public class BridgeReal implements BridgeAPI {
     }
 
     @Override
-    public int createNewComment(int newThreadId, String commentTitle, String commentBody) {
-        return 0;
+    public int createNewComment(String subforumName, int newThreadId, String commentTitle, String commentBody) {
+        RetObj<Integer> ans;
+        ans = ForumService.postNewComment(sid, subforumName,newThreadId,commentTitle,commentBody);
+        if (ans._value == null){
+            return -1;
+        }
+        return ans._value;
     }
 
     @Override
