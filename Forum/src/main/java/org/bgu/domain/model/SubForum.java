@@ -48,7 +48,7 @@ public class SubForum {
     }
 
     public boolean removeModerator(Member moderate) {
-        if (!(moderates.contains(moderate)) || null == moderate)
+        if (!(moderates.contains(moderate)) || null == moderate || moderates.size()==1)
             return false;
         moderates.remove(moderate);
         return true;
@@ -99,7 +99,7 @@ public class SubForum {
     public boolean removeMessage(Member remover, int msgId) {
         for (Message t : threads){
             if (t.getMsgId() == msgId) {
-                if ((t.getCreator().getUserName().equals(remover.getUserName())) || remover.getType()==MemberTypes.GOLD) {
+                if ((t.getCreator().getUserName().equals(remover.getUserName())) || remover.getType()==MemberTypes.GOLD ) {
                     t.removeAllMsgs();
                     threads.remove(t);
                     return true;

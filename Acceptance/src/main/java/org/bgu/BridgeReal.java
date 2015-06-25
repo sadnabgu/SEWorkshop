@@ -1,6 +1,5 @@
 package org.bgu;
 
-import org.bgu.domain.model.User;
 import org.bgu.service.AdminService;
 import org.bgu.service.ForumService;
 import org.bgu.service.ServiceObjects.Result;
@@ -100,22 +99,35 @@ public class BridgeReal implements BridgeAPI {
     }
 
     @Override
-    public int createNewThread(String messageTitle, String messageBody) {
-        return 0;
+    public int createNewThread(String subforumName, String messageTitle, String messageBody) {
+        RetObj<Integer> ans;
+        ans = ForumService.addNewThread(sid,subforumName,messageTitle,messageBody);
+        if (ans._value == null){
+            return -1;
+        }
+        return ans._value;
     }
 
     @Override
-    public int createNewComment(int newThreadId, String commentTitle, String commentBody) {
-        return 0;
+    public int createNewComment(String subforumName, int newThreadId, String commentTitle, String commentBody) {
+        RetObj<Integer> ans;
+        ans = ForumService.postNewComment(sid, subforumName,newThreadId,commentTitle,commentBody);
+        if (ans._value == null){
+            return -1;
+        }
+        return ans._value;
     }
 
     @Override
-    public boolean editMessage(int messageId, String commentTitle, String commentBody) {
-        return false;
+    public boolean editMessage(String subforumName, int messageId, String commentTitle, String commentBody) {
+        ans = ForumService.editMessage(sid,subforumName,messageId,commentTitle,commentBody);
+        return ans._result==Result.SUCCESS;
+
     }
 
     @Override
-    public boolean deleteMessage(int messageId) {
-        return false;
+    public boolean deleteMessage(String subforumName, int messageId) {
+        ans = ForumService.removeMessage(sid, subforumName, messageId );
+        return ans._result==Result.SUCCESS;
     }
 }

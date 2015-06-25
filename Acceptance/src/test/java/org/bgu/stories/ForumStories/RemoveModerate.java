@@ -2,6 +2,7 @@ package org.bgu.stories.ForumStories;
 
 import org.bgu.SubForumCreatedTestBase;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -27,8 +28,9 @@ public class RemoveModerate extends SubForumCreatedTestBase {
     }
 
     @Test
+    @Ignore("admin action")
     public void removeModerate_byAdmin_pass_testID_13_2() {
-        assertTrue("can not Login admin", bridge.login(FORUM_NAME, ADMIN1_NAME, ADMIN1_PASS));
+        assertTrue("can not Login admin", bridge.loginAdmin(ADMIN1_NAME, ADMIN1_PASS));
         assertTrue("admin can not remove moderate", bridge.removeModerate(FORUM_NAME, SUBFORUM_NAME, MODERATE_2_NAME));
     }
 

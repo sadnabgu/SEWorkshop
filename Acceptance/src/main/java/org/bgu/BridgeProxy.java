@@ -65,22 +65,22 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public int createNewThread(String messageTitle, String messageBody) {
+    public int createNewThread(String subforumName, String messageTitle, String messageBody) {
         return 0;
     }
 
     @Override
-    public int createNewComment(int newThreadId, String commentTitle, String commentBody) {
+    public int createNewComment(String subforumName, int newThreadId, String commentTitle, String commentBody) {
         return 0;
     }
 
     @Override
-    public boolean editMessage(int messageId, String commentTitle, String commentBody) {
+    public boolean editMessage(String subforumName, int messageId, String commentTitle, String commentBody) {
         return false;
     }
 
     @Override
-    public boolean deleteMessage(int messageId) {
+    public boolean deleteMessage(String subforumName, int messageId) {
         return false;
     }
 }
