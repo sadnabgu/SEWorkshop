@@ -40,7 +40,8 @@ public enum Result {
     EDIT_COMMENT_FAILED("edit of message failed"),
     NAME_OR_PASS_MISSING("userName or password are missing"),
     SUBFORUM_NOT_FOUND("the given sub forum was not found"),
-    MESSAGE_NOT_FOUND("message not found");
+    MESSAGE_NOT_FOUND("message not found"),
+    SESSION_NOT_FOUND("session id not found");
 
     final public String _desc;
 

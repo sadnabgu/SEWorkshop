@@ -40,10 +40,7 @@ public class UserService {
         if (!(UserFacade.validatePassword(sId, userName, pass)))
             return new RetObj<>(Result.WRONG_USER_NAME_OR_PASS);
 
-        if (!(UserFacade.logInMember(sId, userName)))
-            return new RetObj<>(Result.ALREADY_LOGDIN);
-        // identify user
-        return new RetObj<>(Result.SUCCESS);
+        return new RetObj<>(UserFacade.logInMember(sId, userName));
     }
 
     /**
