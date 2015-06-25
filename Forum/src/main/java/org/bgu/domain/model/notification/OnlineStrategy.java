@@ -26,7 +26,7 @@ public class OnlineStrategy implements NotificationStrategy {
             for (Member m : members) {
                 if (s._member == m) {
                     //for unit tests
-                    communicationSessions.setNotificationPush(type, s._id);
+                    //communicationSessions.setNotificationPush(type, s._id);
                 }
             }
         }

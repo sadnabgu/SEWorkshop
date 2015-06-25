@@ -21,7 +21,7 @@ public class Main {
             args = new String[2];
             args[0] = "12345";
             args[1] = "80";
-            /*
+            /*[[
             System.err.println("Usage: <desktop port> <web port>");
             Sy-stem.exit(1);
             */

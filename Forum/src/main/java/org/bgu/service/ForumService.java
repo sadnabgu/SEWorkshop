@@ -26,7 +26,7 @@ public class ForumService {
      * @param moderators
      * @return
      */
-    public static RetObj<Object> addNewSubForum(UUID sId, String subForumName, Collection<String> moderators){
+    public synchronized static RetObj<Object> addNewSubForum(UUID sId, String subForumName, Collection<String> moderators){
         //TODO - validate data according to POLICY
         logger.trace(String.format("adding new sub forum: %s %s with %d moderators", sId, subForumName, moderators.size()));
 
@@ -60,7 +60,7 @@ public class ForumService {
      * @param threadBody
      * @return - msgId of the newly thread upon success. exception{} upon fail
      */
-    public static RetObj<Integer> addNewThread(UUID sId, String subForumName, String threadTitle, String threadBody){
+    public synchronized static RetObj<Integer> addNewThread(UUID sId, String subForumName, String threadTitle, String threadBody){
         logger.trace(String.format("adding new thread: %s %s %s", sId, subForumName, threadTitle));
         //TODO - validate data according to POLICY
         int newMsgId = ForumFacade.addNewThread(sId, subForumName, threadTitle, threadBody);
@@ -82,7 +82,7 @@ public class ForumService {
      * @param commentBody
      * @return
      */
-    public static RetObj<Integer> postNewComment(UUID sId, String subForumName, int MsgId, String commentTitle, String commentBody){
+    public synchronized static RetObj<Integer> postNewComment(UUID sId, String subForumName, int MsgId, String commentTitle, String commentBody){
         //TODO - validate data according to POLICY
         logger.trace(String.format("posting new message. %s %s %d", sId, subForumName, MsgId));
 
@@ -103,7 +103,7 @@ public class ForumService {
      * @param MsgId
      * @return
      */
-    public static RetObj<Object> removeMessage(UUID sId, String subForumName, int MsgId){
+    public synchronized static RetObj<Object> removeMessage(UUID sId, String subForumName, int MsgId){
         logger.trace(String.format("removing message. %s %s %d", sId, subForumName, MsgId));
 
         if (!ForumFacade.removeMessage(sId, subForumName, MsgId)) {
@@ -124,7 +124,7 @@ public class ForumService {
      * @param commentBody
      * @return
      */
-    public static RetObj<Object> editMessage(UUID sId, String subForumName, int MsgId, String commentTitle, String commentBody){
+    public synchronized static RetObj<Object> editMessage(UUID sId, String subForumName, int MsgId, String commentTitle, String commentBody){
         logger.trace(String.format("editing message. %s %s %d", sId, subForumName, MsgId));
 
         if (!ForumFacade.editMessage(sId, subForumName, MsgId, commentTitle, commentBody)) {
@@ -142,7 +142,7 @@ public class ForumService {
      * @param subForumName
      * @return
      */
-    public static RetObj<Object> removeSubForum(UUID sId, String subForumName){
+    public synchronized static RetObj<Object> removeSubForum(UUID sId, String subForumName){
         //TODO - validate data according to POLICY
         logger.trace(String.format("removing sub forum. %s %s", sId, subForumName));
 
@@ -162,7 +162,7 @@ public class ForumService {
     /**
      * @return - array of all the forums names as strings
      */
-    public static RetObj<ArrayList<String>> getAllForums() {
+    public synchronized static RetObj<ArrayList<String>> getAllForums() {
         logger.trace(String.format("getting all forums"));
 
         ArrayList<String> forums = ForumFacade.getAllForums();
@@ -180,7 +180,7 @@ public class ForumService {
      * @return - array of all the sub forums in the session forum
      *           forum must be defined for the given 'sId'.
      */
-    public static RetObj<ArrayList<String>> getAllSubForums(UUID sId) {
+    public synchronized static RetObj<ArrayList<String>> getAllSubForums(UUID sId) {
         logger.trace(String.format("getting all sub forums %s", sId));
 
         ArrayList<String> subForums = ForumFacade.getAllSubForums(sId);
@@ -199,7 +199,7 @@ public class ForumService {
      * @param subForumName - the name of the sub-forum
      * @return all the sub-forum ('subForumName') threads as collection of ServiceMessages
      */
-    public static RetObj<Collection<ServiceMessage>> getAllThreads(UUID sId, String subForumName) {
+    public synchronized static RetObj<Collection<ServiceMessage>> getAllThreads(UUID sId, String subForumName) {
         logger.trace(String.format("getting all threads %s %s", sId, subForumName));
 
         if (!ForumFacade.getAllSubForums(sId).contains(subForumName)){
@@ -230,7 +230,7 @@ public class ForumService {
      * @param messageId - the id of the source message
      * @return collection of 'ServiceMessages' contain all the comments
      */
-    public static RetObj<Collection<ServiceMessage>> getAllComments(UUID sId, String subForum, int messageId){
+    public synchronized static RetObj<Collection<ServiceMessage>> getAllComments(UUID sId, String subForum, int messageId){
         Collection<Message> messages = ForumFacade.getAllComments(sId, subForum, messageId);
         Collection<ServiceMessage> serviceMessages = new ArrayList<>();
         if (null != messages){
@@ -250,7 +250,7 @@ public class ForumService {
      * @param messageId - the wanted message id
      * @return - return the content of the message 'messageId' as 'ServiceMessage'
      */
-    public static RetObj<ServiceMessage> getMessage(UUID sId, String subForum, int messageId){
+    public synchronized static RetObj<ServiceMessage> getMessage(UUID sId, String subForum, int messageId){
         Message message = ForumFacade.getMessage(sId, subForum, messageId);
         if (null == message){
             return new RetObj<>(Result.FAIL);
@@ -266,7 +266,7 @@ public class ForumService {
      *
      * @return - true if changes success
      */
-    public static boolean setProperties() {
+    public synchronized static boolean setProperties() {
         //TODO - implement
         return false;
     }

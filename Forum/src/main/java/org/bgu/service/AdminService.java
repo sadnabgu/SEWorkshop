@@ -23,7 +23,7 @@ public class AdminService {
      * @param adminPass - initial
      * @return true upon success. exception upon failure.
      */
-   public static RetObj<Object> initializeSystem(String adminName, String adminPass){
+   public synchronized static RetObj<Object> initializeSystem(String adminName, String adminPass){
        logger.debug(String.format("Going to initialize system admin: %s, pass: %s", adminName, adminPass));
 
        if (!UserFacade.initSystem(adminName, adminPass)) {
@@ -41,7 +41,7 @@ public class AdminService {
      * @param adminPass - registered(initialized) admin password
      * @return true upon success. exception of Result.FAIL upon failure.
      */
-    public static RetObj<UUID> loginSystem(String adminName, String adminPass){
+    public synchronized static RetObj<UUID> loginSystem(String adminName, String adminPass){
         logger.debug(String.format("Going to login system admin: %s, pass: %s", adminName, adminPass));
 
         if (!UserFacade.isInitializedSystem()) {
@@ -71,7 +71,7 @@ public class AdminService {
      * @param managerPass
      * @return
      */
-    public static RetObj<Object> createForum(UUID sId, String ForumName, String managerName, String managerPass){
+    public synchronized static RetObj<Object> createForum(UUID sId, String ForumName, String managerName, String managerPass){
         logger.debug(String.format("creating forum... sid: %s, name: %s, manager: %s, pass: %s", sId, ForumName, managerName, managerPass));
         if (!UserFacade.isLoggedInSuperAdmin(sId)) {
             // only logged in admin can create new forum
@@ -91,7 +91,7 @@ public class AdminService {
         return new RetObj<>(Result.SUCCESS);
     }
 
-    public static RetObj<Object> removeForum(UUID sId, String ForumName){
+    public synchronized static RetObj<Object> removeForum(UUID sId, String ForumName){
         logger.debug(String.format("removing forum... sid: %s, name: %s", sId, ForumName));
         if (!UserFacade.isLoggedInSuperAdmin(sId)) {
             // only logged in admin can create new forum
@@ -107,7 +107,7 @@ public class AdminService {
         return new RetObj<>(Result.SUCCESS);
     }
 
-    public static RetObj<Boolean> isInitializedSystem(){
+    public synchronized static RetObj<Boolean> isInitializedSystem(){
         logger.debug(String.format("checking if system initialized"));
 
         if (!UserFacade.isInitializedSystem()){
@@ -119,7 +119,7 @@ public class AdminService {
         return new RetObj<>(Result.SUCCESS, new Boolean(true));
     }
 
-    public static void resetSystem(){
+    public synchronized static void resetSystem(){
         logger.info(String.format("resetting system"));
         UserFacade.resetSystem();
         logger.info(String.format("resetting ended"));

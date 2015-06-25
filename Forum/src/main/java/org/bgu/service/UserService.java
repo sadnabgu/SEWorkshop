@@ -16,13 +16,13 @@ public class UserService {
 
     private static Logger logger = Logger.getLogger(UserService.class);
 
-    public static RetObj<Boolean> isInitializedSystem(){
+    public synchronized static RetObj<Boolean> isInitializedSystem(){
         logger.trace("enter isInitializedSystem");
         boolean ans = UserFacade.isInitializedSystem();
         return new RetObj<>(Result.SUCCESS, ans);
     }
 
-    public static RetObj<UUID> logInGuest(String forumName) {
+    public synchronized static RetObj<UUID> logInGuest(String forumName) {
         logger.trace("enter logInGuest");
         UUID sId = UserFacade.addGuestSession(forumName);
 
@@ -41,7 +41,7 @@ public class UserService {
      * @param pass
      * @return
      */
-    public static RetObj<Void> logInMember(UUID sId, String userName, String pass) {
+    public synchronized static RetObj<Void> logInMember(UUID sId, String userName, String pass) {
         logger.trace("enter logInMember");
         // only Guest can loggin
         if (!(UserFacade.validatePassword(sId, userName, pass))) {
@@ -57,7 +57,7 @@ public class UserService {
      * @param sId
      * @return
      */
-    public static RetObj<Object> logOut(UUID sId) {
+    public synchronized static RetObj<Object> logOut(UUID sId) {
         logger.trace("enter logOut");
         if (!UserFacade.logOut(sId))
             return new RetObj<>(Result.NOT_LOGGED_IN);
@@ -73,7 +73,7 @@ public class UserService {
      * @param pass - the new user password
      * @return Result.SUCCESS if sucsses
      */
-     public static RetObj<Object> registerMember(UUID sId, String userName, String pass) {
+     public synchronized static RetObj<Object> registerMember(UUID sId, String userName, String pass) {
          logger.trace("enter registerMember");
          // only guest can register new member
          if (!UserFacade.registerMember(sId, userName, pass))
@@ -87,7 +87,7 @@ public class UserService {
      * @param otherUserName
      * @return
      */
-    public static RetObj<Object> addFriend(UUID sId, String otherUserName) {
+    public synchronized static RetObj<Object> addFriend(UUID sId, String otherUserName) {
         logger.trace("enter addFriend");
         if (!UserFacade.isLoggedInMember(sId)){
             return new RetObj<>(Result.NOT_LOGGED_IN);
@@ -108,7 +108,7 @@ public class UserService {
      * @param moderatorName
      * @return
      */
-    public static RetObj<Object> addModerator(UUID sId, String subForumName, String moderatorName) {
+    public synchronized static RetObj<Object> addModerator(UUID sId, String subForumName, String moderatorName) {
         logger.trace("enter addModerator");
         if (!UserFacade.isLoggedInMember(sId))
             return new RetObj<>(Result.NOT_LOGGED_IN);
@@ -125,7 +125,7 @@ public class UserService {
      * @param otherUserName
      * @return
      */
-    public static RetObj<Object> unFriend(UUID sId, String otherUserName) {
+    public synchronized static RetObj<Object> unFriend(UUID sId, String otherUserName) {
         logger.trace("enter unFriend");
         if (!UserFacade.isLoggedInMember(sId)){
             return new RetObj<>(Result.NOT_LOGGED_IN);
@@ -146,7 +146,7 @@ public class UserService {
      * @param moderatorName
      * @return
      */
-    public static RetObj<Object> removeModerator(UUID sId, String subForumName, String moderatorName) {
+    public synchronized static RetObj<Object> removeModerator(UUID sId, String subForumName, String moderatorName) {
         logger.trace("enter removeModerator");
         if (!UserFacade.isLoggedInMember(sId))
             return new RetObj<>(Result.NOT_LOGGED_IN);
@@ -162,7 +162,7 @@ public class UserService {
      * @param sId - session id
      * @return - the name of the member or Guest if not login
      */
-    public static RetObj<String> getUserName(UUID sId) {
+    public synchronized static RetObj<String> getUserName(UUID sId) {
         logger.trace("enter getUserName");
         String name = UserFacade.getSessionUserName(sId);
         if(null == name)

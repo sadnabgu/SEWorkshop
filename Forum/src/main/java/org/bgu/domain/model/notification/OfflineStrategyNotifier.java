@@ -18,6 +18,7 @@ public class OfflineStrategyNotifier implements NotificationStrategy {
 
     @Override
     public void update(Subject subject) {
+        /*
         NotificationType type = subject.getNotificationType();
         Collection<Member> members = subject.getContext();
         HashMap<Member, Collection<NotificationType>> waitingList = new HashMap<>();
@@ -26,7 +27,7 @@ public class OfflineStrategyNotifier implements NotificationStrategy {
         for (Session s : UserFacade.getAllSessions()) {
             for (Member m : members) {
                 if (s._member == m) {
-                    communicationSessions.setNotificationPush(type, s._id);
+                    //communicationSessions.setNotificationPush(type, s._id);
                     members.remove(m);
                 }
             }
@@ -55,6 +56,6 @@ public class OfflineStrategyNotifier implements NotificationStrategy {
                     waitingList.remove(m);
                 }
             }
-        }
+        }*/
     }
 }
