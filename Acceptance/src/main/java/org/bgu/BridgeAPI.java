@@ -39,6 +39,6 @@ public interface BridgeAPI {
     public int createNewThread(String subforumName, String messageTitle, String messageBody);
     public int createNewComment(String subforumName, int newThreadId, String commentTitle, String commentBody);
     public boolean editMessage(String subforumName, int messageId, String commentTitle, String commentBody);
-    public boolean deleteMessage(int messageId);
+    public boolean deleteMessage(String subforumName, int messageId);
 
 }

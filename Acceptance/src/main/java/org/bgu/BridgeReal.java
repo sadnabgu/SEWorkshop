@@ -126,7 +126,8 @@ public class BridgeReal implements BridgeAPI {
     }
 
     @Override
-    public boolean deleteMessage(int messageId) {
-        return false;
+    public boolean deleteMessage(String subforumName, int messageId) {
+        ans = ForumService.removeMessage(sid, subforumName, messageId );
+        return ans._result==Result.SUCCESS;
     }
 }

@@ -80,7 +80,7 @@ public class BridgeProxy implements BridgeAPI{
     }
 
     @Override
-    public boolean deleteMessage(int messageId) {
+    public boolean deleteMessage(String subforumName, int messageId) {
         return false;
     }
 }
